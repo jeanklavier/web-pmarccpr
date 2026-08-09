@@ -615,6 +615,14 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
   background:
     linear-gradient(180deg, rgba(8,32,50,.72) 0%, rgba(8,32,50,.55) 45%, rgba(8,32,50,.88) 100%);
 }
+/* La foto del hero principal (aérea de San Juan, cielo y mar muy claros)
+   necesita más oscurecimiento que las fotos de sector: el texto va
+   centrado verticalmente, justo donde el degradado de arriba es más
+   débil (.55), y ese punto cae sobre cielo/edificios de colores. */
+.hero .hero-photo::after{
+  background:
+    linear-gradient(180deg, rgba(8,32,50,.8) 0%, rgba(8,32,50,.72) 45%, rgba(8,32,50,.9) 100%);
+}
 .photo-credit{
   position:absolute; right:10px; bottom:8px; z-index:2;
   font-size:.66rem; color:rgba(255,255,255,.7); text-decoration:none; letter-spacing:.02em;
