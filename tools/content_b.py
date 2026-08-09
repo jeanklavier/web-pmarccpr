@@ -3,7 +3,7 @@
 
 I_WAVES = '<path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>'
 I_TREE = '<path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z"/><path d="M12 22v-3"/>'
-I_UMBRELLA = '<path d="M22 12a10 10 0 0 0-20 0Z"/><path d="M12 12v8a2 2 0 0 0 4 0"/><path d="M12 2v1"/>'
+I_SUN = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>'
 I_BOOK = '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'
 I_SCALE = '<path d="m16 16 3-8 3 8c-.9.7-1.9 1-3 1s-2.1-.3-3-1Z"/><path d="m2 16 3-8 3 8c-.9.7-1.9 1-3 1s-2.1-.3-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>'
 
@@ -139,7 +139,7 @@ SECTORES = [
 # ============================================================ TURISMO
 {
  'slug':'turismo','nombre':'Turismo','nombreCorto':'Turismo',
- 'icono':I_UMBRELLA,'tabla':'7.10',
+ 'icono':I_SUN,'tabla':'7.10',
  'metaDesc':'Diagnóstico y cursos de acción del sector Turismo en el P-MARCC: destino de sol y playa ante el cambio climático, con el 79% de la infraestructura hotelera vulnerable.',
  'heroDesc':'Puerto Rico es un destino de "sol y playa": los turistas gastaron $5,700 millones en 2022 y el sector sostiene 91,500 empleos. Pero el 79% de la infraestructura hotelera es vulnerable al aumento del nivel del mar - el mismo clima que atrae a los visitantes es el que está cambiando.',
  'heroBadges':['$5,700M de gasto turístico (2022)','79% de la infraestructura hotelera vulnerable','4 cursos de acción (COA)'],
