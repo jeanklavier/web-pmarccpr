@@ -2,7 +2,6 @@ const palette = {
   teal:'#12a594', tealLight:'#2ec4b6', coral:'#ff6f59', sun:'#ffb703',
   blue:'#0f5c78', grey:'#8a97a8'
 };
-Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
 
 function themeColors() {
   const cs = getComputedStyle(document.documentElement);
@@ -82,7 +81,19 @@ function initCharts() {
   chartsToRestyle.push({ chart: chartRuta });
 }
 
-initCharts();
+(function () {
+  if (typeof Chart === 'undefined') {
+    // CDN caído/bloqueado: muestra las tablas de datos como respaldo.
+    document.querySelectorAll('canvas[role="img"]').forEach(cv => {
+      cv.style.display = 'none';
+      const table = document.getElementById(cv.getAttribute('aria-describedby'));
+      if (table) table.classList.remove('visually-hidden');
+    });
+    return;
+  }
+  Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+  initCharts();
+})();
 
 window.addEventListener('pmarcc-theme-change', () => {
   chartsToRestyle.forEach(({ chart, isDoughnut }) => applyThemeToChart(chart, { isDoughnut }));

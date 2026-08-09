@@ -5,8 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Energía | P-MARCC Puerto Rico</title>
 <meta name="description" content="Diagnóstico y cursos de acción del sector Energía en el Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático de Puerto Rico.">
+<link rel="canonical" href="https://web-pmarccpr.netlify.app/sectores/energia.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Energía | P-MARCC Puerto Rico">
+<meta property="og:description" content="Diagnóstico y cursos de acción del sector Energía en el plan climático de Puerto Rico: del 4.12% renovable a la meta de 100% en 2050.">
+<meta property="og:url" content="https://web-pmarccpr.netlify.app/sectores/energia.html">
+<meta property="og:image" content="https://web-pmarccpr.netlify.app/og-image.jpg">
+<meta property="og:locale" content="es_PR">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 <link rel="stylesheet" href="../styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Energía — P-MARCC explicado",
+  "inLanguage": "es-PR",
+  "description": "Diagnóstico y cursos de acción del sector Energía en el plan climático de Puerto Rico.",
+  "dateModified": "2026-08-08",
+  "isBasedOn": "Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico (CEACC, 2024)"
+}
+</script>
 <script>
   (function () {
     try {
@@ -25,7 +45,7 @@
 <header class="site-header" id="top">
   <nav class="navbar" aria-label="Principal">
     <a href="../index.html" class="brand">
-      <span class="brand-icon" aria-hidden="true">🌎</span>
+      <span class="brand-icon" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
       <span class="brand-text">P-MARCC <small>Puerto Rico</small></span>
     </a>
     <div class="nav-right">
@@ -34,7 +54,7 @@
         <li><a href="../index.html#datos">Los datos</a></li>
         <li><a href="../index.html#sectores">Sectores</a></li>
         <li><a href="../index.html#acciones">Plan de acción</a></li>
-        <li><a href="../index.html#participa">Participa</a></li>
+        <li><a href="../glosario.html">Glosario</a></li>
       </ul>
       <button id="themeToggle" aria-label="Cambiar a modo oscuro"><span class="tt-thumb"></span></button>
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
@@ -47,13 +67,21 @@
 <main id="main-content">
 <!-- ============ SECTOR HERO ============ -->
 <section class="sector-hero">
+  <div class="hero-photo" aria-hidden="true">
+    <img src="https://images.unsplash.com/photo-1745187946672-2c1d8cf26a2b?auto=format&fit=crop&w=1200&q=70"
+         srcset="https://images.unsplash.com/photo-1745187946672-2c1d8cf26a2b?auto=format&fit=crop&w=800&q=70 800w,
+                 https://images.unsplash.com/photo-1745187946672-2c1d8cf26a2b?auto=format&fit=crop&w=1200&q=70 1200w,
+                 https://images.unsplash.com/photo-1745187946672-2c1d8cf26a2b?auto=format&fit=crop&w=1800&q=70 1800w"
+         sizes="100vw" alt="" fetchpriority="high">
+  </div>
+  <a class="photo-credit" href="https://unsplash.com" target="_blank" rel="noopener">Foto: Unsplash</a>
   <div class="container">
     <p class="breadcrumb" style="color:#bcdcd8; margin-top:0;">
       <a href="../index.html" style="color:#fff;">Inicio</a> ›
       <a href="../index.html#sectores" style="color:#fff;">Sectores</a> ›
       <span>Energía</span>
     </p>
-    <div class="sector-hero-icon" aria-hidden="true">⚡</div>
+    <div class="sector-hero-icon" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor" style="color:var(--sun-400)"><path d="m13 2-9.5 12H11l-1 8 9.5-12H12l1-8Z"/></svg></div>
     <h1>Energía</h1>
     <p>Puerto Rico depende casi por completo de combustibles fósiles importados para generar electricidad. Es, a la vez, la mayor fuente de emisiones del país y el sector con la meta de transformación más ambiciosa: 100% renovable para el 2050.</p>
     <div class="sector-badges">
@@ -84,6 +112,13 @@
       <div class="meta-badge"><strong>96%</strong><span>depende de combustibles fósiles</span></div>
       <div class="meta-badge"><strong>1.5M</strong><span>clientes de la AEE/LUMA</span></div>
       <div class="meta-badge"><strong>85,662</strong><span>clientes "prosumidores" con placas solares (jun. 2023)</span></div>
+    </div>
+
+    <div class="entity-badges" role="list" aria-label="Entidades que administran el sistema eléctrico">
+      <span class="entity-chip e-aee" role="listitem"><span class="entity-mono" aria-hidden="true">AEE</span><strong>AEE</strong> — dueña de los activos</span>
+      <span class="entity-chip e-luma" role="listitem"><span class="entity-mono" aria-hidden="true">LU</span><strong>LUMA Energy</strong> — transmisión y distribución</span>
+      <span class="entity-chip e-genera" role="listitem"><span class="entity-mono" aria-hidden="true">GN</span><strong>Genera PR</strong> — operación de plantas</span>
+      <span class="entity-chip e-nepr" role="listitem"><span class="entity-mono" aria-hidden="true">NE</span><strong>NEPR</strong> — Negociado de Energía (regulador)</span>
     </div>
 
     <div class="diag-columns">
@@ -289,6 +324,18 @@
 <!-- ============ FUENTES ============ -->
 <section class="section section-alt" id="fuentes">
   <div class="container">
+    <div class="source-box" style="margin-top:0; margin-bottom:30px;">
+      <h4>Entidades mencionadas en este sector</h4>
+      <div class="entity-badges" role="list" aria-label="Glosario de entidades">
+        <span class="entity-chip e-aee" role="listitem"><span class="entity-mono" aria-hidden="true">AEE</span>Autoridad de Energía Eléctrica</span>
+        <span class="entity-chip e-luma" role="listitem"><span class="entity-mono" aria-hidden="true">LU</span>LUMA Energy</span>
+        <span class="entity-chip e-genera" role="listitem"><span class="entity-mono" aria-hidden="true">GN</span>Genera PR</span>
+        <span class="entity-chip e-nepr" role="listitem"><span class="entity-mono" aria-hidden="true">NE</span>Negociado de Energía (NEPR)</span>
+        <span class="entity-chip e-ddec" role="listitem"><span class="entity-mono" aria-hidden="true">DD</span>DDEC / PPPE</span>
+        <span class="entity-chip e-jp" role="listitem"><span class="entity-mono" aria-hidden="true">JP</span>Junta de Planificación / AAPP</span>
+        <span class="entity-chip e-doe" role="listitem"><span class="entity-mono" aria-hidden="true">DOE</span>Departamento de Energía federal</span>
+      </div>
+    </div>
     <div class="source-box">
       <h4>Fuentes de esta página</h4>
       <ul>
@@ -321,13 +368,18 @@
         <p>CEACC (2024). <em>Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico.</em> Gobierno de Puerto Rico. Tomos 1 y 2.</p>
       </div>
     </div>
-    <p class="footer-note">Hecho para ayudar al ciudadano común a entender el Plan — no oficial, no afiliado al CEACC ni al Gobierno de Puerto Rico.</p>
+    <div class="ai-disclosure">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+      <p><strong>Sobre el contenido de este sitio:</strong> los textos, resúmenes y organización visual de esta página fueron elaborados con la ayuda de inteligencia artificial a partir del borrador oficial del P-MARCC. Aunque revisamos la exactitud de los datos, pueden existir errores de interpretación o resumen. Si encuentras algo incorrecto, <button type="button" class="footer-report-link" onclick="document.getElementById('reportFab').click()">repórtalo aquí</button> — toma menos de un minuto.</p>
+    </div>
+    <p class="footer-note">Hecho para ayudar al ciudadano común a entender el Plan — no oficial, no afiliado al CEACC ni al Gobierno de Puerto Rico. <a href="../glosario.html" style="color:var(--teal-400);">Glosario</a> · Última actualización: <time datetime="2026-08-08">8 de agosto de 2026</time>.</p>
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
-<script src="../nav.js"></script>
-<script src="../theme.js"></script>
-<script src="energia.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" defer></script>
+<script src="../nav.js" defer></script>
+<script src="../theme.js" defer></script>
+<script src="energia.js" defer></script>
+<script src="../correction.js" defer></script>
 </body>
 </html>
