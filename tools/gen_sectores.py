@@ -8,7 +8,7 @@ from content_a import SECTORES as SEC_A
 from content_b import SECTORES as SEC_B
 
 SECTORES = SEC_A + SEC_B
-BASE = "https://web-pmarccpr.netlify.app"
+BASE = "https://planclimaticopr.com"
 FECHA = "8 de agosto de 2026"
 FECHA_ISO = "2026-08-08"
 
