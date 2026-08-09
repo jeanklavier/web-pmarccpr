@@ -100,6 +100,7 @@
 <nav class="sector-nav">
   <div class="container">
     <a href="#diagnostico">Diagnóstico</a>
+    <a href="#embalses">Historial de niveles</a>
     <a href="#acciones">Cursos de acción</a>
     <a href="#fuentes">Fuentes</a>
   </div>
@@ -135,6 +136,33 @@
     <div class="callout callout-action">
       <p><strong>Lo que el Plan pone en marcha:</strong> proteger cuerpos de agua y acuíferos, conservación en hogares e industrias, captación de agua de lluvia en construcciones nuevas y existentes, maximizar el reúso de aguas tratadas de la AAA, una oficina dedicada a detectar y reparar salideros, y optimizar el riego agrícola.</p>
     </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="embalses">
+  <div class="container">
+    <span class="tag">Historial de niveles</span>
+    <h2>El nivel de los embalses, con datos del USGS</h2>
+    <p class="chart-note">La AAA y la AEE solo publican el nivel actual de los embalses, sin historial. El U.S. Geological Survey (USGS) monitorea 19 embalses de Puerto Rico y sí mantiene un historial público. Elige un embalse para ver su elevación diaria de los últimos 2 años.</p>
+
+    <div class="embalse-controls">
+      <label for="embalseSelect">Embalse</label>
+      <select id="embalseSelect" aria-describedby="embalseStatus"></select>
+    </div>
+
+    <div class="chart-card">
+      <h3 id="embalseChart-title">Elevación diaria del embalse</h3>
+      <p class="chart-note">Pies de elevación sobre el nivel medio del mar (LMSL)</p>
+      <canvas id="embalseChart" role="img" aria-labelledby="embalseChart-title" aria-describedby="embalseChart-data"></canvas>
+      <table class="visually-hidden" id="embalseChart-data">
+        <caption id="embalseChart-caption">Datos de la gráfica: elevación promedio mensual del embalse seleccionado, en pies</caption>
+        <thead><tr><th>Mes</th><th>Elevación promedio (pies)</th></tr></thead>
+        <tbody id="embalseChart-tbody"></tbody>
+      </table>
+      <div class="embalse-status" id="embalseStatus" role="status" aria-live="polite">Cargando el historial…</div>
+    </div>
+
+    <p class="embalse-note">Datos: U.S. Geological Survey (USGS), estación <span id="embalseSourceSiteNo">-</span> - <a id="embalseSourceLink" href="https://waterdata.usgs.gov/" target="_blank" rel="noopener"><span id="embalseSourceName">-</span></a>. Los valores más recientes son datos <strong>provisionales</strong> (sujetos a revisión) según el propio USGS.</p>
   </div>
 </section>
 
@@ -340,8 +368,10 @@
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" defer></script>
 <script src="../nav.js" defer></script>
 <script src="../theme.js" defer></script>
+<script src="embalses.js" defer></script>
 <script src="../correction.js" defer></script>
 </body>
 </html>
