@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es-PR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visor del Plan | P-MARCC Puerto Rico</title>
+<meta name="description" content="Lee el P-MARCC página por página: visor rápido de los Tomos 1 y 2 del plan climático de Puerto Rico, sin descargar el documento completo.">
+<link rel="canonical" href="https://web-pmarccpr.netlify.app/visor.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Visor del Plan | P-MARCC Puerto Rico">
+<meta property="og:description" content="Lee el P-MARCC página por página, directo en tu navegador.">
+<meta property="og:url" content="https://web-pmarccpr.netlify.app/visor.html">
+<meta property="og:image" content="https://web-pmarccpr.netlify.app/og-image.jpg">
+<meta property="og:locale" content="es_PR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="stylesheet" href="styles.css">
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('pmarcc-theme');
+      var isDark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+<header class="site-header" id="top">
+  <nav class="navbar" aria-label="Principal">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+      <span class="brand-text">P-MARCC <small>Puerto Rico</small></span>
+    </a>
+    <div class="nav-right">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#que-es">¿Qué es?</a></li>
+        <li><a href="index.html#datos">Los datos</a></li>
+        <li><a href="index.html#sectores">Sectores</a></li>
+        <li><a href="visor.html" aria-current="page">El Plan (PDF)</a></li>
+        <li><a href="glosario.html">Glosario</a></li>
+      </ul>
+      <button id="themeToggle" aria-label="Cambiar a modo oscuro"><span class="tt-thumb"></span></button>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main id="main-content">
+<section class="sector-hero viewer-hero">
+  <div class="container">
+    <p class="breadcrumb" style="color:#bcdcd8; margin-top:0;">
+      <a href="index.html" style="color:#fff;">Inicio</a> ›
+      <span>Visor del Plan</span>
+    </p>
+    <h1>El Plan, página por página</h1>
+    <p>Lee el documento oficial directo en tu navegador. Solo se carga la página que estás viendo, no el archivo completo. Los números corresponden a la paginación impresa del Plan, la misma que citamos en cada sección del sitio.</p>
+  </div>
+</section>
+
+<section class="section viewer-section">
+  <div class="container">
+    <div class="viewer-bar" role="toolbar" aria-label="Controles del visor">
+      <div class="viewer-group">
+        <label for="tomoSel" class="visually-hidden">Tomo</label>
+        <select id="tomoSel">
+          <option value="1">Tomo 1 · Diagnóstico</option>
+          <option value="2">Tomo 2 · Cursos de acción</option>
+        </select>
+      </div>
+      <div class="viewer-group">
+        <button type="button" id="btnPrev" aria-label="Página anterior">←</button>
+        <label for="pageInput" class="visually-hidden">Página</label>
+        <input type="number" id="pageInput" inputmode="numeric" aria-label="Número de página">
+        <span id="pageRange" class="viewer-range"></span>
+        <button type="button" id="btnNext" aria-label="Página siguiente">→</button>
+      </div>
+      <div class="viewer-group viewer-links">
+        <a id="dlLink" href="plan/tomo1.pdf" target="_blank" rel="noopener">Abrir PDF completo</a>
+        <a href="https://www.drna.pr.gov/wp-content/uploads/2024/04/PLAN-MITIGACION-TOMO-1-ARCHIVO-DIGITAL-19-ABR-2024.pdf" id="drnaLink" target="_blank" rel="noopener">Original (DRNA)</a>
+      </div>
+    </div>
+
+    <div class="viewer-stage" id="viewerStage">
+      <div class="viewer-status" id="viewerStatus" role="status" aria-live="polite">Cargando el documento…</div>
+      <canvas id="pdfCanvas" aria-label="Página del Plan"></canvas>
+    </div>
+    <p class="viewer-hint">Consejo: también puedes navegar con las flechas del teclado. Cada enlace "Ver esa página" del sitio abre este visor en la página exacta que se cita.</p>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Sobre esta guía</h4>
+        <p>Este sitio resume, de forma visual y en lenguaje sencillo, el <em>Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico</em> (P-MARCC), versión revisada de abril de 2024, elaborado por el Comité de Expertos y Asesores sobre Cambio Climático (CEACC), Gobierno de Puerto Rico. No sustituye el documento oficial.</p>
+      </div>
+      <div>
+        <h4>Fuente citada como</h4>
+        <p>CEACC (2024). <em>Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico.</em> Gobierno de Puerto Rico. Tomos 1 y 2.</p>
+        <p>Documento oficial (DRNA): <a href="https://www.drna.pr.gov/wp-content/uploads/2024/04/PLAN-MITIGACION-TOMO-1-ARCHIVO-DIGITAL-19-ABR-2024.pdf" target="_blank" rel="noopener" style="color:var(--teal-400);">Tomo 1 (PDF)</a> · <a href="https://www.drna.pr.gov/wp-content/uploads/2024/04/PLAN-MITIGACION-TOMO-2-ARCHIVO-DIGITAL-19-ABR-2024.pdf" target="_blank" rel="noopener" style="color:var(--teal-400);">Tomo 2 (PDF)</a></p>
+      </div>
+    </div>
+    <p class="footer-note">Hecho para ayudar al ciudadano común a entender el Plan. No es un sitio oficial ni está afiliado al CEACC ni al Gobierno de Puerto Rico. <a href="glosario.html" style="color:var(--teal-400);">Glosario</a> · Última actualización: <time datetime="2026-08-09">9 de agosto de 2026</time>.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+<script src="nav.js" defer></script>
+<script src="theme.js" defer></script>
+<script src="visor.js" defer></script>
+</body>
+</html>

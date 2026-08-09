@@ -76,6 +76,7 @@ def nav():
         <li><a href="../index.html#datos">Los datos</a></li>
         <li><a href="../index.html#sectores">Sectores</a></li>
         <li><a href="../index.html#acciones">Plan de acción</a></li>
+        <li><a href="../visor.html">El Plan (PDF)</a></li>
         <li><a href="../glosario.html">Glosario</a></li>
       </ul>
       <button id="themeToggle" aria-label="Cambiar a modo oscuro"><span class="tt-thumb"></span></button>
@@ -171,19 +172,35 @@ def acciones(s):
       </div>
     </div>''')
     ncoa = sum(len(g['coas']) for g in s['guias'])
+    # Página impresa donde comienza cada tabla del Capítulo 7 (Tomo 2)
+    TABLA_PAGS = {'7.1':333,'7.2':349,'7.3':395,'7.4':413,'7.5':433,'7.6':455,
+                  '7.7':483,'7.8':517,'7.9':567,'7.10':587,'7.11':617,'7.12':651}
+    pag_tabla = TABLA_PAGS.get(s['tabla'])
+    tabla_link = (f'<a class="ver-plan" href="../visor.html?tomo=2&amp;pagina={pag_tabla}">Tabla {s["tabla"]}</a>'
+                  if pag_tabla else f'Tabla {s["tabla"]}')
     return f'''
 <section class="section section-alt" id="acciones">
   <div class="container">
     <span class="tag">El plan de acción</span>
     <h2>Los cursos de acción del sector</h2>
-    <p class="coa-intro">La Tabla {s['tabla']} del P-MARCC organiza este sector en {len(s['guias'])} guías legales (dictadas por el Artículo 9 de la Ley 33-2019) que se traducen en {ncoa} cursos de acción (COA). Aquí se resumen sus objetivos; cada COA incluye en el Plan sus estrategias, entidad responsable, costo estimado, fuente de financiamiento, plazo y métricas.</p>
+    <p class="coa-intro">La {tabla_link} del P-MARCC organiza este sector en {len(s['guias'])} guías legales (dictadas por el Artículo 9 de la Ley 33-2019) que se traducen en {ncoa} cursos de acción (COA). Aquí se resumen sus objetivos; cada COA incluye en el Plan sus estrategias, entidad responsable, costo estimado, fuente de financiamiento, plazo y métricas.</p>
 {''.join(blocks)}
   </div>
 </section>
 '''
 
+def _link_fuente(f):
+    """Añade a cada cita un enlace al visor en la página impresa exacta."""
+    import re
+    m = re.search(r'Tomo (\d).*?pp?\. (\d+)', f)
+    if not m:
+        return f
+    t, p = m.group(1), m.group(2)
+    return (f + f' <a class="ver-plan" href="../visor.html?tomo={t}&amp;pagina={p}">'
+                f'Ver esa página →</a>')
+
 def fuentes(s):
-    fts = "\n        ".join(f"<li>{f}</li>" for f in s['fuentes'])
+    fts = "\n        ".join(f"<li>{_link_fuente(f)}</li>" for f in s['fuentes'])
     return f'''
 <section class="section" id="fuentes">
   <div class="container">
