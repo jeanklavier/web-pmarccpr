@@ -632,6 +632,13 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
   background:var(--bg-alt); border:0; border-radius:50%; width:32px; height:32px; flex-shrink:0;
   font-size:1.1rem; cursor:pointer; color:var(--text-muted); line-height:1;
 }
+.type-toggle{display:flex; gap:8px; margin-bottom:16px;}
+.type-btn{
+  flex:1; border:1px solid var(--border-strong); background:var(--bg); color:var(--text-muted);
+  border-radius:10px; padding:9px 10px; font-size:.82rem; font-weight:700; cursor:pointer;
+  font-family:inherit; transition:background .15s ease, color .15s ease, border-color .15s ease;
+}
+.type-btn.active{background:#0c8074; border-color:#0c8074; color:#fff;}
 .modal-sub{font-size:.85rem; color:var(--text-muted); margin-bottom:20px;}
 .form-field{margin-bottom:14px;}
 .form-field label{display:block; font-size:.82rem; font-weight:700; margin-bottom:6px; color:var(--text);}

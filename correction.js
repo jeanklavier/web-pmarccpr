@@ -1,11 +1,33 @@
 /* ============================================================
-   Reportar un error - botón flotante + modal accesible.
-   Envía la corrección a la misma base de datos (Supabase) que
-   recoge los formularios de los sitios de JCTech, vía la función
-   "form-submit". Se inyecta en cada página para no duplicar HTML.
+   Reportar un error o dejar una sugerencia - botón flotante +
+   modal accesible con selector de tipo. Envía el mensaje a la
+   misma base de datos (Supabase) que recoge los formularios de
+   los sitios de JCTech, vía la función "form-submit". Se inyecta
+   en cada página para no duplicar HTML.
    ============================================================ */
 (function () {
   var SUPABASE_URL = 'https://eexzkkypfkpscewufgrg.supabase.co/functions/v1/form-submit';
+
+  var COPY = {
+    error: {
+      seccionLabel: 'Sección o dato a corregir',
+      mensajeLabel: '¿Cuál es el error?',
+      mensajePlaceholder: 'Ej: El dato de 4.12% debería ser...',
+      sub: 'Este sitio resume el P-MARCC con ayuda de inteligencia artificial. Si algo no coincide con el documento oficial, dínoslo: indica dónde está el error y lo revisamos.',
+      submitLabel: 'Enviar corrección',
+      successMsg: '¡Gracias! Recibimos tu corrección y la vamos a revisar.',
+      tipoNegocio: 'Corrección P-MARCC'
+    },
+    sugerencia: {
+      seccionLabel: 'Página o sección relacionada',
+      mensajeLabel: 'Tu sugerencia o comentario',
+      mensajePlaceholder: 'Ej: Sería útil un mapa interactivo por municipio...',
+      sub: '¿Hay algo que te gustaría ver en este sitio, o una forma de mejorarlo? Cuéntanos tu idea, la leemos con gusto.',
+      submitLabel: 'Enviar sugerencia',
+      successMsg: '¡Gracias! Recibimos tu sugerencia.',
+      tipoNegocio: 'Sugerencia P-MARCC'
+    }
+  };
 
   /* ---- 1. Scroll-spy: qué sección está viendo la persona ahora ---- */
   var sectionLabels = {};
@@ -33,11 +55,11 @@
   fab.className = 'report-fab';
   fab.id = 'reportFab';
   fab.setAttribute('aria-haspopup', 'dialog');
+  fab.setAttribute('aria-label', 'Reportar un error o dejar una sugerencia');
   fab.innerHTML =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-    '<path d="M12 9v4"></path><path d="M12 17h.01"></path>' +
-    '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path>' +
-    '</svg><span class="fab-label">¿Algo incorrecto?</span>';
+    '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>' +
+    '</svg><span class="fab-label">Comentarios</span>';
   document.body.appendChild(fab);
 
   var overlay = document.createElement('div');
@@ -46,18 +68,22 @@
   overlay.innerHTML =
     '<div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reportModalTitle">' +
       '<div class="modal-head">' +
-        '<h3 id="reportModalTitle">Reportar un dato incorrecto</h3>' +
+        '<h3 id="reportModalTitle">Ayúdanos a mejorar este sitio</h3>' +
         '<button type="button" class="modal-close" id="reportClose" aria-label="Cerrar">✕</button>' +
       '</div>' +
-      '<p class="modal-sub">Este sitio resume el P-MARCC con ayuda de inteligencia artificial. Si algo no coincide con el documento oficial, dínoslo: indica dónde está el error y lo revisamos.</p>' +
+      '<div class="type-toggle" role="group" aria-label="Tipo de mensaje">' +
+        '<button type="button" class="type-btn" id="typeError" aria-pressed="true">Reportar un error</button>' +
+        '<button type="button" class="type-btn" id="typeSugerencia" aria-pressed="false">Sugerencia o idea</button>' +
+      '</div>' +
+      '<p class="modal-sub" id="reportSub"></p>' +
       '<form id="reportForm" novalidate>' +
         '<div class="form-field">' +
-          '<label for="rf-seccion">Sección o dato a corregir</label>' +
+          '<label for="rf-seccion" id="reportSeccionLabel">Sección o dato a corregir</label>' +
           '<input type="text" id="rf-seccion" name="producto" required>' +
           '<p class="form-hint">Se llena solo según la sección donde estabas. Puedes editarlo.</p>' +
         '</div>' +
         '<div class="form-field">' +
-          '<label for="rf-mensaje">¿Cuál es el error?</label>' +
+          '<label for="rf-mensaje" id="reportMensajeLabel">¿Cuál es el error?</label>' +
           '<textarea id="rf-mensaje" name="mensaje" required placeholder="Ej: El dato de 4.12% debería ser..."></textarea>' +
         '</div>' +
         '<div class="form-field">' +
@@ -74,7 +100,7 @@
           '<input type="text" id="rf-gotcha" name="_gotcha" tabindex="-1" autocomplete="off">' +
         '</div>' +
         '<input type="hidden" name="_source" value="pmarcc">' +
-        '<input type="hidden" name="tipo_negocio" value="Corrección P-MARCC">' +
+        '<input type="hidden" id="rf-tipo" name="tipo_negocio" value="Corrección P-MARCC">' +
         '<button type="submit" class="modal-submit" id="reportSubmit">Enviar corrección</button>' +
         '<div class="modal-status" id="reportStatus" role="status" aria-live="polite"></div>' +
       '</form>' +
@@ -86,10 +112,34 @@
   var statusBox = document.getElementById('reportStatus');
   var submitBtn = document.getElementById('reportSubmit');
   var seccionInput = document.getElementById('rf-seccion');
+  var subText = document.getElementById('reportSub');
+  var seccionLabel = document.getElementById('reportSeccionLabel');
+  var mensajeLabel = document.getElementById('reportMensajeLabel');
+  var mensajeInput = document.getElementById('rf-mensaje');
+  var tipoInput = document.getElementById('rf-tipo');
+  var typeErrorBtn = document.getElementById('typeError');
+  var typeSugerenciaBtn = document.getElementById('typeSugerencia');
   var lastFocused = null;
+  var currentType = 'error';
+
+  function applyType(type) {
+    currentType = type;
+    var c = COPY[type];
+    subText.textContent = c.sub;
+    seccionLabel.textContent = c.seccionLabel;
+    mensajeLabel.textContent = c.mensajeLabel;
+    mensajeInput.placeholder = c.mensajePlaceholder;
+    tipoInput.value = c.tipoNegocio;
+    submitBtn.textContent = c.submitLabel;
+    typeErrorBtn.setAttribute('aria-pressed', String(type === 'error'));
+    typeSugerenciaBtn.setAttribute('aria-pressed', String(type === 'sugerencia'));
+    typeErrorBtn.classList.toggle('active', type === 'error');
+    typeSugerenciaBtn.classList.toggle('active', type === 'sugerencia');
+  }
 
   function openModal() {
     lastFocused = document.activeElement;
+    applyType('error');
     var ref = (window.location.pathname.split('/').pop() || 'index.html') + (currentSectionId ? '#' + currentSectionId : '');
     seccionInput.value = (document.title.split('|')[0].trim()) + (currentSectionLabel ? ' - ' + currentSectionLabel : '') + ' (' + ref + ')';
     overlay.classList.add('open');
@@ -106,7 +156,7 @@
   function onKeydown(e) {
     if (e.key === 'Escape') { closeModal(); return; }
     if (e.key === 'Tab') {
-      var focusables = overlay.querySelectorAll('input, textarea, button');
+      var focusables = overlay.querySelectorAll('button, input, textarea');
       var first = focusables[0], last = focusables[focusables.length - 1];
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
@@ -116,6 +166,8 @@
   fab.addEventListener('click', openModal);
   closeBtn.addEventListener('click', closeModal);
   overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+  typeErrorBtn.addEventListener('click', function () { applyType('error'); });
+  typeSugerenciaBtn.addEventListener('click', function () { applyType('sugerencia'); });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -133,7 +185,7 @@
       .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
       .then(function (res) {
         if (res.ok && res.data && res.data.success) {
-          statusBox.textContent = '¡Gracias! Recibimos tu corrección y la vamos a revisar.';
+          statusBox.textContent = COPY[currentType].successMsg;
           statusBox.className = 'modal-status show ok';
           form.reset();
           setTimeout(closeModal, 2600);
@@ -142,12 +194,12 @@
         }
       })
       .catch(function () {
-        statusBox.textContent = 'No pudimos enviar el reporte. Intenta de nuevo en unos minutos.';
+        statusBox.textContent = 'No pudimos enviar el mensaje. Intenta de nuevo en unos minutos.';
         statusBox.className = 'modal-status show err';
       })
       .finally(function () {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar corrección';
+        submitBtn.textContent = COPY[currentType].submitLabel;
       });
   });
 })();
