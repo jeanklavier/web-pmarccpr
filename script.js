@@ -82,97 +82,167 @@ sectores.forEach(s => {
   const tienePagina = paginasListas.includes(s.slug);
   const card = document.createElement(tienePagina ? 'a' : 'div');
   card.className = 'sector-card';
-  if (tienePagina) card.href = `sectores/${s.slug}.html`;
+  if (tienePagina) {
+    card.href = `sectores/${s.slug}.html`;
+  } else {
+    // Tarjetas sin página propia todavía: accesibles por teclado como "botón" que expande el resumen.
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-expanded', 'false');
+  }
   card.innerHTML = `
-    <div class="sector-icon">${s.icon}</div>
+    <div class="sector-icon" aria-hidden="true">${s.icon}</div>
     <h4>${s.nombre}</h4>
     <p>${s.resumen}</p>
     <span class="sector-stat">${s.stat}</span>
     ${tienePagina
-      ? `<div class="sector-detail" style="display:block; border-top:1px dashed #ddd; margin-top:10px; padding-top:10px;">Ver diagnóstico y cursos de acción completos →</div>`
+      ? `<div class="sector-detail" style="display:block; border-top:1px dashed var(--border-strong); margin-top:10px; padding-top:10px;">Ver diagnóstico y cursos de acción completos →</div>`
       : `<div class="sector-detail">${s.detalle}</div>`}
   `;
-  if (!tienePagina) card.addEventListener('click', () => card.classList.toggle('open'));
+  if (!tienePagina) {
+    const toggle = () => {
+      const open = card.classList.toggle('open');
+      card.setAttribute('aria-expanded', String(open));
+    };
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  }
   grid.appendChild(card);
 });
 
-/* ============ Charts ============ */
+/* ============ Charts (theme-aware) ============ */
 const palette = {
   teal:'#12a594', tealLight:'#2ec4b6', coral:'#ff6f59', sun:'#ffb703',
-  blue:'#0f5c78', grey:'#c8d6d4'
+  blue:'#0f5c78', grey:'#8a97a8'
 };
+
+function themeColors() {
+  const cs = getComputedStyle(document.documentElement);
+  return {
+    text: cs.getPropertyValue('--text-muted').trim() || '#3d5257',
+    grid: cs.getPropertyValue('--border').trim() || 'rgba(8,32,50,.08)',
+    surface: cs.getPropertyValue('--surface').trim() || '#ffffff'
+  };
+}
+
 Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
-Chart.defaults.color = '#3d5257';
 
-/* Emisiones por fuente 2021 */
-new Chart(document.getElementById('chartEmisiones'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Generación eléctrica (52%)', 'Transporte (26%)', 'Residuos sólidos (8%)', 'Otros sectores (14%)'],
-    datasets: [{
-      data: [52, 26, 8, 14],
-      backgroundColor: [palette.blue, palette.teal, palette.coral, palette.grey],
-      borderWidth: 2, borderColor:'#fff'
-    }]
-  },
-  options: {
-    plugins: { legend: { position: 'bottom', labels:{ boxWidth:12, padding:14, font:{size:11} } } },
-    cutout: '58%'
+const chartsToRestyle = [];
+
+function applyThemeToChart(chart, opts) {
+  const c = themeColors();
+  Chart.defaults.color = c.text;
+  if (chart.options.plugins && chart.options.plugins.legend) {
+    chart.options.plugins.legend.labels = chart.options.plugins.legend.labels || {};
+    chart.options.plugins.legend.labels.color = c.text;
   }
-});
+  if (chart.options.scales) {
+    Object.values(chart.options.scales).forEach(scale => {
+      scale.ticks = scale.ticks || {}; scale.ticks.color = c.text;
+      scale.grid = scale.grid || {}; scale.grid.color = c.grid;
+      if (scale.title) scale.title.color = c.text;
+    });
+  }
+  if (opts && opts.isDoughnut) {
+    chart.data.datasets[0].borderColor = c.surface;
+  }
+  chart.update();
+}
 
-/* Nivel del mar */
-new Chart(document.getElementById('chartMar'), {
-  type: 'bar',
-  data: {
-    labels: ['2030', '2050', '2100'],
-    datasets: [
-      { label: 'Escenario bajo', data: [0.59, 1.02, 1.97], backgroundColor: palette.tealLight },
-      { label: 'Escenario intermedio', data: [0.69, 1.31, 3.94], backgroundColor: palette.teal },
-      { label: 'Escenario alto', data: [0.72, 1.71, 7.22], backgroundColor: palette.coral }
-    ]
-  },
-  options: {
-    plugins:{ legend:{ position:'bottom', labels:{boxWidth:12, padding:14, font:{size:11}} } },
-    scales: {
-      y: { title:{display:true, text:'Pies de aumento'}, beginAtZero:true }
+function initCharts() {
+  const c = themeColors();
+  Chart.defaults.color = c.text;
+
+  /* Emisiones por fuente 2021 */
+  const chartEmisiones = new Chart(document.getElementById('chartEmisiones'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Generación eléctrica (52%)', 'Transporte (26%)', 'Residuos sólidos (8%)', 'Otros sectores (14%)'],
+      datasets: [{
+        data: [52, 26, 8, 14],
+        backgroundColor: [palette.blue, palette.teal, palette.coral, palette.grey],
+        borderWidth: 2, borderColor: c.surface
+      }]
+    },
+    options: {
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 14, font: { size: 11 }, color: c.text } } },
+      cutout: '58%'
     }
-  }
-});
+  });
+  chartsToRestyle.push({ chart: chartEmisiones, isDoughnut: true });
 
-/* Meta de emisiones */
-new Chart(document.getElementById('chartMeta'), {
-  type: 'line',
-  data: {
-    labels: ['2005 (base)', '2019', '2021', '2025 (meta legal)'],
-    datasets: [{
-      label: 'Millones de toneladas de CO2e',
-      data: [53.6, 33.4, 34.3, 26.7],
-      borderColor: palette.coral,
-      backgroundColor: 'rgba(255,111,89,.15)',
-      fill:true, tension:.3, pointRadius:5, pointBackgroundColor: palette.coral
-    }]
-  },
-  options: {
-    plugins:{ legend:{display:false} },
-    scales:{ y:{ beginAtZero:true, title:{display:true, text:'MTM de CO2e'} } }
-  }
-});
+  /* Nivel del mar */
+  const chartMar = new Chart(document.getElementById('chartMar'), {
+    type: 'bar',
+    data: {
+      labels: ['2030', '2050', '2100'],
+      datasets: [
+        { label: 'Escenario bajo', data: [0.59, 1.02, 1.97], backgroundColor: palette.tealLight },
+        { label: 'Escenario intermedio', data: [0.69, 1.31, 3.94], backgroundColor: palette.teal },
+        { label: 'Escenario alto', data: [0.72, 1.71, 7.22], backgroundColor: palette.coral }
+      ]
+    },
+    options: {
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 14, font: { size: 11 }, color: c.text } } },
+      scales: {
+        y: { title: { display: true, text: 'Pies de aumento', color: c.text }, beginAtZero: true, ticks: { color: c.text }, grid: { color: c.grid } },
+        x: { ticks: { color: c.text }, grid: { color: c.grid } }
+      }
+    }
+  });
+  chartsToRestyle.push({ chart: chartMar });
 
-/* Marejada ciclónica María */
-new Chart(document.getElementById('chartMarejada'), {
-  type: 'bar',
-  data: {
-    labels: ['Costa este\n(entrada)', 'Resto costa\neste', 'Costa\nnorte', 'Costa\nsur', 'Costa oeste /\nsuroeste'],
-    datasets: [{
-      label: 'Marejada ciclónica (pies)',
-      data: [9.5, 7, 3, 4, 2.5],
-      backgroundColor: palette.blue,
-      borderRadius: 6
-    }]
-  },
-  options: {
-    plugins:{ legend:{display:false} },
-    scales:{ y:{ beginAtZero:true, title:{display:true, text:'Pies sobre el nivel del suelo'} } }
-  }
+  /* Meta de emisiones */
+  const chartMeta = new Chart(document.getElementById('chartMeta'), {
+    type: 'line',
+    data: {
+      labels: ['2005 (base)', '2019', '2021', '2025 (meta legal)'],
+      datasets: [{
+        label: 'Millones de toneladas de CO2e',
+        data: [53.6, 33.4, 34.3, 26.7],
+        borderColor: palette.coral,
+        backgroundColor: 'rgba(255,111,89,.15)',
+        fill: true, tension: .3, pointRadius: 5, pointBackgroundColor: palette.coral
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, title: { display: true, text: 'MTM de CO2e', color: c.text }, ticks: { color: c.text }, grid: { color: c.grid } },
+        x: { ticks: { color: c.text }, grid: { color: c.grid } }
+      }
+    }
+  });
+  chartsToRestyle.push({ chart: chartMeta });
+
+  /* Marejada ciclónica María */
+  const chartMarejada = new Chart(document.getElementById('chartMarejada'), {
+    type: 'bar',
+    data: {
+      labels: ['Costa este\n(entrada)', 'Resto costa\neste', 'Costa\nnorte', 'Costa\nsur', 'Costa oeste /\nsuroeste'],
+      datasets: [{
+        label: 'Marejada ciclónica (pies)',
+        data: [9.5, 7, 3, 4, 2.5],
+        backgroundColor: palette.blue,
+        borderRadius: 6
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, title: { display: true, text: 'Pies sobre el nivel del suelo', color: c.text }, ticks: { color: c.text }, grid: { color: c.grid } },
+        x: { ticks: { color: c.text }, grid: { color: c.grid } }
+      }
+    }
+  });
+  chartsToRestyle.push({ chart: chartMarejada });
+}
+
+initCharts();
+
+// Vuelve a colorear las gráficas cuando se cambia de tema (ver theme.js).
+window.addEventListener('pmarcc-theme-change', () => {
+  chartsToRestyle.forEach(({ chart, isDoughnut }) => applyThemeToChart(chart, { isDoughnut }));
 });

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-PR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,29 +7,44 @@
 <meta name="description" content="Diagnóstico y cursos de acción del sector Energía en el Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático de Puerto Rico.">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 <link rel="stylesheet" href="../styles.css">
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('pmarcc-theme');
+      var isDark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
 <!-- ============ NAV ============ -->
 <header class="site-header" id="top">
-  <nav class="navbar">
+  <nav class="navbar" aria-label="Principal">
     <a href="../index.html" class="brand">
-      <span class="brand-icon">🌎</span>
+      <span class="brand-icon" aria-hidden="true">🌎</span>
       <span class="brand-text">P-MARCC <small>Puerto Rico</small></span>
     </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="../index.html#que-es">¿Qué es?</a></li>
-      <li><a href="../index.html#datos">Los datos</a></li>
-      <li><a href="../index.html#sectores">Sectores</a></li>
-      <li><a href="../index.html#acciones">Plan de acción</a></li>
-      <li><a href="../index.html#participa">Participa</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html#que-es">¿Qué es?</a></li>
+        <li><a href="../index.html#datos">Los datos</a></li>
+        <li><a href="../index.html#sectores">Sectores</a></li>
+        <li><a href="../index.html#acciones">Plan de acción</a></li>
+        <li><a href="../index.html#participa">Participa</a></li>
+      </ul>
+      <button id="themeToggle" aria-label="Cambiar a modo oscuro"><span class="tt-thumb"></span></button>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 </header>
 
+<main id="main-content">
 <!-- ============ SECTOR HERO ============ -->
 <section class="sector-hero">
   <div class="container">
@@ -38,7 +53,7 @@
       <a href="../index.html#sectores" style="color:#fff;">Sectores</a> ›
       <span>Energía</span>
     </p>
-    <div class="sector-hero-icon">⚡</div>
+    <div class="sector-hero-icon" aria-hidden="true">⚡</div>
     <h1>Energía</h1>
     <p>Puerto Rico depende casi por completo de combustibles fósiles importados para generar electricidad. Es, a la vez, la mayor fuente de emisiones del país y el sector con la meta de transformación más ambiciosa: 100% renovable para el 2050.</p>
     <div class="sector-badges">
@@ -77,7 +92,7 @@
         <p>Alrededor del <strong>96% de la generación eléctrica todavía usa combustibles fósiles</strong>. Solo el 4.12% proviene de fuentes renovables a gran escala. A esto se suman 85,662 clientes "prosumidores" —hogares y negocios con placas solares que además alimentan la red— que aportan cerca de 336,000 MWh al año, evitando aproximadamente 456,744 toneladas de CO2e anuales.</p>
         <p>El sistema tiene un problema estructural de resiliencia: las plantas de generación más eficientes están en el <strong>sur</strong> de la isla, pero la mayor demanda está en el <strong>norte</strong>, lo que obliga a transportar electricidad por largas distancias a través de 178 centros de transmisión y más de 1,100 millas de líneas — una vulnerabilidad que quedó expuesta con los huracanes Irma y María (2017), los terremotos de 2020 y el huracán Fiona (2022).</p>
         <p>Casi el <strong>44.5% de la población de Puerto Rico vive bajo el nivel de pobreza</strong>, un dato que el propio Plan señala como crucial al diseñar estrategias de energía renovable accesible: en 36 de los 78 municipios, la mitad o más de sus residentes están en situación de pobreza.</p>
-        <h4 style="margin-top:28px; color:var(--blue-800);">¿Quién consume la electricidad?</h4>
+        <h4 style="margin-top:28px; color:var(--heading-accent);">¿Quién consume la electricidad?</h4>
         <ul class="diag-list">
           <li><strong>Clientes residenciales:</strong> 91% de los clientes, 43% del consumo total.</li>
           <li><strong>Clientes comerciales:</strong> 8% de los clientes, 45% del consumo — las tarifas más altas del sistema.</li>
@@ -86,9 +101,17 @@
       </div>
       <div>
         <div class="chart-card">
-          <h3>Mezcla de generación eléctrica</h3>
+          <h3 id="chartMezcla-title">Mezcla de generación eléctrica</h3>
           <p class="chart-note">Fuente: AEE / Genera PR, 2022–2023</p>
-          <canvas id="chartMezcla"></canvas>
+          <canvas id="chartMezcla" role="img" aria-labelledby="chartMezcla-title" aria-describedby="chartMezcla-data"></canvas>
+          <table class="visually-hidden" id="chartMezcla-data">
+            <caption>Datos de la gráfica: mezcla de generación eléctrica</caption>
+            <thead><tr><th>Fuente</th><th>% de la generación</th></tr></thead>
+            <tbody>
+              <tr><td>Combustibles fósiles</td><td>95.88%</td></tr>
+              <tr><td>Fuentes renovables</td><td>4.12%</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -100,9 +123,20 @@
   <div class="container">
     <span class="tag">Hacia dónde vamos</span>
     <h2>La ruta legal hacia el 100% renovable</h2>
-    <p class="lead">La Ley 17-2019 (Política Pública Energética) fija metas de energía renovable por etapas. El propio P-MARCC traza métricas intermedias para cumplirlas.</p>
+    <p class="lead" id="chartRuta-title">La Ley 17-2019 (Política Pública Energética) fija metas de energía renovable por etapas. El propio P-MARCC traza métricas intermedias para cumplirlas.</p>
     <div class="goal-track">
-      <canvas id="chartRuta"></canvas>
+      <canvas id="chartRuta" role="img" aria-labelledby="chartRuta-title" aria-describedby="chartRuta-data"></canvas>
+      <table class="visually-hidden" id="chartRuta-data">
+        <caption>Datos de la gráfica: ruta legal hacia el 100% de energía renovable</caption>
+        <thead><tr><th>Año</th><th>% renovable</th></tr></thead>
+        <tbody>
+          <tr><td>2023 (actual)</td><td>4.12%</td></tr>
+          <tr><td>2025</td><td>40%</td></tr>
+          <tr><td>2030</td><td>40%</td></tr>
+          <tr><td>2040</td><td>60%</td></tr>
+          <tr><td>2050</td><td>100%</td></tr>
+        </tbody>
+      </table>
     </div>
     <div class="callout" style="margin-top:24px;">
       <p><strong>Un dato que pone las cosas en perspectiva:</strong> para cerrar la brecha entre el 4.12% actual y la meta de 40% en 2025, el Plan proyecta sustituir con energía renovable o alternativa <strong>1,800 MW</strong> que hoy provienen de combustibles fósiles en un plazo de apenas 5 años, y hasta 3,600 MW en 7 a 10 años.</p>
@@ -272,6 +306,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <!-- ============ FOOTER ============ -->
 <footer class="site-footer">
@@ -292,6 +327,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <script src="../nav.js"></script>
+<script src="../theme.js"></script>
 <script src="energia.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-PR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,29 +7,44 @@
 <meta name="description" content="Guía visual y fácil de entender del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático de Puerto Rico (P-MARCC).">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 <link rel="stylesheet" href="styles.css">
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('pmarcc-theme');
+      var isDark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
 <!-- ============ NAV ============ -->
 <header class="site-header" id="top">
-  <nav class="navbar">
+  <nav class="navbar" aria-label="Principal">
     <a href="#top" class="brand">
-      <span class="brand-icon">🌎</span>
+      <span class="brand-icon" aria-hidden="true">🌎</span>
       <span class="brand-text">P-MARCC <small>Puerto Rico</small></span>
     </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#que-es">¿Qué es?</a></li>
-      <li><a href="#datos">Los datos</a></li>
-      <li><a href="#sectores">Sectores</a></li>
-      <li><a href="#acciones">Plan de acción</a></li>
-      <li><a href="#participa">Participa</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#que-es">¿Qué es?</a></li>
+        <li><a href="#datos">Los datos</a></li>
+        <li><a href="#sectores">Sectores</a></li>
+        <li><a href="#acciones">Plan de acción</a></li>
+        <li><a href="#participa">Participa</a></li>
+      </ul>
+      <button id="themeToggle" aria-label="Cambiar a modo oscuro"><span class="tt-thumb"></span></button>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 </header>
 
+<main id="main-content">
 <!-- ============ HERO ============ -->
 <section class="hero">
   <div class="hero-bg" aria-hidden="true"></div>
@@ -60,17 +75,17 @@
 
     <div class="pillars">
       <div class="pillar-card">
-        <div class="pillar-icon">🛠️</div>
+        <div class="pillar-icon" aria-hidden="true">🛠️</div>
         <h3>Mitigación</h3>
         <p>Reducir las emisiones de gases de efecto invernadero (GEI) que Puerto Rico produce, principalmente al generar electricidad y transportarnos.</p>
       </div>
       <div class="pillar-card">
-        <div class="pillar-icon">🌱</div>
+        <div class="pillar-icon" aria-hidden="true">🌱</div>
         <h3>Adaptación</h3>
         <p>Ajustar cómo vivimos, construimos y producimos para reducir el daño de los efectos del cambio climático que ya están ocurriendo.</p>
       </div>
       <div class="pillar-card">
-        <div class="pillar-icon">🛡️</div>
+        <div class="pillar-icon" aria-hidden="true">🛡️</div>
         <h3>Resiliencia</h3>
         <p>Fortalecer la capacidad de las comunidades, la infraestructura y los ecosistemas para resistir y recuperarse de eventos extremos.</p>
       </div>
@@ -125,27 +140,67 @@
 
     <div class="chart-grid">
       <div class="chart-card">
-        <h3>¿De dónde vienen las emisiones?</h3>
+        <h3 id="chartEmisiones-title">¿De dónde vienen las emisiones?</h3>
         <p class="chart-note">Distribución de emisiones de gases de efecto invernadero en Puerto Rico, 2021</p>
-        <canvas id="chartEmisiones"></canvas>
+        <canvas id="chartEmisiones" role="img" aria-labelledby="chartEmisiones-title" aria-describedby="chartEmisiones-data"></canvas>
+        <table class="visually-hidden" id="chartEmisiones-data">
+          <caption>Datos de la gráfica: distribución de emisiones de GEI en Puerto Rico, 2021</caption>
+          <thead><tr><th>Fuente</th><th>% del total de emisiones</th></tr></thead>
+          <tbody>
+            <tr><td>Generación eléctrica</td><td>52%</td></tr>
+            <tr><td>Transporte</td><td>26%</td></tr>
+            <tr><td>Residuos sólidos</td><td>8%</td></tr>
+            <tr><td>Otros sectores</td><td>14%</td></tr>
+          </tbody>
+        </table>
       </div>
       <div class="chart-card">
-        <h3>El nivel del mar seguirá subiendo</h3>
+        <h3 id="chartMar-title">El nivel del mar seguirá subiendo</h3>
         <p class="chart-note">Proyección regional de aumento del nivel del mar (pies), por escenario de emisiones</p>
-        <canvas id="chartMar"></canvas>
+        <canvas id="chartMar" role="img" aria-labelledby="chartMar-title" aria-describedby="chartMar-data"></canvas>
+        <table class="visually-hidden" id="chartMar-data">
+          <caption>Datos de la gráfica: proyección de aumento del nivel del mar en pies, por año y escenario</caption>
+          <thead><tr><th>Año</th><th>Escenario bajo</th><th>Escenario intermedio</th><th>Escenario alto</th></tr></thead>
+          <tbody>
+            <tr><td>2030</td><td>0.59 pies</td><td>0.69 pies</td><td>0.72 pies</td></tr>
+            <tr><td>2050</td><td>1.02 pies</td><td>1.31 pies</td><td>1.71 pies</td></tr>
+            <tr><td>2100</td><td>1.97 pies</td><td>3.94 pies</td><td>7.22 pies</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <div class="chart-grid">
       <div class="chart-card">
-        <h3>Camino hacia la meta de emisiones</h3>
+        <h3 id="chartMeta-title">Camino hacia la meta de emisiones</h3>
         <p class="chart-note">Millones de toneladas métricas de CO2e — la Ley 33-2019 exige no superar 26.7M para 2025</p>
-        <canvas id="chartMeta"></canvas>
+        <canvas id="chartMeta" role="img" aria-labelledby="chartMeta-title" aria-describedby="chartMeta-data"></canvas>
+        <table class="visually-hidden" id="chartMeta-data">
+          <caption>Datos de la gráfica: millones de toneladas métricas de CO2e por año</caption>
+          <thead><tr><th>Año</th><th>MTM de CO2e</th></tr></thead>
+          <tbody>
+            <tr><td>2005 (base)</td><td>53.6</td></tr>
+            <tr><td>2019</td><td>33.4</td></tr>
+            <tr><td>2021</td><td>34.3</td></tr>
+            <tr><td>2025 (meta legal)</td><td>26.7</td></tr>
+          </tbody>
+        </table>
       </div>
       <div class="chart-card">
-        <h3>Marejada ciclónica del huracán María (2017)</h3>
+        <h3 id="chartMarejada-title">Marejada ciclónica del huracán María (2017)</h3>
         <p class="chart-note">Altura máxima registrada por región costera (pies) — referencia usada por el CEACC para planificar</p>
-        <canvas id="chartMarejada"></canvas>
+        <canvas id="chartMarejada" role="img" aria-labelledby="chartMarejada-title" aria-describedby="chartMarejada-data"></canvas>
+        <table class="visually-hidden" id="chartMarejada-data">
+          <caption>Datos de la gráfica: altura de la marejada ciclónica de María por región costera</caption>
+          <thead><tr><th>Región</th><th>Altura</th></tr></thead>
+          <tbody>
+            <tr><td>Costa este (entrada del huracán)</td><td>9.5 pies</td></tr>
+            <tr><td>Resto de la costa este</td><td>7 pies</td></tr>
+            <tr><td>Costa norte</td><td>2–4 pies</td></tr>
+            <tr><td>Costa sur</td><td>3–5 pies</td></tr>
+            <tr><td>Costa oeste / suroeste</td><td>2–3 pies</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -249,6 +304,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <!-- ============ FOOTER ============ -->
 <footer class="site-footer">
@@ -269,6 +325,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <script src="nav.js"></script>
+<script src="theme.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
