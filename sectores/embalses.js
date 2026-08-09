@@ -10,10 +10,12 @@
   var API_BASE = 'https://waterservices.usgs.gov/nwis/dv/';
   var PARAM_CD = '72375';
   var DEFAULT_SITE = '50027100'; // Lago Dos Bocas, Utuado
+  var ALL_HISTORY_START = '1960-01-01'; // anterior al inicio real de cualquier estación de PR
 
   /* Los 19 embalses de PR que monitorea el USGS. Nombres oficiales
      resueltos vía el servicio de metadata de USGS (nwis/site), no
-     inventados ni traducidos. */
+     inventados ni traducidos. "label" solo se usa cuando el nombre
+     común (AAA/CEACC) difiere del nombre técnico del USGS. */
   var STATIONS = [
     { siteNo: '50010800', name: 'LAGO GUAJATACA AT DAMSITE NR QUEBRADILLAS, PR' },
     { siteNo: '50020100', name: 'LAGO GARZAS NR ADJUNTAS, PR' },
@@ -24,7 +26,7 @@
     { siteNo: '50039995', name: 'LAGO CARITE AT SPILLWAY, PR' },
     { siteNo: '50045000', name: 'LAGO LA PLATA AT DAMSITE NR TOA ALTA, PR' },
     { siteNo: '50047550', name: 'LAGO CIDRA AT DAMSITE NEAR CIDRA, PR' },
-    { siteNo: '50059000', name: 'LAGO LOIZA AT DAMSITE NEAR TRUJILLO ALTO, PR' },
+    { siteNo: '50059000', name: 'LAGO LOIZA AT DAMSITE NEAR TRUJILLO ALTO, PR', label: 'Carraízo (Lago Loíza)' },
     { siteNo: '50071225', name: 'LAGO FAJARDO NEAR VAPOR, PR' },
     { siteNo: '50076800', name: 'LAGO BLANCO NEAR NAGUABO, PR' },
     { siteNo: '50093045', name: 'LAGO PATILLAS AT DAMSITE NEAR PATILLAS, PR' },
@@ -35,6 +37,38 @@
     { siteNo: '50128900', name: 'LAGO LOCO AT DAMSITE NR YAUCO, PR' },
     { siteNo: '50141500', name: 'LAGO GUAYO AT DAMSITE NEAR CASTANER, PR' }
   ];
+
+  /* Umbral de "ajustes operacionales" de la AAA, en pies (fuente: gráfica
+     oficial de la AAA, acueductos.pr.gov). Cada site_no fue re-emparejado
+     contra el nombre real del USGS (nwis/site) antes de usarse aquí, no
+     se asumió que el orden de la lista original coincidiera.
+     50125780 (Lucchetti) se omite a propósito: el valor de la foto
+     quedó ambiguo por superposición de texto y no se pudo confirmar.
+     Nota: La Plata y Fajardo comparten el mismo valor (40.50 m / 132.9
+     pies) en la transcripción original de la foto de la AAA. Podría
+     ser correcto (coincidencia real) o un error de transcripción de
+     una fila duplicada; no se pudo verificar de forma independiente,
+     así que se dejan ambos tal como se recibieron. */
+  var NIVEL_AJUSTES_PIES = {
+    '50059000': 121.4,  // Carraízo (Lago Loíza) — 37.00 m
+    '50045000': 132.9,  // La Plata — 40.50 m (ver nota: igual a Fajardo)
+    '50047550': 1307.0, // Cidra — 398.37 m
+    '50111210': 435.0,  // Toa Vaca — 132.6 m
+    '50076800': 73.8,   // Río Blanco — 22.50 m
+    '50071225': 132.9,  // Fajardo — 40.50 m (ver nota: igual a La Plata)
+    '50039995': 1765.9, // Carite — 538.16 m
+    '50093045': 193.0,  // Patillas — 58.82 m
+    '50032290': 2943.4, // El Guineo — 897.33 m
+    '50032590': 2393.0, // Matrullas — 729.39 m
+    '50111300': 328.0,  // Guayabal — 99.97 m
+    '50020100': 2399.6, // Garzas — 731.22 m
+    '50141500': 1444.4, // Guayo — 440.13 m
+    '50128900': 226.0,  // Loco — 68.88 m
+    '50027100': 283.0,  // Dos Bocas — 86.26 m
+    '50026140': 800.5,  // Caonillas — 244 m
+    '50010800': 623.4,  // Guajataca — 190 m
+    '50113950': 500.0   // Cerrillos — 152.4 m
+  };
 
   var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
@@ -47,8 +81,21 @@
     });
   }
 
+  function labelFor(siteNo, rawName) {
+    var station = STATIONS.filter(function (s) { return s.siteNo === siteNo; })[0];
+    if (station && station.label) return station.label;
+    return displayName(rawName);
+  }
+
   function isoDate(d) {
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function startDateFor(range) {
+    if (range === 'all') return ALL_HISTORY_START;
+    var d = new Date();
+    d.setFullYear(d.getFullYear() - (range === '3y' ? 3 : 1));
+    return isoDate(d);
   }
 
   var select = document.getElementById('embalseSelect');
@@ -59,6 +106,7 @@
   var sourceSiteNo = document.getElementById('embalseSourceSiteNo');
   var sourceName = document.getElementById('embalseSourceName');
   var sourceLink = document.getElementById('embalseSourceLink');
+  var rangeButtons = document.querySelectorAll('.range-btn');
   if (!select || !canvas) return;
 
   /* Si Chart.js no cargó (CDN caído o bloqueado), la tabla de datos
@@ -74,16 +122,17 @@
 
   /* ---- 1. Poblar el <select>, ordenado alfabéticamente por nombre ---- */
   STATIONS.slice().sort(function (a, b) {
-    return displayName(a.name).localeCompare(displayName(b.name), 'es');
+    return labelFor(a.siteNo, a.name).localeCompare(labelFor(b.siteNo, b.name), 'es');
   }).forEach(function (s) {
     var opt = document.createElement('option');
     opt.value = s.siteNo;
-    opt.textContent = displayName(s.name);
+    opt.textContent = labelFor(s.siteNo, s.name);
     select.appendChild(opt);
   });
   select.value = DEFAULT_SITE;
 
   var chart = null;
+  var currentRange = '1y';
 
   function setStatus(msg, isError) {
     statusBox.textContent = msg || '';
@@ -99,9 +148,10 @@
     };
   }
 
-  /* ---- 2. Tabla accesible: promedio mensual (730 filas diarias sería
-     demasiado para un lector de pantalla; el promedio mensual da una
-     idea fiel de la tendencia). ---- */
+  /* ---- 2. Tabla accesible: promedio mensual (con "todo el historial"
+     podrían ser cientos de filas diarias, demasiado para un lector de
+     pantalla; el promedio mensual da una idea fiel de la tendencia en
+     cualquier rango). ---- */
   function renderTable(values) {
     var byMonth = {};
     values.forEach(function (v) {
@@ -122,30 +172,47 @@
   }
 
   /* ---- 3. Gráfica de línea con Chart.js ---- */
-  function renderChart(values, stationLabel) {
+  function renderChart(values, stationLabel, siteNo) {
     var c = themeColors();
     var labels = values.map(function (v) {
       var d = v.dateTime.slice(0, 10).split('-');
       return d[2] + ' ' + MESES[parseInt(d[1], 10) - 1] + ' ' + d[0];
     });
     var data = values.map(function (v) { return parseFloat(v.value); });
+    var umbral = NIVEL_AJUSTES_PIES[siteNo];
+
+    var datasets = [{
+      label: stationLabel,
+      data: data,
+      borderColor: '#1f7ae0',
+      backgroundColor: 'rgba(31,122,224,.12)',
+      fill: true, tension: .15, pointRadius: 0, borderWidth: 2
+    }];
+    if (typeof umbral === 'number') {
+      datasets.push({
+        label: 'Nivel de ajustes',
+        data: labels.map(function () { return umbral; }),
+        borderColor: '#c9782f',
+        borderDash: [6, 4],
+        borderWidth: 1.5,
+        pointRadius: 0,
+        fill: false
+      });
+    }
 
     if (chart) chart.destroy();
     chart = new Chart(canvas, {
       type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: stationLabel,
-          data: data,
-          borderColor: '#1f7ae0',
-          backgroundColor: 'rgba(31,122,224,.12)',
-          fill: true, tension: .15, pointRadius: 0, borderWidth: 2
-        }]
-      },
+      data: { labels: labels, datasets: datasets },
       options: {
         animation: false,
-        plugins: { legend: { display: false } },
+        plugins: {
+          legend: {
+            display: datasets.length > 1,
+            position: 'bottom',
+            labels: { boxWidth: 12, padding: 12, font: { size: 11 }, color: c.text }
+          }
+        },
         scales: {
           y: {
             title: { display: true, text: 'Pies sobre el nivel del mar', color: c.text },
@@ -165,10 +232,9 @@
     setStatus('Cargando el historial…', false);
     canvas.style.visibility = 'hidden';
 
-    var end = new Date();
-    var start = new Date();
-    start.setFullYear(start.getFullYear() - 2);
-    var url = API_BASE + '?sites=' + siteNo + '&startDT=' + isoDate(start) + '&endDT=' + isoDate(end)
+    var start = startDateFor(currentRange);
+    var end = isoDate(new Date());
+    var url = API_BASE + '?sites=' + siteNo + '&startDT=' + start + '&endDT=' + end
       + '&format=json&parameterCd=' + PARAM_CD;
 
     fetch(url)
@@ -184,13 +250,14 @@
         if (!values || !values.length) throw new Error('sin valores');
         var stationInfo = STATIONS.filter(function (s) { return s.siteNo === siteNo; })[0];
         var realName = (series.sourceInfo && series.sourceInfo.siteName) || (stationInfo && stationInfo.name) || siteNo;
+        var label = labelFor(siteNo, realName);
 
-        if (chartAvailable) renderChart(values, displayName(realName));
+        if (chartAvailable) renderChart(values, label, siteNo);
         renderTable(values);
-        caption.textContent = 'Datos de la gráfica: elevación promedio mensual del embalse ' + displayName(realName) + ', en pies';
+        caption.textContent = 'Datos de la gráfica: elevación promedio mensual del embalse ' + label + ', en pies';
 
         sourceSiteNo.textContent = siteNo;
-        sourceName.textContent = displayName(realName);
+        sourceName.textContent = label;
         sourceLink.href = 'https://waterdata.usgs.gov/monitoring-location/USGS-' + siteNo + '/';
 
         canvas.style.visibility = 'visible';
@@ -203,6 +270,16 @@
 
   select.addEventListener('change', function () { loadStation(select.value); });
 
+  rangeButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (btn.classList.contains('is-active')) return;
+      rangeButtons.forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      currentRange = btn.getAttribute('data-range');
+      loadStation(select.value);
+    });
+  });
+
   if (chartAvailable) Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
   loadStation(DEFAULT_SITE);
 
@@ -213,6 +290,7 @@
     chart.options.scales.y.title.color = c.text;
     chart.options.scales.y.grid.color = c.grid;
     chart.options.scales.x.ticks.color = c.text;
+    if (chart.options.plugins.legend.labels) chart.options.plugins.legend.labels.color = c.text;
     chart.update();
   });
 })();

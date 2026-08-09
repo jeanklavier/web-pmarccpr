@@ -162,7 +162,7 @@
   <div class="container">
     <span class="tag">Historial de niveles</span>
     <h2>El nivel de los embalses, con datos del USGS</h2>
-    <p class="chart-note">La AAA y la AEE solo publican el nivel actual de los embalses, sin historial. El U.S. Geological Survey (USGS) monitorea 19 embalses de Puerto Rico y sí mantiene un historial público. Elige un embalse para ver su elevación diaria de los últimos 2 años.</p>
+    <p class="chart-note">La AAA y la AEE solo publican el nivel actual de los embalses, sin historial. El U.S. Geological Survey (USGS) monitorea 19 embalses de Puerto Rico y sí mantiene un historial público. Elige un embalse y un rango de fechas para ver su elevación diaria.</p>
 
     <div class="embalse-controls">
       <label for="embalseSelect">Embalse</label>
@@ -172,6 +172,11 @@
     <div class="chart-card">
       <h3 id="embalseChart-title">Elevación diaria del embalse</h3>
       <p class="chart-note">Pies de elevación sobre el nivel medio del mar (LMSL)</p>
+      <div class="chart-range-controls" role="group" aria-label="Rango de fechas">
+        <button type="button" class="range-btn is-active" data-range="1y">Último año</button>
+        <button type="button" class="range-btn" data-range="3y">Últimos 3 años</button>
+        <button type="button" class="range-btn" data-range="all">Todo el historial</button>
+      </div>
       <canvas id="embalseChart" role="img" aria-labelledby="embalseChart-title" aria-describedby="embalseChart-data"></canvas>
       <table class="visually-hidden" id="embalseChart-data">
         <caption id="embalseChart-caption">Datos de la gráfica: elevación promedio mensual del embalse seleccionado, en pies</caption>
@@ -182,6 +187,7 @@
     </div>
 
     <p class="embalse-note">Datos: U.S. Geological Survey (USGS), estación <span id="embalseSourceSiteNo">-</span> - <a id="embalseSourceLink" href="https://waterdata.usgs.gov/" target="_blank" rel="noopener"><span id="embalseSourceName">-</span></a>. Los valores más recientes son datos <strong>provisionales</strong> (sujetos a revisión) según el propio USGS.</p>
+    <p class="embalse-note">Umbral de "ajustes operacionales" según AAA. Cuando el nivel cae por debajo de esta línea, la AAA puede imponer restricciones de consumo. Fuente: AAA (imagen de monitoreo diario, acueductos.pr.gov).</p>
   </div>
 </section>
 
