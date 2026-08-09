@@ -12,10 +12,11 @@
   var DEFAULT_SITE = '50027100'; // Lago Dos Bocas, Utuado
   var ALL_HISTORY_START = '1960-01-01'; // anterior al inicio real de cualquier estación de PR
 
-  /* Los 19 embalses de PR que monitorea el USGS. Nombres oficiales
+  /* Los 19 embalses de PR que monitorea el USGS. Nombres técnicos
      resueltos vía el servicio de metadata de USGS (nwis/site), no
-     inventados ni traducidos. "label" solo se usa cuando el nombre
-     común (AAA/CEACC) difiere del nombre técnico del USGS. */
+     inventados ni traducidos - se guardan aquí solo como referencia /
+     rastro de auditoría de qué site_no es cuál embalse. El nombre que
+     de verdad se muestra en la interfaz sale de NOMBRE_AAA, más abajo. */
   var STATIONS = [
     { siteNo: '50010800', name: 'LAGO GUAJATACA AT DAMSITE NR QUEBRADILLAS, PR' },
     { siteNo: '50020100', name: 'LAGO GARZAS NR ADJUNTAS, PR' },
@@ -26,7 +27,7 @@
     { siteNo: '50039995', name: 'LAGO CARITE AT SPILLWAY, PR' },
     { siteNo: '50045000', name: 'LAGO LA PLATA AT DAMSITE NR TOA ALTA, PR' },
     { siteNo: '50047550', name: 'LAGO CIDRA AT DAMSITE NEAR CIDRA, PR' },
-    { siteNo: '50059000', name: 'LAGO LOIZA AT DAMSITE NEAR TRUJILLO ALTO, PR', label: 'Carraízo (Lago Loíza)' },
+    { siteNo: '50059000', name: 'LAGO LOIZA AT DAMSITE NEAR TRUJILLO ALTO, PR' },
     { siteNo: '50071225', name: 'LAGO FAJARDO NEAR VAPOR, PR' },
     { siteNo: '50076800', name: 'LAGO BLANCO NEAR NAGUABO, PR' },
     { siteNo: '50093045', name: 'LAGO PATILLAS AT DAMSITE NEAR PATILLAS, PR' },
@@ -38,11 +39,39 @@
     { siteNo: '50141500', name: 'LAGO GUAYO AT DAMSITE NEAR CASTANER, PR' }
   ];
 
+  /* Nombres cortos tal como aparecen en la gráfica oficial de monitoreo
+     diario de la AAA (acueductos.pr.gov) - lo que ve la persona usuaria
+     en el <select>, la leyenda de la gráfica y la nota de fuente. Cada
+     site_no se emparejó contra el nombre técnico real de STATIONS (no
+     se asumió el orden de ninguna lista externa). "Luchetti" con una
+     sola "c", corrigiendo el error de las instrucciones anteriores. */
+  var NOMBRE_AAA = {
+    '50010800': 'Guajataca',
+    '50020100': 'Garzas',
+    '50026140': 'Caonillas',
+    '50027100': 'Dos Bocas',
+    '50032290': 'Guineo',
+    '50032590': 'Matrullas',
+    '50039995': 'Carite',
+    '50045000': 'La Plata',
+    '50047550': 'Cidra',
+    '50059000': 'Carraízo',
+    '50071225': 'Fajardo',
+    '50076800': 'Río Blanco',
+    '50093045': 'Patillas',
+    '50111210': 'Toa Vaca',
+    '50111300': 'Guayabal',
+    '50113950': 'Cerrillos',
+    '50125780': 'Luchetti',
+    '50128900': 'Loco',
+    '50141500': 'Guayo'
+  };
+
   /* Umbral de "ajustes operacionales" de la AAA, en pies (fuente: gráfica
      oficial de la AAA, acueductos.pr.gov). Cada site_no fue re-emparejado
      contra el nombre real del USGS (nwis/site) antes de usarse aquí, no
      se asumió que el orden de la lista original coincidiera.
-     50125780 (Lucchetti) se omite a propósito: el valor de la foto
+     50125780 (Luchetti) se omite a propósito: el valor de la foto
      quedó ambiguo por superposición de texto y no se pudo confirmar.
      Nota: La Plata y Fajardo comparten el mismo valor (40.50 m / 132.9
      pies) en la transcripción original de la foto de la AAA. Podría
@@ -50,7 +79,7 @@
      una fila duplicada; no se pudo verificar de forma independiente,
      así que se dejan ambos tal como se recibieron. */
   var NIVEL_AJUSTES_PIES = {
-    '50059000': 121.4,  // Carraízo (Lago Loíza) — 37.00 m
+    '50059000': 121.4,  // Carraízo — 37.00 m
     '50045000': 132.9,  // La Plata — 40.50 m (ver nota: igual a Fajardo)
     '50047550': 1307.0, // Cidra — 398.37 m
     '50111210': 435.0,  // Toa Vaca — 132.6 m
@@ -72,19 +101,8 @@
 
   var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 
-  /* Pone en mayúscula solo la primera letra de cada palabra; conserva
-     "PR" tal cual (es la abreviatura del estado/territorio, no una
-     palabra común). No cambia el nombre en sí, solo su capitalización. */
-  function displayName(rawName) {
-    return rawName.toLowerCase().replace(/\b\w+\b/g, function (w) {
-      return w === 'pr' ? 'PR' : w.charAt(0).toUpperCase() + w.slice(1);
-    });
-  }
-
-  function labelFor(siteNo, rawName) {
-    var station = STATIONS.filter(function (s) { return s.siteNo === siteNo; })[0];
-    if (station && station.label) return station.label;
-    return displayName(rawName);
+  function labelFor(siteNo) {
+    return NOMBRE_AAA[siteNo] || siteNo;
   }
 
   function isoDate(d) {
@@ -122,11 +140,11 @@
 
   /* ---- 1. Poblar el <select>, ordenado alfabéticamente por nombre ---- */
   STATIONS.slice().sort(function (a, b) {
-    return labelFor(a.siteNo, a.name).localeCompare(labelFor(b.siteNo, b.name), 'es');
+    return labelFor(a.siteNo).localeCompare(labelFor(b.siteNo), 'es');
   }).forEach(function (s) {
     var opt = document.createElement('option');
     opt.value = s.siteNo;
-    opt.textContent = labelFor(s.siteNo, s.name);
+    opt.textContent = labelFor(s.siteNo);
     select.appendChild(opt);
   });
   select.value = DEFAULT_SITE;
@@ -248,9 +266,7 @@
         var series = ts[0];
         var values = series.values[0].value;
         if (!values || !values.length) throw new Error('sin valores');
-        var stationInfo = STATIONS.filter(function (s) { return s.siteNo === siteNo; })[0];
-        var realName = (series.sourceInfo && series.sourceInfo.siteName) || (stationInfo && stationInfo.name) || siteNo;
-        var label = labelFor(siteNo, realName);
+        var label = labelFor(siteNo);
 
         if (chartAvailable) renderChart(values, label, siteNo);
         renderTable(values);
