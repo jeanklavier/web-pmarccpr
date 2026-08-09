@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Energía | P-MARCC Puerto Rico</title>
+<meta name="description" content="Diagnóstico y cursos de acción del sector Energía en el Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático de Puerto Rico.">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="site-header" id="top">
+  <nav class="navbar">
+    <a href="../index.html" class="brand">
+      <span class="brand-icon">🌎</span>
+      <span class="brand-text">P-MARCC <small>Puerto Rico</small></span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="../index.html#que-es">¿Qué es?</a></li>
+      <li><a href="../index.html#datos">Los datos</a></li>
+      <li><a href="../index.html#sectores">Sectores</a></li>
+      <li><a href="../index.html#acciones">Plan de acción</a></li>
+      <li><a href="../index.html#participa">Participa</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- ============ SECTOR HERO ============ -->
+<section class="sector-hero">
+  <div class="container">
+    <p class="breadcrumb" style="color:#bcdcd8; margin-top:0;">
+      <a href="../index.html" style="color:#fff;">Inicio</a> ›
+      <a href="../index.html#sectores" style="color:#fff;">Sectores</a> ›
+      <span>Energía</span>
+    </p>
+    <div class="sector-hero-icon">⚡</div>
+    <h1>Energía</h1>
+    <p>Puerto Rico depende casi por completo de combustibles fósiles importados para generar electricidad. Es, a la vez, la mayor fuente de emisiones del país y el sector con la meta de transformación más ambiciosa: 100% renovable para el 2050.</p>
+    <div class="sector-badges">
+      <span class="sector-badge">52% de las emisiones de GEI de PR (2021)</span>
+      <span class="sector-badge">Ley 17-2019 · Política Pública Energética</span>
+      <span class="sector-badge">5 cursos de acción (COA)</span>
+    </div>
+  </div>
+</section>
+
+<nav class="sector-nav">
+  <div class="container">
+    <a href="#diagnostico">Diagnóstico</a>
+    <a href="#metas">Metas legales</a>
+    <a href="#acciones">Cursos de acción</a>
+    <a href="#fuentes">Fuentes</a>
+  </div>
+</nav>
+
+<!-- ============ DIAGNÓSTICO ============ -->
+<section class="section" id="diagnostico">
+  <div class="container">
+    <span class="tag">El diagnóstico</span>
+    <h2>¿Cómo está el sistema eléctrico hoy?</h2>
+
+    <div class="meta-badges">
+      <div class="meta-badge"><strong>4.12%</strong><span>de la generación es renovable</span></div>
+      <div class="meta-badge"><strong>96%</strong><span>depende de combustibles fósiles</span></div>
+      <div class="meta-badge"><strong>1.5M</strong><span>clientes de la AEE/LUMA</span></div>
+      <div class="meta-badge"><strong>85,662</strong><span>clientes "prosumidores" con placas solares (jun. 2023)</span></div>
+    </div>
+
+    <div class="diag-columns">
+      <div>
+        <p>Desde 1941, la Autoridad de Energía Eléctrica (AEE) fue la única proveedora de electricidad de Puerto Rico. Hoy el sistema está fragmentado entre tres entidades: la <strong>AEE</strong> (dueña de los activos), <strong>LUMA Energy</strong> (transmisión y distribución, desde 2021) y <strong>Genera PR</strong> (operación de las plantas generatrices, desde enero de 2023).</p>
+        <p>Alrededor del <strong>96% de la generación eléctrica todavía usa combustibles fósiles</strong>. Solo el 4.12% proviene de fuentes renovables a gran escala. A esto se suman 85,662 clientes "prosumidores" —hogares y negocios con placas solares que además alimentan la red— que aportan cerca de 336,000 MWh al año, evitando aproximadamente 456,744 toneladas de CO2e anuales.</p>
+        <p>El sistema tiene un problema estructural de resiliencia: las plantas de generación más eficientes están en el <strong>sur</strong> de la isla, pero la mayor demanda está en el <strong>norte</strong>, lo que obliga a transportar electricidad por largas distancias a través de 178 centros de transmisión y más de 1,100 millas de líneas — una vulnerabilidad que quedó expuesta con los huracanes Irma y María (2017), los terremotos de 2020 y el huracán Fiona (2022).</p>
+        <p>Casi el <strong>44.5% de la población de Puerto Rico vive bajo el nivel de pobreza</strong>, un dato que el propio Plan señala como crucial al diseñar estrategias de energía renovable accesible: en 36 de los 78 municipios, la mitad o más de sus residentes están en situación de pobreza.</p>
+        <h4 style="margin-top:28px; color:var(--blue-800);">¿Quién consume la electricidad?</h4>
+        <ul class="diag-list">
+          <li><strong>Clientes residenciales:</strong> 91% de los clientes, 43% del consumo total.</li>
+          <li><strong>Clientes comerciales:</strong> 8% de los clientes, 45% del consumo — las tarifas más altas del sistema.</li>
+          <li><strong>Clientes industriales:</strong> menos del 1% de los clientes, pero cerca del 11% del consumo.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="chart-card">
+          <h3>Mezcla de generación eléctrica</h3>
+          <p class="chart-note">Fuente: AEE / Genera PR, 2022–2023</p>
+          <canvas id="chartMezcla"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ METAS ============ -->
+<section class="section section-alt" id="metas">
+  <div class="container">
+    <span class="tag">Hacia dónde vamos</span>
+    <h2>La ruta legal hacia el 100% renovable</h2>
+    <p class="lead">La Ley 17-2019 (Política Pública Energética) fija metas de energía renovable por etapas. El propio P-MARCC traza métricas intermedias para cumplirlas.</p>
+    <div class="goal-track">
+      <canvas id="chartRuta"></canvas>
+    </div>
+    <div class="callout" style="margin-top:24px;">
+      <p><strong>Un dato que pone las cosas en perspectiva:</strong> para cerrar la brecha entre el 4.12% actual y la meta de 40% en 2025, el Plan proyecta sustituir con energía renovable o alternativa <strong>1,800 MW</strong> que hoy provienen de combustibles fósiles en un plazo de apenas 5 años, y hasta 3,600 MW en 7 a 10 años.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CURSOS DE ACCIÓN ============ -->
+<section class="section" id="acciones">
+  <div class="container">
+    <span class="tag">El plan de acción</span>
+    <h2>Los 5 cursos de acción para el sector Energía</h2>
+    <p class="coa-intro">El Capítulo 7.1 del P-MARCC (Tabla 7.1) organiza las estrategias de energía en cinco grandes cursos de acción (COA), cada uno con objetivos, estrategias específicas, entidad responsable y métricas de progreso. Aquí se resumen fielmente al texto del Plan.</p>
+
+    <!-- COA A -->
+    <div class="coa-block">
+      <div class="coa-block-head">
+        <h3><span class="coa-letter">A</span>Transición a energía neutra en emisiones</h3>
+        <p>Adoptar medidas encaminadas a la transición energética a un modelo de energía renovable o alternativa con la eliminación del carbón como fuente de energía.</p>
+      </div>
+      <div class="coa-body">
+        <div class="coa-objective">
+          <h4>COA A.1 — Adquisición de energía neutra, resiliente y accesible</h4>
+          <ul class="coa-strategies">
+            <li>Implementar los "tramos" (tranches) de proyectos de energía renovable a escala de servicio público definidos por el Negociado de Energía (NEPR), conforme al Plan Integrado de Recursos de la AEE.</li>
+            <li>Coordinar con expertos y agencias las adquisiciones de sistemas renovables, y capacitar a la fuerza laboral del sector (meta: certificar al 30% de los profesionales del campo cada año).</li>
+            <li>Agilizar los estudios de interconexión a la red y actualizar los alimentadores del sistema de distribución.</li>
+            <li>Priorizar el suministro de energía de bajo costo para mantener tarifas justas y accesibles.</li>
+          </ul>
+          <div class="coa-meta">
+            <span class="coa-chip resp">Responsables: NEPR, AEE, LUMA, DDEC</span>
+            <span class="coa-chip plazo">Mediano plazo</span>
+            <span class="coa-chip result">Meta: 40% renovable en 2025, 100% en 2050</span>
+          </div>
+        </div>
+        <div class="coa-objective">
+          <h4>COA A.1.3 — Cierre de la planta de carbón y sustitución por renovables</h4>
+          <ul class="coa-strategies">
+            <li>Eliminar el uso del carbón como fuente de generación de energía.</li>
+            <li>Decomisar las unidades de generación a combustibles fósiles que hayan concluido su vida útil, según el Plan Integrado de Recursos.</li>
+            <li>Estudiar la viabilidad de hidrógeno verde para la generación, incluyendo el efecto del aumento del nivel del mar sobre las centrales costeras.</li>
+          </ul>
+          <div class="coa-meta">
+            <span class="coa-chip resp">Responsables: NEPR, AEE, AES, Genera PR</span>
+            <span class="coa-chip plazo">Largo plazo (7–10 años)</span>
+            <span class="coa-chip result">R: Cese de la planta de carbón de AES en Guayama en diciembre de 2027</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COA B -->
+    <div class="coa-block">
+      <div class="coa-block-head">
+        <h3><span class="coa-letter">B</span>Eficiencia y ahorro energético</h3>
+        <p>Impulsar políticas de eficiencia y ahorro energético, con un modelo de tarifas que penalice el sobreconsumo.</p>
+      </div>
+      <div class="coa-body">
+        <div class="coa-objective">
+          <h4>COA B.1 — Programa de eficiencia energética</h4>
+          <ul class="coa-strategies">
+            <li>Crear un proceso público y multisectorial (comunidad, industria, filantropía) para diseñar un modelo de financiamiento híbrido de eficiencia energética.</li>
+            <li>Identificar las actividades de mayor consumo energético — el 20% de las actividades que consumen el 80% de la energía.</li>
+            <li>Subsidiar calentadores solares en residencias unifamiliares ($5,000 por residencia; meta de 50,000 instalaciones al año).</li>
+            <li>Climatizar residencias de familias bajo el nivel de pobreza mediante el Weatherization Assistance Program del DOE federal (meta: más de 200 residencias al año).</li>
+          </ul>
+          <div class="coa-meta">
+            <span class="coa-chip resp">Responsables: NEPR, LUMA, DV, DDEC/PPPE</span>
+            <span class="coa-chip plazo">Corto a largo plazo (10 años)</span>
+            <span class="coa-chip result">M: Reducir 1% la demanda de energía anualmente por 10 años</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COA C -->
+    <div class="coa-block">
+      <div class="coa-block-head">
+        <h3><span class="coa-letter">C</span>Uso planificado del suelo para renovables</h3>
+        <p>Promover las energías renovables o alternativas aprovechando, siempre que sea posible, espacios ya alterados por la actividad humana, para minimizar la ocupación innecesaria de terrenos.</p>
+      </div>
+      <div class="coa-body">
+        <div class="coa-objective">
+          <h4>COA C.1 — Guías de uso de terrenos para energía renovable</h4>
+          <ul class="coa-strategies">
+            <li>Utilizar terrenos de vertederos para instalar sistemas fotovoltaicos (incluyendo Vieques).</li>
+            <li>Instalar paneles solares sin afectar terrenos agrícolas o de ganadería.</li>
+            <li>Permitir sistemas de paneles a más de 8 pies de altura sobre cultivos que no requieran luz solar directa (agrivoltaica).</li>
+            <li>No afectar cuerpos de agua, sumideros, zonas de karso ni humedales.</li>
+          </ul>
+          <div class="coa-meta">
+            <span class="coa-chip resp">Responsables: Junta de Planificación, AAPP</span>
+            <span class="coa-chip plazo">Largo plazo (7–10 años)</span>
+            <span class="coa-chip result">M: 60,000 MWh/año en vertederos; 3.7 TWh/año sin impactar la agricultura</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COA D -->
+    <div class="coa-block">
+      <div class="coa-block-head">
+        <h3><span class="coa-letter">D</span>Modelo energético sin combustibles fósiles</h3>
+        <p>Estimular un modelo energético cuyo fin sea eliminar el consumo de combustibles fósiles para alcanzar mayor participación de las energías renovables o alternativas en el sistema eléctrico.</p>
+      </div>
+      <div class="coa-body">
+        <div class="coa-objective">
+          <h4>COA D.1 — Transformar la generación a fuentes no fósiles con almacenamiento</h4>
+          <ul class="coa-strategies">
+            <li>Analizar el sistema de distribución con énfasis en cómo varía el costo y las limitaciones del servicio según la ubicación.</li>
+            <li>Examinar primero las opciones de eficiencia energética antes de considerar nuevos recursos (solar, hidroeléctrica, eólica).</li>
+            <li>Integrar baterías y vehículos eléctricos al sistema mediante reuniones comunitarias amplias e inclusivas.</li>
+            <li>Retirar las unidades generatrices más ineficientes según el Plan Integrado de Recursos.</li>
+          </ul>
+          <div class="coa-meta">
+            <span class="coa-chip resp">Responsables: NEPR, AEE, Genera PR</span>
+            <span class="coa-chip plazo">Largo plazo (10 años)</span>
+            <span class="coa-chip result">M: 40% renovable (2023–2025), 60% (2026–2040), 100% (2041–2050)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COA E -->
+    <div class="coa-block">
+      <div class="coa-block-head">
+        <h3><span class="coa-letter">E</span>Autoconsumo y energía comunitaria</h3>
+        <p>Adoptar medidas que favorezcan el autoconsumo energético a base de energías renovables y la participación de actores locales en su producción y distribución.</p>
+      </div>
+      <div class="coa-body">
+        <div class="coa-objective">
+          <h4>COA E.1 — Prosumidores y plantas de energía virtuales (VPP)</h4>
+          <ul class="coa-strategies">
+            <li>Evaluar la estructura tarifaria para el autoconsumo y llevar las tarifas propuestas a vistas públicas.</li>
+            <li>Fomentar plantas de energía virtuales (VPP) que vinculen a múltiples clientes y desplacen a las plantas de combustibles fósiles.</li>
+            <li>Instalar sistemas de energía renovable en techos de comunidades en desventaja socioeconómica ($1,000 millones del Fondo de Resiliencia Energética; meta: 100,000 residencias en 5 años).</li>
+          </ul>
+          <div class="coa-meta">
+            <span class="coa-chip resp">Responsables: NEPR, LUMA, DOE federal</span>
+            <span class="coa-chip plazo">Corto a mediano plazo</span>
+            <span class="coa-chip result">M: +10% anual de clientes con sistemas renovables; -20% en demanda pico</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ FUENTES ============ -->
+<section class="section section-alt" id="fuentes">
+  <div class="container">
+    <div class="source-box">
+      <h4>Fuentes de esta página</h4>
+      <ul>
+        <li>CEACC (2024). <em>P-MARCC</em>, Tomo 1, Capítulo 4.1 "Energía" (diagnóstico), pp. 74–80.</li>
+        <li>CEACC (2024). <em>P-MARCC</em>, Tomo 2, Capítulo 6 "COA para la mitigación" (COA A.2, A.3), pp. 296 y ss.</li>
+        <li>CEACC (2024). <em>P-MARCC</em>, Tomo 2, Capítulo 7.1 "Energía" (Tabla 7.1, COA A–E), pp. 332–341.</li>
+        <li>Ley 17-2019, Ley de Política Pública Energética de Puerto Rico.</li>
+        <li>Ley 33-2019, Ley de Mitigación, Adaptación y Resiliencia al Cambio Climático de Puerto Rico.</li>
+      </ul>
+    </div>
+
+    <div class="sector-pager">
+      <a class="pager-link" href="../index.html#sectores"><span>Volver a</span><strong>Todos los sectores</strong></a>
+      <a class="pager-link next" href="infraestructura.html"><span>Siguiente sector</span><strong>Infraestructura y vivienda →</strong></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Sobre esta guía</h4>
+        <p>Este sitio resume, de forma visual y en lenguaje sencillo, el <em>Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico</em> (P-MARCC), versión revisada de abril de 2024, elaborado por el Comité de Expertos y Asesores sobre Cambio Climático (CEACC), Gobierno de Puerto Rico. No sustituye el documento oficial.</p>
+      </div>
+      <div>
+        <h4>Fuente citada como</h4>
+        <p>CEACC (2024). <em>Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico.</em> Gobierno de Puerto Rico. Tomos 1 y 2.</p>
+      </div>
+    </div>
+    <p class="footer-note">Hecho para ayudar al ciudadano común a entender el Plan — no oficial, no afiliado al CEACC ni al Gobierno de Puerto Rico.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="../nav.js"></script>
+<script src="energia.js"></script>
+</body>
+</html>

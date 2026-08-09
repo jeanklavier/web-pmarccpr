@@ -1,13 +1,7 @@
-/* ============ Mobile nav ============ */
-const navToggle = document.getElementById('navToggle');
-const navLinks = document.getElementById('navLinks');
-navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
-navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
-
 /* ============ Sector data (from P-MARCC, Cap. 4 y 7) ============ */
 const sectores = [
   {
-    icon: '⚡', nombre: 'Energía',
+    icon: '⚡', nombre: 'Energía', slug: 'energia',
     stat: '4.12% renovable hoy · meta 100% para 2050',
     resumen: 'El sistema eléctrico depende casi por completo de combustibles fósiles importados.',
     detalle: 'La generación de electricidad es la mayor fuente de emisiones de GEI en Puerto Rico (52% del total en 2021). El Plan apunta a acelerar la transición a energía renovable y distribuida, especialmente en techos residenciales.'
@@ -80,18 +74,25 @@ const sectores = [
   }
 ];
 
+// Páginas de sector ya construidas (las demás muestran el resumen expandible por ahora)
+const paginasListas = ['energia'];
+
 const grid = document.getElementById('sectorGrid');
 sectores.forEach(s => {
-  const card = document.createElement('div');
+  const tienePagina = paginasListas.includes(s.slug);
+  const card = document.createElement(tienePagina ? 'a' : 'div');
   card.className = 'sector-card';
+  if (tienePagina) card.href = `sectores/${s.slug}.html`;
   card.innerHTML = `
     <div class="sector-icon">${s.icon}</div>
     <h4>${s.nombre}</h4>
     <p>${s.resumen}</p>
     <span class="sector-stat">${s.stat}</span>
-    <div class="sector-detail">${s.detalle}</div>
+    ${tienePagina
+      ? `<div class="sector-detail" style="display:block; border-top:1px dashed #ddd; margin-top:10px; padding-top:10px;">Ver diagnóstico y cursos de acción completos →</div>`
+      : `<div class="sector-detail">${s.detalle}</div>`}
   `;
-  card.addEventListener('click', () => card.classList.toggle('open'));
+  if (!tienePagina) card.addEventListener('click', () => card.classList.toggle('open'));
   grid.appendChild(card);
 });
 
