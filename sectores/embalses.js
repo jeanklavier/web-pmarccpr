@@ -100,6 +100,9 @@
   };
 
   var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+  var MESES_LARGO = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
+    'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  var TENDENCIA_UMBRAL_M = 0.05; // mismo umbral que usa la AAA/embalsespr.com
 
   function labelFor(siteNo) {
     return NOMBRE_AAA[siteNo] || siteNo;
@@ -125,6 +128,9 @@
   var sourceName = document.getElementById('embalseSourceName');
   var sourceLink = document.getElementById('embalseSourceLink');
   var rangeButtons = document.querySelectorAll('.range-btn');
+  var currentValue = document.getElementById('reservoirCurrentValue');
+  var currentTrend = document.getElementById('reservoirCurrentTrend');
+  var currentDate = document.getElementById('reservoirCurrentDate');
   if (!select || !canvas) return;
 
   /* Si Chart.js no cargó (CDN caído o bloqueado), la tabla de datos
@@ -166,7 +172,55 @@
     };
   }
 
-  /* ---- 2. Tabla accesible: promedio mensual (con "todo el historial"
+  /* ---- 2. Última lectura + tendencia (independiente del rango elegido:
+     el fetch siempre termina en "hoy", así que el último punto del
+     array ya fetched es el dato más reciente disponible sin importar
+     si el usuario está viendo 1 año, 3 años o todo el historial). ---- */
+  function renderCurrentReading(values) {
+    // Defensivo: nos aseguramos de que venga ordenado ascendente por
+    // fecha antes de tomar el último punto (USGS ya lo entrega así,
+    // pero no lo asumimos).
+    var sorted = values.slice().sort(function (a, b) {
+      return a.dateTime < b.dateTime ? -1 : (a.dateTime > b.dateTime ? 1 : 0);
+    });
+    var last = sorted[sorted.length - 1];
+    var prev = sorted.length > 1 ? sorted[sorted.length - 2] : null;
+    var lastFt = parseFloat(last.value);
+    if (isNaN(lastFt)) {
+      currentValue.textContent = '—';
+      currentTrend.textContent = '';
+      currentTrend.className = 'reservoir-current-trend';
+      currentDate.textContent = '';
+      return;
+    }
+    var lastM = lastFt * 0.3048;
+    currentValue.textContent = lastM.toFixed(2) + ' m';
+
+    var d = last.dateTime.slice(0, 10).split('-');
+    currentDate.textContent = parseInt(d[2], 10) + ' de ' + MESES_LARGO[parseInt(d[1], 10) - 1] + ' de ' + d[0];
+
+    if (prev) {
+      var prevFt = parseFloat(prev.value);
+      if (!isNaN(prevFt)) {
+        var diffM = lastM - prevFt * 0.3048;
+        if (diffM > TENDENCIA_UMBRAL_M) {
+          currentTrend.textContent = '↑ Subiendo';
+          currentTrend.className = 'reservoir-current-trend up';
+        } else if (diffM < -TENDENCIA_UMBRAL_M) {
+          currentTrend.textContent = '↓ Bajando';
+          currentTrend.className = 'reservoir-current-trend down';
+        } else {
+          currentTrend.textContent = '→ Estable';
+          currentTrend.className = 'reservoir-current-trend stable';
+        }
+        return;
+      }
+    }
+    currentTrend.textContent = '';
+    currentTrend.className = 'reservoir-current-trend';
+  }
+
+  /* ---- 3. Tabla accesible: promedio mensual (con "todo el historial"
      podrían ser cientos de filas diarias, demasiado para un lector de
      pantalla; el promedio mensual da una idea fiel de la tendencia en
      cualquier rango). ---- */
@@ -189,7 +243,7 @@
     tbody.innerHTML = rows.join('');
   }
 
-  /* ---- 3. Gráfica de línea con Chart.js ---- */
+  /* ---- 4. Gráfica de línea con Chart.js ---- */
   function renderChart(values, stationLabel, siteNo) {
     var c = themeColors();
     var labels = values.map(function (v) {
@@ -245,7 +299,7 @@
     });
   }
 
-  /* ---- 4. Cargar un embalse ---- */
+  /* ---- 5. Cargar un embalse ---- */
   function loadStation(siteNo) {
     setStatus('Cargando el historial…', false);
     canvas.style.visibility = 'hidden';
@@ -270,6 +324,7 @@
 
         if (chartAvailable) renderChart(values, label, siteNo);
         renderTable(values);
+        renderCurrentReading(values);
         caption.textContent = 'Datos de la gráfica: elevación promedio mensual del embalse ' + label + ', en pies';
 
         sourceSiteNo.textContent = siteNo;

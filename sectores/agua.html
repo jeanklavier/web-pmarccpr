@@ -177,6 +177,12 @@
         <button type="button" class="range-btn" data-range="3y">Últimos 3 años</button>
         <button type="button" class="range-btn" data-range="all">Todo el historial</button>
       </div>
+      <div class="reservoir-current" id="reservoirCurrent">
+        <span class="reservoir-current-label">Última lectura (USGS, provisional)</span>
+        <span class="reservoir-current-value" id="reservoirCurrentValue">—</span>
+        <span class="reservoir-current-trend" id="reservoirCurrentTrend"></span>
+        <span class="reservoir-current-date" id="reservoirCurrentDate"></span>
+      </div>
       <canvas id="embalseChart" role="img" aria-labelledby="embalseChart-title" aria-describedby="embalseChart-data"></canvas>
       <table class="visually-hidden" id="embalseChart-data">
         <caption id="embalseChart-caption">Datos de la gráfica: elevación promedio mensual del embalse seleccionado, en pies</caption>
