@@ -29,7 +29,7 @@
     return;
   }
   pdfjsLib.GlobalWorkerOptions.workerSrc =
-    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.2.108/pdf.worker.min.mjs';
 
   var params = new URLSearchParams(window.location.search);
   var tomo = params.get('tomo') === '2' ? 2 : 1;
