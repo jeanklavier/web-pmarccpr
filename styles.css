@@ -357,6 +357,20 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
 .site-footer p{font-size:.86rem; color:#a9c7c3;}
 .footer-note{border-top:1px solid rgba(255,255,255,.12); padding-top:20px; font-size:.78rem; color:#7fa19c; text-align:center;}
 
+.support-block{
+  margin-top:24px; padding-top:20px; border-top:1px solid rgba(255,255,255,.12);
+  display:flex; flex-direction:column; align-items:flex-start; gap:10px;
+}
+.support-block p{ margin:0; font-size:.92em; color:#bcdcd8; max-width:520px; }
+.bmc-button{
+  display:inline-flex; align-items:center; gap:8px;
+  background:#FFDD00; color:#000; font-weight:600; font-size:.9em;
+  padding:10px 16px; border-radius:8px; text-decoration:none;
+  transition:transform .15s ease;
+}
+.bmc-button:hover{ transform:translateY(-1px); }
+.bmc-button img{ width:20px; height:20px; }
+
 /* ============ SECTOR PAGES ============ */
 .breadcrumb{
   font-size:.85rem; color:var(--text-dim); margin:22px 0 0; display:flex; gap:8px; align-items:center; flex-wrap:wrap;
