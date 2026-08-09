@@ -80,7 +80,7 @@ const sectores = [
   {
     icon: '🏖️', nombre: 'Turismo', slug: 'turismo',
     stat: 'El sector económico más vulnerable, según el CEACC',
-    resumen: 'Playas, arrecifes y atracciones naturales —motor del turismo— están entre los recursos más expuestos.',
+    resumen: 'Playas, arrecifes y atracciones naturales (motor del turismo) están entre los recursos más expuestos.',
     detalle: 'El Plan recomienda proteger la infraestructura turística (hoteles, puertos, aeropuertos) y actualizar el marco legal de turismo para incorporar la adaptación climática.'
   },
   {

@@ -1,5 +1,5 @@
 /* ============================================================
-   Reportar un error — botón flotante + modal accesible.
+   Reportar un error - botón flotante + modal accesible.
    Envía la corrección a la misma base de datos (Supabase) que
    recoge los formularios de los sitios de JCTech, vía la función
    "form-submit". Se inyecta en cada página para no duplicar HTML.
@@ -49,12 +49,12 @@
         '<h3 id="reportModalTitle">Reportar un dato incorrecto</h3>' +
         '<button type="button" class="modal-close" id="reportClose" aria-label="Cerrar">✕</button>' +
       '</div>' +
-      '<p class="modal-sub">Este sitio resume el P-MARCC con ayuda de inteligencia artificial. Si algo no coincide con el documento oficial, dínoslo — indica dónde está el error y lo revisamos.</p>' +
+      '<p class="modal-sub">Este sitio resume el P-MARCC con ayuda de inteligencia artificial. Si algo no coincide con el documento oficial, dínoslo: indica dónde está el error y lo revisamos.</p>' +
       '<form id="reportForm" novalidate>' +
         '<div class="form-field">' +
           '<label for="rf-seccion">Sección o dato a corregir</label>' +
           '<input type="text" id="rf-seccion" name="producto" required>' +
-          '<p class="form-hint">Se llena solo según la sección donde estabas — puedes editarlo.</p>' +
+          '<p class="form-hint">Se llena solo según la sección donde estabas. Puedes editarlo.</p>' +
         '</div>' +
         '<div class="form-field">' +
           '<label for="rf-mensaje">¿Cuál es el error?</label>' +
@@ -67,7 +67,7 @@
         '<div class="form-field">' +
           '<label for="rf-correo">Correo electrónico (opcional)</label>' +
           '<input type="email" id="rf-correo" name="correo" autocomplete="email">' +
-          '<p class="form-hint">Solo por si necesitamos aclarar algo — puedes reportar de forma anónima.</p>' +
+          '<p class="form-hint">Solo por si necesitamos aclarar algo. Puedes reportar de forma anónima.</p>' +
         '</div>' +
         '<div class="honeypot" aria-hidden="true">' +
           '<label for="rf-gotcha">No llenar este campo</label>' +
@@ -91,7 +91,7 @@
   function openModal() {
     lastFocused = document.activeElement;
     var ref = (window.location.pathname.split('/').pop() || 'index.html') + (currentSectionId ? '#' + currentSectionId : '');
-    seccionInput.value = (document.title.split('|')[0].trim()) + (currentSectionLabel ? ' — ' + currentSectionLabel : '') + ' (' + ref + ')';
+    seccionInput.value = (document.title.split('|')[0].trim()) + (currentSectionLabel ? ' - ' + currentSectionLabel : '') + ' (' + ref + ')';
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
     seccionInput.focus();

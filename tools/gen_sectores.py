@@ -50,7 +50,7 @@ def head(s):
 {{
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "{s['nombre']} — P-MARCC explicado",
+  "headline": "{s['nombre']} - P-MARCC explicado",
   "inLanguage": "es-PR",
   "description": "{desc}",
   "dateModified": "{FECHA_ISO}",
@@ -216,14 +216,15 @@ def footer():
       <div>
         <h4>Fuente citada como</h4>
         <p>CEACC (2024). <em>Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico.</em> Gobierno de Puerto Rico. Tomos 1 y 2.</p>
+        <p>Documento oficial (DRNA): <a href="https://www.drna.pr.gov/wp-content/uploads/2024/04/PLAN-MITIGACION-TOMO-1-ARCHIVO-DIGITAL-19-ABR-2024.pdf" target="_blank" rel="noopener" style="color:var(--teal-400);">Tomo 1 (PDF)</a> · <a href="https://www.drna.pr.gov/wp-content/uploads/2024/04/PLAN-MITIGACION-TOMO-2-ARCHIVO-DIGITAL-19-ABR-2024.pdf" target="_blank" rel="noopener" style="color:var(--teal-400);">Tomo 2 (PDF)</a></p>
         <p><a href="../glosario.html" style="color:var(--teal-400);">Glosario de términos y siglas →</a></p>
       </div>
     </div>
     <div class="ai-disclosure">
       {AI_SVG}
-      <p><strong>Sobre el contenido de este sitio:</strong> los textos, resúmenes y organización visual de esta página fueron elaborados con la ayuda de inteligencia artificial a partir del borrador oficial del P-MARCC. Aunque revisamos la exactitud de los datos, pueden existir errores de interpretación o resumen. Si encuentras algo incorrecto, <button type="button" class="footer-report-link" onclick="document.getElementById('reportFab').click()">repórtalo aquí</button> — toma menos de un minuto.</p>
+      <p><strong>Sobre el contenido de este sitio:</strong> los textos, resúmenes y organización visual de esta página fueron elaborados con la ayuda de inteligencia artificial a partir del borrador oficial del P-MARCC. Aunque revisamos la exactitud de los datos, pueden existir errores de interpretación o resumen. Si encuentras algo incorrecto, <button type="button" class="footer-report-link" onclick="document.getElementById('reportFab').click()">repórtalo aquí</button>; toma menos de un minuto.</p>
     </div>
-    <p class="footer-note">Hecho para ayudar al ciudadano común a entender el Plan — no oficial, no afiliado al CEACC ni al Gobierno de Puerto Rico. Última actualización: <time datetime="{FECHA_ISO}">{FECHA}</time>.</p>
+    <p class="footer-note">Hecho para ayudar al ciudadano común a entender el Plan. No es un sitio oficial ni está afiliado al CEACC ni al Gobierno de Puerto Rico. Última actualización: <time datetime="{FECHA_ISO}">{FECHA}</time>.</p>
   </div>
 </footer>
 
