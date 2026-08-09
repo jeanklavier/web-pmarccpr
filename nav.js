@@ -14,6 +14,33 @@ if (navToggle && navLinks) {
   }));
 }
 
+/* ============ Submenu desplegable de "Sectores" ============ */
+(function () {
+  const dropdownToggle = document.querySelector('.nav-dropdown-toggle');
+  const submenu = document.getElementById('sectorSubmenu');
+  if (!dropdownToggle || !submenu) return;
+
+  function closeSubmenu() {
+    dropdownToggle.setAttribute('aria-expanded', 'false');
+    submenu.classList.remove('is-open');
+  }
+
+  dropdownToggle.addEventListener('click', () => {
+    const isOpen = dropdownToggle.getAttribute('aria-expanded') === 'true';
+    dropdownToggle.setAttribute('aria-expanded', String(!isOpen));
+    submenu.classList.toggle('is-open', !isOpen);
+  });
+
+  /* En desktop el submenu flota sobre el contenido; se cierra al hacer
+     clic afuera o al presionar Escape (patrón estándar de disclosure). */
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-item-dropdown')) closeSubmenu();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSubmenu();
+  });
+})();
+
 /* ============ Botón "volver arriba" ============ */
 (function () {
   const btn = document.createElement('button');

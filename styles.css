@@ -122,6 +122,30 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
 .nav-toggle{display:none; flex-direction:column; gap:5px; background:none; border:0; cursor:pointer; padding:6px;}
 .nav-toggle span{width:24px; height:2px; background:#fff; display:block;}
 
+/* ---------- submenu desplegable de "Sectores" ---------- */
+/* Por defecto (desktop): dropdown flotante sobre el contenido. */
+.nav-item-dropdown{position:relative;}
+.nav-dropdown-toggle{
+  display:flex; align-items:center; gap:4px;
+  background:none; border:none; color:inherit; font:inherit; cursor:pointer; padding:0;
+}
+.nav-dropdown-chevron{transition:transform .2s ease;}
+.nav-dropdown-toggle[aria-expanded="true"] .nav-dropdown-chevron{transform:rotate(180deg);}
+.nav-submenu{
+  list-style:none; margin:0; padding:10px 0; min-width:220px;
+  position:absolute; top:calc(100% + 14px); left:-14px;
+  background:var(--blue-800); border-radius:12px; box-shadow:var(--shadow-md);
+  opacity:0; visibility:hidden; transform:translateY(-6px); z-index:55;
+  transition:opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+}
+.nav-submenu.is-open{
+  opacity:1; visibility:visible; transform:translateY(0);
+  transition:opacity .18s ease, transform .18s ease;
+}
+.nav-submenu li{margin:0;}
+.nav-submenu a{display:block; padding:9px 20px; font-size:.9rem; white-space:nowrap; color:#e7f3f2;}
+.nav-submenu a:hover{background:rgba(255,255,255,.08); color:var(--teal-400);}
+
 /* ---------- theme toggle (pattern shared with jctechpr.com) ---------- */
 #themeToggle{
   position:relative; width:52px; height:28px; border-radius:999px; padding:0; margin:0;
@@ -459,6 +483,18 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
   }
   .nav-links.open{display:flex;}
   .nav-toggle{display:flex;}
+  /* En mobile el submenu es un acordeón dentro del propio panel, no un
+     dropdown flotante. */
+  .nav-item-dropdown{position:static;}
+  .nav-submenu{
+    position:static; min-width:0; background:none; box-shadow:none; border-radius:0;
+    padding:0 0 0 12px; opacity:1; visibility:visible; transform:none;
+    max-height:0; overflow:hidden; transition:max-height .25s ease;
+  }
+  .nav-submenu.is-open{max-height:400px;}
+  .nav-submenu li{margin:8px 0;}
+  .nav-submenu a{display:block; padding:0; font-size:.92em; opacity:.9; white-space:normal;}
+  .nav-submenu a:hover{background:none; opacity:1;}
   .info-grid{grid-template-columns:1fr;}
   .stat-cards{grid-template-columns:1fr;}
   .sector-grid{grid-template-columns:1fr;}
