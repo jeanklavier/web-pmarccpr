@@ -110,9 +110,11 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
   max-width:var(--max-w); margin:0 auto; padding:14px 24px;
   display:flex; align-items:center; justify-content:space-between;
 }
-.brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; font-weight:700; font-size:1.1rem;}
-.brand-icon{font-size:1.4rem}
-.brand-text small{display:block; font-weight:400; font-size:.6rem; letter-spacing:.12em; color:var(--teal-400); text-transform:uppercase;}
+.brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; font-weight:700; font-size:1.1rem;}
+.brand-icon{color:var(--teal-400); display:flex;}
+.brand-icon .icon-svg{width:28px; height:28px;}
+.brand-text{display:flex; flex-direction:column; line-height:1.15;}
+.brand-text small{display:block; font-weight:600; font-size:.62rem; letter-spacing:.12em; color:var(--teal-400); text-transform:uppercase;}
 .nav-links{list-style:none; display:flex; gap:28px; margin:0; padding:0;}
 .nav-links a{color:#e7f3f2; text-decoration:none; font-size:.95rem; font-weight:500; transition:color .2s;}
 .nav-links a:hover{color:var(--teal-400)}
@@ -459,8 +461,9 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
    ============================================================ */
 @media (max-width:600px){
   .navbar{padding:12px 16px;}
+  .brand{gap:8px;}
   .brand-text{font-size:.98rem;}
-  .brand-icon{font-size:1.2rem;}
+  .brand-icon .icon-svg{width:24px; height:24px;}
   .nav-right{gap:8px;}
   .container{padding:0 18px;}
   .hero{min-height:auto; padding:52px 18px 44px;}
