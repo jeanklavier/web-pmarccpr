@@ -134,7 +134,10 @@ function chartsFallback() {
   document.querySelectorAll('canvas[role="img"]').forEach(cv => {
     cv.style.display = 'none';
     const table = document.getElementById(cv.getAttribute('aria-describedby'));
-    if (table) table.classList.remove('visually-hidden');
+    if (table) {
+      table.classList.remove('visually-hidden');
+      table.classList.add('chart-fallback-table');
+    }
   });
 }
 

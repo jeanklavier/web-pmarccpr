@@ -82,6 +82,12 @@ img{max-width:100%;display:block}
 .visually-hidden{
   position:absolute; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  table-layout:fixed; /* las tablas ignoran width:1px sin esto */
+}
+/* <caption> no se acota con table-layout:fixed: su ancho intrínseco
+   sigue empujando la caja de la tabla aunque el texto no se muestre. */
+.visually-hidden caption{
+  white-space:normal; max-width:1px; overflow-wrap:anywhere;
 }
 .skip-link{
   position:absolute; left:12px; top:-60px; z-index:100;
@@ -224,11 +230,19 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
 .chart-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;}
 .chart-card{
   background:var(--surface); border-radius:var(--radius); padding:26px; box-shadow:var(--shadow-sm);
-  border:1px solid var(--border);
+  border:1px solid var(--border); min-width:0; /* si no, el ancho intrínseco del canvas desborda la celda del grid */
 }
 .chart-card h3{font-size:1.1rem; margin-bottom:4px;}
 .chart-note{font-size:.82rem; color:var(--text-dim); margin-bottom:16px;}
-.chart-card canvas{max-height:280px;}
+.chart-card canvas{max-width:100%; max-height:280px;}
+
+.chart-fallback-table{
+  display:block;
+  overflow-x:auto;
+  max-width:100%;
+  font-size:.82rem;
+  -webkit-overflow-scrolling:touch;
+}
 
 .callout{
   background:var(--callout-bg); border:1px solid var(--callout-border); border-radius:var(--radius);
