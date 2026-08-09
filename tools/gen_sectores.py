@@ -57,6 +57,14 @@ def head(s):
   "isBasedOn": "Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico (CEACC, 2024)"
 }}
 </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-65HEXGSRK0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+  gtag('config', 'G-65HEXGSRK0');
+</script>
 </head>'''
 
 def nav():
