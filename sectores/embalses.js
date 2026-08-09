@@ -99,6 +99,38 @@
     '50113950': 500.0   // Cerrillos — 152.4 m
   };
 
+  /* Umbral de "Control" de la AAA, en pies - el siguiente nivel de
+     alerta, más grave que "Ajustes" (mismo origen: gráfica oficial de
+     la AAA, acueductos.pr.gov). Mismo mapeo site_no -> embalse que
+     NIVEL_AJUSTES_PIES, ya verificado contra el nombre real del USGS.
+     50125780 (Luchetti) se omite por la misma razón que en Ajustes: el
+     valor de la foto quedó ambiguo por superposición de texto y no se
+     pudo confirmar de forma independiente.
+     Sanity check: para los 18 embalses con ambos valores, Control es
+     siempre menor que Ajustes (más pies = más lleno el embalse, y
+     Control es la alerta más grave = nivel más bajo), lo cual es
+     consistente con que el mapeo site_no -> embalse sea correcto. */
+  var NIVEL_CONTROL_PIES = {
+    '50059000': 98.43,   // Carraízo — 30 m
+    '50045000': 98.43,   // La Plata — 30 m
+    '50047550': 1297.57, // Cidra — 395.5 m
+    '50111210': 403.54,  // Toa Vaca — 123 m
+    '50076800': 65.62,   // Río Blanco — 20 m
+    '50071225': 118.11,  // Fajardo — 36 m
+    '50039995': 1759.06, // Carite — 536.16 m
+    '50093045': 187.01,  // Patillas — 57 m
+    '50032290': 2937.99, // Guineo — 895.5 m
+    '50032590': 2387.99, // Matrullas — 727.86 m
+    '50111300': 323.00,  // Guayabal — 98.45 m
+    '50020100': 2393.01, // Garzas — 729.39 m
+    '50141500': 1437.99, // Guayo — 438.3 m
+    '50128900': 225.00,  // Loco — 68.58 m
+    '50027100': 277.00,  // Dos Bocas — 84.43 m
+    '50026140': 793.96,  // Caonillas — 242 m
+    '50010800': 610.24,  // Guajataca — 186 m
+    '50113950': 475.07   // Cerrillos — 144.8 m
+  };
+
   var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
   var MESES_LARGO = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
     'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -251,7 +283,8 @@
       return d[2] + ' ' + MESES[parseInt(d[1], 10) - 1] + ' ' + d[0];
     });
     var data = values.map(function (v) { return parseFloat(v.value); });
-    var umbral = NIVEL_AJUSTES_PIES[siteNo];
+    var ajustes = NIVEL_AJUSTES_PIES[siteNo];
+    var control = NIVEL_CONTROL_PIES[siteNo];
 
     var datasets = [{
       label: stationLabel,
@@ -260,12 +293,23 @@
       backgroundColor: 'rgba(31,122,224,.12)',
       fill: true, tension: .15, pointRadius: 0, borderWidth: 2
     }];
-    if (typeof umbral === 'number') {
+    if (typeof ajustes === 'number') {
       datasets.push({
         label: 'Nivel de ajustes',
-        data: labels.map(function () { return umbral; }),
+        data: labels.map(function () { return ajustes; }),
         borderColor: '#c9782f',
         borderDash: [6, 4],
+        borderWidth: 1.5,
+        pointRadius: 0,
+        fill: false
+      });
+    }
+    if (typeof control === 'number') {
+      datasets.push({
+        label: 'Nivel de control',
+        data: labels.map(function () { return control; }),
+        borderColor: '#c92a2a',
+        borderDash: [3, 3],
         borderWidth: 1.5,
         pointRadius: 0,
         fill: false
