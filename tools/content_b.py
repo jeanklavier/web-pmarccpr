@@ -13,6 +13,7 @@ SECTORES = [
 {
  'slug':'marinos','nombre':'Sistemas marinos y costeros','nombreCorto':'Marinos y costeros',
  'icono':I_WAVES,'tabla':'7.8',
+ 'foto':{'img':'https://images.unsplash.com/photo-1708649290066-5f617003b93f','credit':'NEOM','creditUrl':'https://unsplash.com/photos/an-underwater-view-of-a-colorful-coral-reef-HYHYGLs-Rp8','heroAlt':'Vista submarina de un arrecife de coral colorido','eyebrow':'Sistemas marinos y costeros','caption':'Con 1,187 kilómetros de costa, Puerto Rico depende de arrecifes, manglares y praderas marinas como barreras naturales - y el mar más caliente y ácido las está debilitando.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Ecosistemas marinos y zonas costeras en el P-MARCC: erosión costera, arrecifes, sargazo y planificación de la zona costanera.',
  'heroDesc':'Con 1,187 kilómetros de costa, Puerto Rico depende de playas, arrecifes, manglares y praderas marinas que funcionan como barreras protectoras naturales. La erosión costera, el mar más caliente y ácido, y la construcción en la costa las están debilitando.',
  'heroBadges':['1,187 km de línea de costa','10 guías legales (A-J)','33 cursos de acción (COA) - el sector con más'],
@@ -91,6 +92,7 @@ SECTORES = [
 {
  'slug':'forestacion','nombre':'Forestación y ecosistemas terrestres','nombreCorto':'Forestación',
  'icono':I_TREE,'tabla':'7.9',
+ 'foto':{'img':'https://images.unsplash.com/photo-1643296634102-b516a6d24720','credit':'Angel Rivera','creditUrl':'https://unsplash.com/photos/a-view-of-the-mountains-from-the-top-of-a-hill-xEn-s46rH-M','heroAlt':'Vista de las montañas boscosas de Puerto Rico desde lo alto de una colina','eyebrow':'Bosques de Puerto Rico','caption':'De un mínimo histórico de 5% de cubierta forestal a casi 46% hoy: los bosques jóvenes de Puerto Rico son su principal absorbente de carbono, pero enfrentan huracanes, sequías e incendios.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Forestación y ecosistemas terrestres en el P-MARCC: reforestación de cuencas, gestión forestal adaptativa y especies vulnerables.',
  'heroDesc':'Puerto Rico pasó de 90% de bosque antes de la colonización a un mínimo de 5% a inicios del siglo XX - y se ha recuperado hasta cerca del 46%. Esos bosques jóvenes son el gran absorbente de carbono del país, pero enfrentan huracanes, sequías e incendios.',
  'heroBadges':['De 5% a ~46% de cubierta forestal en un siglo','6 guías legales (A-F)','9 cursos de acción (COA)'],
@@ -140,6 +142,7 @@ SECTORES = [
 {
  'slug':'turismo','nombre':'Turismo','nombreCorto':'Turismo',
  'icono':I_SUN,'tabla':'7.10',
+ 'foto':{'img':'https://images.unsplash.com/photo-1771945484043-3a17fbf57a4b','credit':'Hugh Whyte','creditUrl':'https://unsplash.com/photos/a-tropical-beach-with-palm-trees-and-turquoise-water-VHjY9XrkIEo','heroAlt':'Playa tropical con palmeras y aguas turquesas en Puerto Rico','eyebrow':'Turismo de sol y playa','caption':'El 79% de la infraestructura hotelera de Puerto Rico es vulnerable al aumento del nivel del mar - el mismo clima que atrae a los 91,500 empleos del sector es el que está cambiando.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Turismo en el P-MARCC: destino de sol y playa ante el cambio climático, con el 79% de la infraestructura hotelera vulnerable.',
  'heroDesc':'Puerto Rico es un destino de "sol y playa": los turistas gastaron $5,700 millones en 2022 y el sector sostiene 91,500 empleos. Pero el 79% de la infraestructura hotelera es vulnerable al aumento del nivel del mar - el mismo clima que atrae a los visitantes es el que está cambiando.',
  'heroBadges':['$5,700M de gasto turístico (2022)','79% de la infraestructura hotelera vulnerable','4 cursos de acción (COA)'],
@@ -181,6 +184,7 @@ SECTORES = [
 {
  'slug':'educacion','nombre':'Educación','nombreCorto':'Educación',
  'icono':I_BOOK,'tabla':'7.11',
+ 'foto':{'img':'https://images.unsplash.com/photo-1740635341299-3b8e3490f546','credit':'Nathan Cima','creditUrl':'https://unsplash.com/photos/a-classroom-filled-with-lots-of-desks-and-chairs-Qw6wa96IvvQ','heroAlt':'Salón de clases con pupitres y sillas','eyebrow':'Educación climática','caption':'El propio Plan concluye que el desconocimiento sobre el cambio climático en Puerto Rico debe tratarse como un asunto de emergencia.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Educación en el P-MARCC: currículo climático K-12, capacitación docente y educación comunitaria ambiental.',
  'heroDesc':'Antes del huracán María, la mayoría de la población no tenía una percepción clara de lo que el cambio climático implicaba para Puerto Rico. El propio Plan concluye que el desconocimiento sobre el cambio climático debe tratarse como un asunto de emergencia.',
  'heroBadges':['Currículo climático para todas las escuelas','3 guías legales (A-C)','11 cursos de acción (COA)'],
@@ -230,6 +234,7 @@ SECTORES = [
 {
  'slug':'justicia','nombre':'Justicia climática','nombreCorto':'Justicia climática',
  'icono':I_SCALE,'tabla':'7.12',
+ 'foto':{'img':'https://images.unsplash.com/photo-1768839719921-6a554fb3e847','credit':'Sasun Bughdaryan','creditUrl':'https://unsplash.com/photos/statue-of-justice-holding-scales-against-blue-background-zbQ5UaREHx4','heroAlt':'Estatua de la justicia sosteniendo una balanza contra un fondo azul','eyebrow':'Justicia climática','caption':'El 44.5% de la población de Puerto Rico vive bajo el nivel de pobreza. La justicia climática exige que las decisiones y los fondos prioricen a quienes más sufren los impactos.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Justicia climática en el P-MARCC: protección de comunidades vulnerables, equidad en fondos climáticos y recuperación justa.',
  'heroDesc':'Puerto Rico figura entre los territorios más afectados del mundo por eventos climáticos extremos entre 2000 y 2019 - con una población donde el 44.5% vive bajo el nivel de pobreza. La justicia climática plantea que las decisiones y los fondos deben priorizar a quienes más sufren los impactos.',
  'heroBadges':['44.5% de la población bajo pobreza','Entre los más afectados del mundo (IRC 2000-2019)','4 cursos de acción (COA)'],

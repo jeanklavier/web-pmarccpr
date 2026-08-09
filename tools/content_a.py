@@ -15,6 +15,7 @@ SECTORES = [
 {
  'slug':'infraestructura','nombre':'Infraestructura','nombreCorto':'Infraestructura',
  'icono':I_BUILDING,'tabla':'7.2',
+ 'foto':{'img':'https://images.unsplash.com/photo-1571860120928-bfc8e6a0a263','credit':'Cezar Sampaio','creditUrl':'https://unsplash.com/photos/concrete-bridge-jPnndQ1w_oo','heroAlt':'Puente de concreto sobre una vía en Puerto Rico','eyebrow':'Infraestructura crítica','caption':'Carreteras, puertos, aeropuertos y la red eléctrica se construyeron cerca de la costa. El huracán María evidenció su fragilidad; el aumento del nivel del mar la pondrá a prueba de forma permanente.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Infraestructuras en el P-MARCC: construcción verde, resiliencia de carreteras, aeropuertos y red eléctrica ante el cambio climático.',
  'heroDesc':'Carreteras, puertos, aeropuertos, edificios y la red eléctrica: la infraestructura de Puerto Rico se construyó cerca de la costa y quedó expuesta. El huracán María evidenció su fragilidad; el aumento del nivel del mar la pondrá a prueba de forma permanente.',
  'heroBadges':['12 guías legales (A-L)','19 cursos de acción (COA)','Cap. 4.2 y 7.2 del P-MARCC'],
@@ -84,6 +85,7 @@ SECTORES = [
 {
  'slug':'transporte','nombre':'Transporte y movilidad','nombreCorto':'Transporte',
  'icono':I_CAR,'tabla':'7.3',
+ 'foto':{'img':'https://images.unsplash.com/photo-1567888942747-4dd354b52274','credit':'Erik Mclean','creditUrl':'https://unsplash.com/photos/empty-coastal-road-YQoG5Bq2zf4','heroAlt':'Carretera costera vacía en Puerto Rico','eyebrow':'Transporte y movilidad','caption':'El transporte es el segundo mayor emisor de gases de efecto invernadero del país (26% del total en 2021) y depende de carreteras costeras, puertos y aeropuertos vulnerables al aumento del nivel del mar.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Transporte y movilidad en el P-MARCC: transporte colectivo, vehículos eléctricos, aeropuertos y puertos resilientes.',
  'heroDesc':'El transporte es el segundo mayor emisor de gases de efecto invernadero de Puerto Rico: 26% del total en 2021, casi todo por la gasolina que quemamos en la carretera. Y como archipiélago, dependemos de puertos y aeropuertos vulnerables al aumento del nivel del mar.',
  'heroBadges':['26% de las emisiones de GEI (2021)','7 guías legales (A-G)','18 cursos de acción (COA)'],
@@ -144,6 +146,7 @@ SECTORES = [
 {
  'slug':'residuos','nombre':'Residuos sólidos','nombreCorto':'Residuos',
  'icono':I_TRASH,'tabla':'7.4',
+ 'foto':{'img':'https://images.unsplash.com/photo-1611284446314-60a58ac0deb9','credit':'Nareeta Martin','creditUrl':'https://unsplash.com/photos/red-yellow-and-green-trash-bins-FoG7PKNYjpM','heroAlt':'Contenedores de basura rojo, amarillo y verde','eyebrow':'Residuos sólidos','caption':'Puerto Rico deposita más de 9,000 toneladas diarias de residuos en rellenos que se acercan al final de su vida útil, generando el 8% de las emisiones del país.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Residuos sólidos en el P-MARCC: rellenos sanitarios al límite, reciclaje estancado y la estrategia de desperdicio cero.',
  'heroDesc':'Cada día, Puerto Rico deposita más de 9,000 toneladas de residuos en rellenos sanitarios que se acercan al final de su vida útil. La tasa de reciclaje sigue lejos de las metas de ley, y los residuos generan el 8% de las emisiones del país.',
  'heroBadges':['9,078 toneladas diarias a rellenos','8% de las emisiones de GEI (2021)','6 cursos de acción (COA)'],
@@ -190,6 +193,7 @@ SECTORES = [
 {
  'slug':'salud','nombre':'Salud y bienestar','nombreCorto':'Salud',
  'icono':I_HEART,'tabla':'7.5',
+ 'foto':{'img':'https://images.unsplash.com/photo-1584432810601-6c7f27d2362b','credit':'JESHOOTS.COM','creditUrl':'https://unsplash.com/photos/woman-in-white-button-up-shirt-and-blue-stethoscope-l0j0DHVWcIE','heroAlt':'Profesional de la salud con estetoscopio','eyebrow':'Salud y bienestar','caption':'Calor extremo, dengue y otras enfermedades por vectores, y brotes tras huracanes: el cambio climático es una amenaza directa a la salud pública, y no afecta a todos por igual.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Salud y bienestar en el P-MARCC: calor extremo, enfermedades por vectores, salud mental y protección de poblaciones vulnerables.',
  'heroDesc':'El cambio climático es una amenaza directa a la salud pública: calor extremo, dengue y otras enfermedades por vectores, brotes tras huracanes y un impacto profundo en la salud mental. Además, no afecta a todos por igual: las comunidades vulnerables sufren primero y con más fuerza.',
  'heroBadges':['4 guías legales (A-D)','7 cursos de acción (COA)','Modelo BRACE de los CDC'],
@@ -236,6 +240,7 @@ SECTORES = [
 {
  'slug':'agricultura','nombre':'Agricultura y ganadería','nombreCorto':'Agricultura',
  'icono':I_SPROUT,'tabla':'7.6',
+ 'foto':{'img':'https://images.unsplash.com/photo-1662391941703-c47f60015926','credit':'Ovidio Soto','creditUrl':'https://unsplash.com/photos/a-landscape-with-hills-and-trees-d1c7kn00kTM','heroAlt':'Paisaje agrícola con colinas y árboles en Puerto Rico','eyebrow':'Agricultura y ganadería','caption':'La producción local cubre apenas ~15% del consumo de comida de la isla. El Plan apuesta a que la agricultura también sea parte de la solución climática, capturando carbono en los suelos.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Agricultura y ganadería en el P-MARCC: seguridad alimentaria, prácticas sostenibles, riego eficiente y protección de tierras agrícolas.',
  'heroDesc':'La producción local satisface apenas cerca del 15% del consumo de comida de Puerto Rico. El cambio climático amenaza con reducir aún más los rendimientos - pero la agricultura también puede ser parte de la solución, capturando carbono en los suelos.',
  'heroBadges':['~15% del consumo de comida es local','3 guías legales (A-C)','10 cursos de acción (COA)'],
@@ -284,6 +289,7 @@ SECTORES = [
 {
  'slug':'agua','nombre':'Agua','nombreCorto':'Agua',
  'icono':I_DROP,'tabla':'7.7',
+ 'foto':{'img':'https://images.unsplash.com/photo-1603638329794-0a222e723aa0','credit':'Luis Santiago','creditUrl':'https://unsplash.com/photos/green-trees-on-mountain-during-daytime-EUPYidBxpBk','heroAlt':'Montaña cubierta de árboles verdes en un día soleado, Puerto Rico','eyebrow':'El agua en Puerto Rico','caption':'Puerto Rico pierde cerca del 60% del agua potable en su sistema de distribución, mientras las sequías se vuelven más frecuentes y el mar salinizada los acuíferos costeros.'},
  'metaDesc':'Diagnóstico y cursos de acción del sector Agua en el P-MARCC: sequías, pérdida del 60% en distribución, embalses sedimentados y protección de acuíferos.',
  'heroDesc':'Puerto Rico está entre las jurisdicciones con menos agua dulce disponible por persona en América Latina - y pierde alrededor del 60% del agua potable en su sistema de distribución. Las sequías serán más frecuentes; el mar que sube saliniza los acuíferos.',
  'heroBadges':['60% de pérdida en distribución (AAA)','10 guías legales (A-J)','17 cursos de acción (COA)'],

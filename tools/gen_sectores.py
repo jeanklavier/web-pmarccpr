@@ -96,12 +96,27 @@ def nav():
 </header>
 '''
 
+def hero_photo(s):
+    foto = s.get('foto')
+    if not foto:
+        return ''
+    img = foto['img']
+    return f'''  <div class="hero-photo" aria-hidden="true">
+    <img src="{img}?auto=format&fit=crop&w=1200&q=70"
+         srcset="{img}?auto=format&fit=crop&w=800&q=70 800w,
+                 {img}?auto=format&fit=crop&w=1200&q=70 1200w,
+                 {img}?auto=format&fit=crop&w=1800&q=70 1800w"
+         sizes="100vw" alt="{foto['heroAlt']}" fetchpriority="high">
+  </div>
+  <a class="photo-credit" href="{foto['creditUrl']}" target="_blank" rel="noopener">Foto: {foto['credit']} / Unsplash</a>
+'''
+
 def hero(s):
     badges = "\n      ".join(f'<span class="sector-badge">{b}</span>' for b in s['heroBadges'])
     return f'''
 <main id="main-content">
 <section class="sector-hero">
-  <div class="container">
+{hero_photo(s)}  <div class="container">
     <p class="breadcrumb" style="color:#bcdcd8; margin-top:0;">
       <a href="../index.html" style="color:#fff;">Inicio</a> ›
       <a href="../index.html#sectores" style="color:#fff;">Sectores</a> ›
@@ -159,6 +174,28 @@ def diagnostico(s):
     </div>
   </div>
 </section>
+'''
+
+def foto_banner(s):
+    foto = s.get('foto')
+    if not foto:
+        return ''
+    img = foto['img']
+    return f'''
+<div class="photo-banner">
+  <img class="photo-banner-img" alt="" loading="lazy"
+       src="{img}?auto=format&fit=crop&w=1200&q=65"
+       srcset="{img}?auto=format&fit=crop&w=800&q=65 800w,
+               {img}?auto=format&fit=crop&w=1600&q=65 1600w"
+       sizes="100vw">
+  <div class="container">
+    <div class="photo-banner-text">
+      <span>{foto['eyebrow']}</span>
+      <p>{foto['caption']}</p>
+    </div>
+  </div>
+  <a class="photo-credit" href="{foto['creditUrl']}" target="_blank" rel="noopener">Foto: {foto['credit']} / Unsplash</a>
+</div>
 '''
 
 def acciones(s):
@@ -283,11 +320,12 @@ def wire_pager(s):
 
 def render(s):
     wire_pager(s)
-    return (head(s) + nav() + hero(s) + diagnostico(s) + acciones(s)
+    return (head(s) + nav() + hero(s) + diagnostico(s) + foto_banner(s) + acciones(s)
             + fuentes(s) + footer())
 
 if __name__ == '__main__':
-    outdir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sectores')
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    outdir = os.path.join(repo_root, 'sectores')
     os.makedirs(outdir, exist_ok=True)
     for s in SECTORES:
         path = os.path.join(outdir, s['slug'] + '.html')
