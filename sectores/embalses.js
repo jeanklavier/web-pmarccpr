@@ -1,16 +1,19 @@
 /* ============================================================
-   Historial de niveles de embalses (sector Agua) - datos en vivo
-   del USGS Water Services (WaterML/JSON), parámetro 72375
-   (elevación del embalse sobre el nivel medio del mar, en pies).
-   No hay backend: el endpoint de USGS envía
-   Access-Control-Allow-Origin: * y permite fetch() directo desde
-   el navegador (verificado antes de escribir este archivo).
+   Historial de niveles de embalses (sector Agua). Fuente principal:
+   tabla pmarcc_embalses_niveles en Supabase (proyecto eexzkkypfkpscewufgrg),
+   que se actualiza sola a diario vía cron y guarda site_no, fecha y
+   valor_pies (mismo parámetro 72375 del USGS: elevación del embalse
+   sobre el nivel medio del mar, en pies). Respaldo: si Supabase falla
+   o no devuelve datos, se hace fetch directo al USGS Water Services
+   (WaterML/JSON) como antes.
    ============================================================ */
 (function () {
+  var SUPABASE_URL = 'https://eexzkkypfkpscewufgrg.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_JyU7cRLmTLbjaMEHjbexHA_4FXmtv64';
   var API_BASE = 'https://waterservices.usgs.gov/nwis/dv/';
   var PARAM_CD = '72375';
   var DEFAULT_SITE = '50027100'; // Lago Dos Bocas, Utuado
-  var ALL_HISTORY_START = '1960-01-01'; // anterior al inicio real de cualquier estación de PR
+  var USGS_FALLBACK_START = '2000-01-01'; // solo para el respaldo a USGS cuando el rango es "todo el historial"
 
   /* Los 19 embalses de PR que monitorea el USGS. Nombres técnicos
      resueltos vía el servicio de metadata de USGS (nwis/site), no
@@ -144,8 +147,10 @@
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
 
+  // "all" no manda filtro de fecha: cada embalse tiene su propio inicio
+  // real de datos en la tabla (varía entre 2006 y 2016 según la estación).
   function startDateFor(range) {
-    if (range === 'all') return ALL_HISTORY_START;
+    if (range === 'all') return null;
     var d = new Date();
     d.setFullYear(d.getFullYear() - (range === '3y' ? 3 : 1));
     return isoDate(d);
@@ -343,27 +348,80 @@
     });
   }
 
-  /* ---- 5. Cargar un embalse ---- */
-  function loadStation(siteNo) {
-    setStatus('Cargando el historial…', false);
-    canvas.style.visibility = 'hidden';
+  /* ---- 5. Fuentes de datos: Supabase (principal) y USGS (respaldo).
+     Ambas resuelven al mismo formato [{dateTime, value}] que ya usan
+     renderChart/renderTable/renderCurrentReading, para no tocar esa
+     lógica. ---- */
+  // PostgREST limita cada respuesta a 1000 filas por defecto (confirmado:
+  // Content-Range: 0-999/*). 3 años de lecturas diarias ya superan eso, y
+  // "todo el historial" lo supera por mucho, así que hay que paginar con
+  // limit/offset hasta que una página vuelva con menos de PAGE_SIZE filas.
+  var SUPABASE_PAGE_SIZE = 1000;
 
-    var start = startDateFor(currentRange);
-    var end = isoDate(new Date());
-    var url = API_BASE + '?sites=' + siteNo + '&startDT=' + start + '&endDT=' + end
+  function fetchSupabasePage(siteNo, startDT, endDT, offset) {
+    var url = SUPABASE_URL + '/rest/v1/pmarcc_embalses_niveles?site_no=eq.' + encodeURIComponent(siteNo);
+    if (startDT) url += '&fecha=gte.' + startDT;
+    if (endDT) url += '&fecha=lte.' + endDT;
+    url += '&order=fecha.asc&select=fecha,valor_pies&limit=' + SUPABASE_PAGE_SIZE + '&offset=' + offset;
+
+    return fetch(url, {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+      }
+    }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    });
+  }
+
+  function fetchStationFromSupabase(siteNo, startDT, endDT) {
+    function loadPages(offset, acc) {
+      return fetchSupabasePage(siteNo, startDT, endDT, offset).then(function (rows) {
+        acc = acc.concat(rows);
+        if (!rows.length || rows.length < SUPABASE_PAGE_SIZE) return acc;
+        return loadPages(offset + SUPABASE_PAGE_SIZE, acc);
+      });
+    }
+    return loadPages(0, []).then(function (rows) {
+      if (!rows || !rows.length) throw new Error('Supabase: sin datos');
+      return rows.map(function (row) {
+        return { dateTime: row.fecha, value: row.valor_pies };
+      });
+    });
+  }
+
+  function fetchStationFromUSGS(siteNo, startDT, endDT) {
+    var url = API_BASE + '?sites=' + siteNo + '&startDT=' + startDT + '&endDT=' + endDT
       + '&format=json&parameterCd=' + PARAM_CD;
 
-    fetch(url)
+    return fetch(url)
       .then(function (r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
       .then(function (data) {
         var ts = data && data.value && data.value.timeSeries;
-        if (!ts || !ts.length) throw new Error('sin datos');
-        var series = ts[0];
-        var values = series.values[0].value;
-        if (!values || !values.length) throw new Error('sin valores');
+        if (!ts || !ts.length) throw new Error('USGS: sin datos');
+        var values = ts[0].values[0].value;
+        if (!values || !values.length) throw new Error('USGS: sin valores');
+        return values;
+      });
+  }
+
+  /* ---- 6. Cargar un embalse ---- */
+  function loadStation(siteNo) {
+    setStatus('Cargando el historial…', false);
+    canvas.style.visibility = 'hidden';
+
+    var start = startDateFor(currentRange);
+    var end = isoDate(new Date());
+
+    fetchStationFromSupabase(siteNo, start, end)
+      .catch(function () {
+        return fetchStationFromUSGS(siteNo, start || USGS_FALLBACK_START, end);
+      })
+      .then(function (values) {
         var label = labelFor(siteNo);
 
         if (chartAvailable) renderChart(values, label, siteNo);
