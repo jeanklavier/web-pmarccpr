@@ -286,13 +286,6 @@ def footer():
       {AI_SVG}
       <p><strong>Sobre el contenido de este sitio:</strong> los textos, resúmenes y organización visual de esta página fueron elaborados con la ayuda de inteligencia artificial a partir del borrador oficial del P-MARCC. Aunque revisamos la exactitud de los datos, pueden existir errores de interpretación o resumen. Si encuentras algo incorrecto o tienes una sugerencia, <button type="button" class="footer-report-link" onclick="document.getElementById('reportFab').click()">cuéntanoslo aquí</button>; toma menos de un minuto.</p>
     </div>
-    <div class="support-block">
-      <p>Mantener este sitio activo (dominio, hosting y base de datos) tiene un costo mensual. Si te ha sido útil, puedes apoyar su mantenimiento.</p>
-      <a class="bmc-button" href="https://www.buymeacoffee.com/jeanklavier" target="_blank" rel="noopener">
-        <img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="">
-        Apoya este proyecto
-      </a>
-    </div>
     <p class="footer-note">Hecho para ayudar al ciudadano común a entender el Plan. No es un sitio oficial ni está afiliado al CEACC ni al Gobierno de Puerto Rico. Última actualización: <time datetime="{FECHA_ISO}">{FECHA}</time>.</p>
   </div>
 </footer>
