@@ -78,6 +78,7 @@
   </ul>
 </li>
         <li><a href="../index.html#acciones">Plan de acción</a></li>
+        <li><a href="../embalses.html">Embalses</a></li>
         <li><a href="../visor.html">El Plan (PDF)</a></li>
         <li><a href="../glosario.html">Glosario</a></li>
       </ul>
@@ -190,10 +191,26 @@
         <tbody id="embalseChart-tbody"></tbody>
       </table>
       <div class="embalse-status" id="embalseStatus" role="status" aria-live="polite">Cargando el historial…</div>
+      <p class="proyeccion-nota" id="proyeccionNota" style="display:none;"></p>
     </div>
 
     <p class="embalse-note">Datos: U.S. Geological Survey (USGS), estación <span id="embalseSourceSiteNo">-</span> - <a id="embalseSourceLink" href="https://waterdata.usgs.gov/" target="_blank" rel="noopener"><span id="embalseSourceName">-</span></a>. Los valores más recientes son datos <strong>provisionales</strong> (sujetos a revisión) según el propio USGS.</p>
     <p class="embalse-note">Líneas de referencia: nivel de Ajustes y nivel de Control según clasificación operacional de la AAA. "Control" es el siguiente umbral de alerta, más grave que "Ajustes"; cuando el nivel cae por debajo de cualquiera de las dos, la AAA puede imponer restricciones de consumo más severas mientras más bajo caiga. Fuente: AAA (imagen de monitoreo diario, acueductos.pr.gov).</p>
+
+    <div class="lluvia-panel">
+      <h3>Pronóstico de lluvia — próximos 14 días</h3>
+      <canvas id="lluviaChart" role="img" aria-label="Pronóstico de lluvia de los próximos 14 días para el embalse seleccionado"></canvas>
+      <p class="embalse-status" id="lluviaStatus" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="tendencia-explicacion">
+      <p><strong>Cómo leer estos dos datos juntos:</strong> la línea punteada morada en la gráfica de arriba proyecta hacia dónde va el nivel si continúa la tendencia reciente, sin tomar en cuenta la lluvia. La gráfica de pronóstico de lluvia muestra cuánta lluvia se espera en los próximos 14 días en la ubicación del embalse. Más lluvia de lo usual generalmente ayuda a que el nivel suba o se estabilice; menos lluvia de lo usual tiende a acelerar la baja. Esta página no combina ambos datos en una sola predicción automática - te los mostramos por separado para que puedas sacar tu propia conclusión.</p>
+    </div>
+
+    <div class="embalses-cta">
+      <p>¿Quieres ver los 19 embalses en un mapa, con año de construcción, operador y cuánta capacidad ha perdido cada uno?</p>
+      <a href="../embalses.html">Ver toda la información de los embalses →</a>
+    </div>
   </div>
 </section>
 
@@ -404,6 +421,7 @@
   crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 <script src="../nav.js" defer></script>
 <script src="../theme.js" defer></script>
+<script type="module" src="embalses-coords-loader.js"></script>
 <script src="embalses.js" defer></script>
 <script src="../correction.js" defer></script>
 </body>

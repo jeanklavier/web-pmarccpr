@@ -294,6 +294,21 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
 .reservoir-current-trend.stable{color:var(--text-muted);}
 .reservoir-current-date{font-size:.82rem; color:var(--text-dim);}
 
+.proyeccion-nota{
+  font-size:.85rem; color:var(--text-muted); background:var(--bg-alt);
+  border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-top:14px;
+}
+.lluvia-panel{
+  background:var(--surface); border-radius:var(--radius); padding:26px;
+  box-shadow:var(--shadow-sm); border:1px solid var(--border); margin-top:24px;
+}
+.lluvia-panel h3{font-size:1.1rem; margin-bottom:16px;}
+.lluvia-panel canvas{max-width:100%; max-height:240px;}
+.tendencia-explicacion{
+  background:var(--bg-alt); border-radius:var(--radius); padding:20px 24px; margin-top:20px;
+}
+.tendencia-explicacion p{margin:0; font-size:.9rem; color:var(--text-muted);}
+
 .chart-fallback-table{
   display:block;
   overflow-x:auto;
@@ -855,4 +870,77 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
   .viewer-bar{top:56px; padding:10px 12px; gap:10px;}
   .viewer-links{margin-left:0; width:100%; justify-content:space-between;}
   .viewer-stage{padding:10px;}
+}
+
+/* ============================================================
+   PÁGINA DE EMBALSES (mapa Leaflet + tarjetas)
+   ============================================================ */
+
+.embalses-map-card{
+  background:var(--surface); border-radius:var(--radius); padding:14px;
+  box-shadow:var(--shadow-sm); border:1px solid var(--border);
+}
+#embalsesMap{height:480px; border-radius:12px; overflow:hidden; background:var(--bg-alt);}
+.embalses-map-status{font-size:.85rem; color:var(--text-muted); text-align:center; padding:14px;}
+
+.embalse-marker-critico{animation:embalse-pulso 1.6s ease-in-out infinite;}
+@keyframes embalse-pulso{0%,100%{opacity:1;}50%{opacity:.55;}}
+@media (prefers-reduced-motion:reduce){.embalse-marker-critico{animation:none;}}
+
+.embalses-mapa-leyenda{
+  display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:10px;
+  font-size:.8rem; color:var(--text-muted);
+}
+.embalses-mapa-leyenda .leyenda-item{display:inline-flex; align-items:center; gap:6px;}
+.embalses-mapa-leyenda .leyenda-punto{
+  width:11px; height:11px; border-radius:50%; display:inline-block; flex-shrink:0;
+  border:1.5px solid #fff; box-shadow:0 0 0 1px rgba(0,0,0,.15);
+}
+.embalse-popup{font-size:.86rem; line-height:1.45; min-width:180px;}
+.embalse-popup strong{font-size:1rem;}
+.embalse-popup a{color:var(--link-accent); font-weight:600; text-decoration:none; font-size:.85em;}
+.embalse-popup a:hover{text-decoration:underline;}
+
+.embalse-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:40px;}
+.embalse-card{
+  background:var(--surface); border-radius:16px; padding:22px 20px; box-shadow:var(--shadow-sm);
+  border:1px solid var(--border); display:flex; flex-direction:column;
+}
+.embalse-card h4{font-size:1.05rem; margin-bottom:2px; color:var(--heading-accent);}
+.embalse-card-municipio{font-size:.82rem; color:var(--text-dim); margin-bottom:14px;}
+.embalse-card-nivel{display:flex; align-items:baseline; gap:10px; margin:2px 0 8px;}
+.embalse-card-nivel-valor{font-size:1.3rem; font-weight:800; color:var(--text);}
+.embalse-card-sparkline{width:100%; height:48px; margin-bottom:14px; display:block;}
+.embalse-card-facts{margin:0 0 6px; display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;}
+.embalse-card-facts div{display:flex; flex-direction:column;}
+.embalse-card-facts dt{font-size:.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px;}
+.embalse-card-facts dd{margin:0; font-size:.88rem; font-weight:700; color:var(--text);}
+.embalse-card-nota{font-size:.74rem; color:var(--callout-text); background:var(--callout-bg); border:1px solid var(--callout-border); border-radius:8px; padding:8px 10px; margin:12px 0 0;}
+.embalse-card-link{
+  margin-top:16px; align-self:flex-start; font-size:.85rem; font-weight:700; color:var(--link-accent);
+  text-decoration:none; padding:9px 16px; border-radius:999px; background:rgba(18,165,148,.1);
+  transition:background .15s ease;
+}
+.embalse-card-link:hover{background:rgba(18,165,148,.18);}
+
+.embalses-cta{
+  background:linear-gradient(120deg, rgba(18,165,148,.1), rgba(15,92,120,.06));
+  border:1px solid var(--border); border-radius:var(--radius);
+  padding:24px 26px; margin-top:30px; display:flex; align-items:center; justify-content:space-between;
+  gap:20px; flex-wrap:wrap;
+}
+.embalses-cta p{margin:0; color:var(--text-muted); font-size:.95rem;}
+.embalses-cta a{
+  white-space:nowrap; background:#0c8074; color:#fff; font-weight:700; font-size:.9rem;
+  padding:12px 22px; border-radius:999px; text-decoration:none; transition:transform .15s ease;
+}
+.embalses-cta a:hover{transform:translateY(-2px);}
+
+@media (max-width:960px){
+  .embalse-grid{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:720px){
+  .embalse-grid{grid-template-columns:1fr;}
+  #embalsesMap{height:380px;}
+  .embalses-cta{flex-direction:column; align-items:flex-start;}
 }

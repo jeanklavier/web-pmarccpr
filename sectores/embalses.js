@@ -134,10 +134,20 @@
     '50113950': 475.07   // Cerrillos — 144.8 m
   };
 
+  /* Expuesto en window para que otras páginas (embalses.html) puedan
+     reusar la misma conexión a Supabase y los mismos umbrales de la AAA
+     sin duplicar la URL/llave ni volver a transcribir los valores. */
+  window.PMARCC_SUPABASE = {
+    fetchNiveles: fetchNivelesSupabase,
+    NIVEL_AJUSTES_PIES: NIVEL_AJUSTES_PIES,
+    NIVEL_CONTROL_PIES: NIVEL_CONTROL_PIES
+  };
+
   var MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
   var MESES_LARGO = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio',
     'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   var TENDENCIA_UMBRAL_M = 0.05; // mismo umbral que usa la AAA/embalsespr.com
+  window.PMARCC_SUPABASE.TENDENCIA_UMBRAL_M = TENDENCIA_UMBRAL_M;
 
   function labelFor(siteNo) {
     return NOMBRE_AAA[siteNo] || siteNo;
@@ -156,6 +166,44 @@
     return isoDate(d);
   }
 
+  /* ---- Proyección de tendencia: regresión lineal simple sobre los
+     últimos ~30 puntos reales, extrapolada 30 días hacia adelante. Es
+     una señal distinta a la tendencia día-a-día de renderCurrentReading
+     (que compara solo la última lectura contra la anterior); esta usa
+     una ventana más larga para suavizar el ruido diario. ---- */
+  var PROYECCION_DIAS = 30;
+  var PROYECCION_VENTANA_MAX = 30; // usa como máximo los últimos 30 puntos reales
+  var PROYECCION_MIN_PUNTOS = 10;  // si hay menos que esto, no se calcula proyección
+
+  function calcularTendencia(values) {
+    var ordered = values.slice().sort(function (a, b) {
+      return a.dateTime < b.dateTime ? -1 : (a.dateTime > b.dateTime ? 1 : 0);
+    });
+    var ventana = ordered.slice(Math.max(0, ordered.length - PROYECCION_VENTANA_MAX));
+    var pts = ventana.map(function (v, i) {
+      return { x: i, y: parseFloat(v.value) };
+    }).filter(function (p) { return !isNaN(p.y); });
+    if (pts.length < PROYECCION_MIN_PUNTOS) return null;
+
+    var n = pts.length;
+    var sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    pts.forEach(function (p) {
+      sumX += p.x; sumY += p.y; sumXY += p.x * p.y; sumXX += p.x * p.x;
+    });
+    var slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    var intercept = (sumY - slope * sumX) / n;
+
+    var lastDate = new Date(ordered[ordered.length - 1].dateTime + 'T00:00:00');
+    var proyeccion = [];
+    for (var k = 1; k <= PROYECCION_DIAS; k++) {
+      var x = (n - 1) + k;
+      var d = new Date(lastDate);
+      d.setDate(d.getDate() + k);
+      proyeccion.push({ fecha: isoDate(d), valor: intercept + slope * x });
+    }
+    return { slopePorDia: slope, proyeccion: proyeccion };
+  }
+
   var select = document.getElementById('embalseSelect');
   var canvas = document.getElementById('embalseChart');
   var statusBox = document.getElementById('embalseStatus');
@@ -168,6 +216,8 @@
   var currentValue = document.getElementById('reservoirCurrentValue');
   var currentTrend = document.getElementById('reservoirCurrentTrend');
   var currentDate = document.getElementById('reservoirCurrentDate');
+  var lluviaCanvas = document.getElementById('lluviaChart');
+  var lluviaStatus = document.getElementById('lluviaStatus');
   if (!select || !canvas) return;
 
   /* Si Chart.js no cargó (CDN caído o bloqueado), la tabla de datos
@@ -190,7 +240,13 @@
     opt.textContent = labelFor(s.siteNo);
     select.appendChild(opt);
   });
-  select.value = DEFAULT_SITE;
+
+  // Deep link desde otras páginas (p.ej. embalses.html#50027100): si el
+  // hash coincide con un site_no conocido, abre esa estación en vez de
+  // la de por defecto y lleva la vista hasta la gráfica.
+  var hashSiteNo = (location.hash || '').slice(1);
+  var initialSiteNo = STATIONS.some(function (s) { return s.siteNo === hashSiteNo; }) ? hashSiteNo : DEFAULT_SITE;
+  select.value = initialSiteNo;
 
   var chart = null;
   var currentRange = '1y';
@@ -321,6 +377,58 @@
       });
     }
 
+    var tendencia = calcularTendencia(values);
+    var proyeccionNota = document.getElementById('proyeccionNota');
+    if (tendencia) {
+      var nuevasLabels = tendencia.proyeccion.map(function (p) {
+        var d = p.fecha.split('-');
+        return d[2] + ' ' + MESES[parseInt(d[1], 10) - 1] + ' ' + d[0];
+      });
+      labels = labels.concat(nuevasLabels);
+      data = data.concat(new Array(tendencia.proyeccion.length).fill(null));
+      // Extiende Ajustes/Control (si existen) hacia los días proyectados también,
+      // para que las líneas de referencia sigan visibles en esa franja.
+      datasets.forEach(function (ds) {
+        if (ds.label === 'Nivel de ajustes' || ds.label === 'Nivel de control') {
+          var v = ds.data[0];
+          ds.data = ds.data.concat(new Array(tendencia.proyeccion.length).fill(v));
+        }
+      });
+
+      // null hasta el último punto real, valor real en ese punto para que la
+      // línea conecte con la proyección, luego los valores proyectados.
+      var idxUltimoReal = values.length - 1;
+      var proyeccionData = new Array(labels.length).fill(null);
+      proyeccionData[idxUltimoReal] = parseFloat(values[values.length - 1].value);
+      tendencia.proyeccion.forEach(function (p, i) {
+        proyeccionData[idxUltimoReal + 1 + i] = p.valor;
+      });
+
+      datasets.push({
+        label: 'Proyección (tendencia 30 días)',
+        data: proyeccionData,
+        borderColor: '#8854d0',
+        borderDash: [8, 4],
+        borderWidth: 1.5,
+        pointRadius: 0,
+        fill: false,
+        spanGaps: false
+      });
+
+      if (proyeccionNota) {
+        var totalPies = tendencia.slopePorDia * PROYECCION_DIAS;
+        var totalM = totalPies * 0.3048;
+        var etiqueta = totalM > 0.15 ? 'subiendo' : (totalM < -0.15 ? 'bajando' : 'relativamente estable');
+        proyeccionNota.textContent = 'Si continúa la tendencia de los últimos 30 días, el nivel estaría ' +
+          etiqueta + ' en los próximos 30 días (cambio proyectado: ' + (totalM >= 0 ? '+' : '') +
+          totalM.toFixed(2) + ' m). Esto es una proyección estadística, no un pronóstico oficial: asume ' +
+          'que las condiciones actuales continúan y no toma en cuenta lluvia futura.';
+        proyeccionNota.style.display = 'block';
+      }
+    } else if (proyeccionNota) {
+      proyeccionNota.style.display = 'none';
+    }
+
     if (chart) chart.destroy();
     chart = new Chart(canvas, {
       type: 'line',
@@ -348,21 +456,72 @@
     });
   }
 
+  /* ---- 4b. Pronóstico de lluvia (Open-Meteo) para la ubicación del
+     embalse seleccionado. Requiere las coordenadas de
+     sectores/embalses-info-data.js, expuestas en window.EMBALSES_INFO
+     por embalses-coords-loader.js (debe cargarse antes que este script
+     en la página que lo use; en agua.html va antes de embalses.js). ---- */
+  var lluviaChart = null;
+
+  function fetchLluvia(siteNo) {
+    if (!lluviaCanvas) return;
+    var info = window.EMBALSES_INFO && window.EMBALSES_INFO[siteNo];
+    if (!info || typeof info.lat !== 'number') {
+      if (lluviaStatus) lluviaStatus.textContent = 'No hay coordenadas para este embalse.';
+      return;
+    }
+    if (lluviaStatus) lluviaStatus.textContent = 'Cargando pronóstico…';
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + info.lat +
+      '&longitude=' + info.lng + '&daily=precipitation_sum&forecast_days=14&timezone=America%2FPuerto_Rico';
+
+    fetch(url).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    }).then(function (json) {
+      var fechas = json.daily.time;
+      var precip = json.daily.precipitation_sum;
+      var labels = fechas.map(function (f) {
+        var d = f.split('-');
+        return d[2] + ' ' + MESES[parseInt(d[1], 10) - 1];
+      });
+      var colores = precip.map(function (v, i) {
+        return i < 7 ? 'rgba(31,122,224,.85)' : 'rgba(31,122,224,.35)';
+      });
+      if (lluviaChart) lluviaChart.destroy();
+      var c = themeColors();
+      lluviaChart = new Chart(lluviaCanvas, {
+        type: 'bar',
+        data: { labels: labels, datasets: [{ label: 'Lluvia pronosticada (mm)', data: precip, backgroundColor: colores }] },
+        options: {
+          animation: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { title: { display: true, text: 'mm de lluvia', color: c.text }, ticks: { color: c.text }, grid: { color: c.grid } },
+            x: { ticks: { color: c.text, maxRotation: 0 }, grid: { display: false } }
+          }
+        }
+      });
+      if (lluviaStatus) lluviaStatus.textContent = 'Días 1-7: pronóstico de mayor confiabilidad. Días 8-14 (barras más claras): tendencia general, menor precisión — es una limitación conocida de los modelos meteorológicos a ese plazo, no del sitio.';
+    }).catch(function () {
+      if (lluviaStatus) lluviaStatus.textContent = 'No se pudo cargar el pronóstico de lluvia en este momento.';
+    });
+  }
+
   /* ---- 5. Fuentes de datos: Supabase (principal) y USGS (respaldo).
      Ambas resuelven al mismo formato [{dateTime, value}] que ya usan
      renderChart/renderTable/renderCurrentReading, para no tocar esa
      lógica. ---- */
-  // PostgREST limita cada respuesta a 1000 filas por defecto (confirmado:
-  // Content-Range: 0-999/*). 3 años de lecturas diarias ya superan eso, y
-  // "todo el historial" lo supera por mucho, así que hay que paginar con
-  // limit/offset hasta que una página vuelva con menos de PAGE_SIZE filas.
-  var SUPABASE_PAGE_SIZE = 1000;
-
-  function fetchSupabasePage(siteNo, startDT, endDT, offset) {
+  // Conexión genérica a la tabla pmarcc_embalses_niveles, reusable por
+  // cualquier página (esta y embalses.html). opts: { startDT, endDT,
+  // order: 'asc'|'desc' (default 'asc'), limit, offset }.
+  function fetchNivelesSupabase(siteNo, opts) {
+    opts = opts || {};
     var url = SUPABASE_URL + '/rest/v1/pmarcc_embalses_niveles?site_no=eq.' + encodeURIComponent(siteNo);
-    if (startDT) url += '&fecha=gte.' + startDT;
-    if (endDT) url += '&fecha=lte.' + endDT;
-    url += '&order=fecha.asc&select=fecha,valor_pies&limit=' + SUPABASE_PAGE_SIZE + '&offset=' + offset;
+    if (opts.startDT) url += '&fecha=gte.' + opts.startDT;
+    if (opts.endDT) url += '&fecha=lte.' + opts.endDT;
+    url += '&order=fecha.' + (opts.order || 'asc') + '&select=fecha,valor_pies';
+    if (opts.limit) url += '&limit=' + opts.limit;
+    if (opts.offset) url += '&offset=' + opts.offset;
 
     return fetch(url, {
       headers: {
@@ -375,9 +534,18 @@
     });
   }
 
+  // PostgREST limita cada respuesta a 1000 filas por defecto (confirmado:
+  // Content-Range: 0-999/*). 3 años de lecturas diarias ya superan eso, y
+  // "todo el historial" lo supera por mucho, así que hay que paginar con
+  // limit/offset hasta que una página vuelva con menos de PAGE_SIZE filas.
+  var SUPABASE_PAGE_SIZE = 1000;
+
   function fetchStationFromSupabase(siteNo, startDT, endDT) {
     function loadPages(offset, acc) {
-      return fetchSupabasePage(siteNo, startDT, endDT, offset).then(function (rows) {
+      return fetchNivelesSupabase(siteNo, {
+        startDT: startDT, endDT: endDT, order: 'asc',
+        limit: SUPABASE_PAGE_SIZE, offset: offset
+      }).then(function (rows) {
         acc = acc.concat(rows);
         if (!rows.length || rows.length < SUPABASE_PAGE_SIZE) return acc;
         return loadPages(offset + SUPABASE_PAGE_SIZE, acc);
@@ -411,6 +579,7 @@
 
   /* ---- 6. Cargar un embalse ---- */
   function loadStation(siteNo) {
+    fetchLluvia(siteNo);
     setStatus('Cargando el historial…', false);
     canvas.style.visibility = 'hidden';
 
@@ -454,7 +623,11 @@
   });
 
   if (chartAvailable) Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
-  loadStation(DEFAULT_SITE);
+  loadStation(initialSiteNo);
+  if (initialSiteNo !== DEFAULT_SITE) {
+    var section = document.getElementById('embalses');
+    if (section) section.scrollIntoView();
+  }
 
   window.addEventListener('pmarcc-theme-change', function () {
     if (!chartAvailable || !chart) return;

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es-PR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Embalses de Puerto Rico: Niveles Actuales y Datos Históricos | Plan Climático PR</title>
+<meta name="description" content="Mapa y ficha de los 19 embalses de Puerto Rico: nivel actual, umbrales de la AAA, año de construcción y cuánta capacidad han perdido por sedimentación. Datos que se actualizan a diario desde el USGS.">
+<link rel="canonical" href="https://planclimaticopr.com/embalses.html">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Embalses de Puerto Rico: Niveles Actuales y Datos Históricos | Plan Climático PR">
+<meta property="og:description" content="Mapa y ficha de los 19 embalses de Puerto Rico: nivel actual, umbrales de la AAA, año de construcción y cuánta capacidad han perdido por sedimentación.">
+<meta property="og:url" content="https://planclimaticopr.com/embalses.html">
+<meta property="og:image" content="https://planclimaticopr.com/og-image.jpg">
+<meta property="og:locale" content="es_PR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
+  integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w=="
+  crossorigin="anonymous" referrerpolicy="no-referrer">
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('pmarcc-theme');
+      var isDark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    } catch (e) {}
+  })();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Embalses de Puerto Rico: niveles actuales y datos históricos",
+  "inLanguage": "es-PR",
+  "description": "Mapa y ficha de los 19 embalses de Puerto Rico: nivel actual, umbrales de la AAA, año de construcción y cuánta capacidad han perdido por sedimentación.",
+  "dateModified": "2026-08-10",
+  "about": "Sector Agua del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico (P-MARCC)"
+}
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-65HEXGSRK0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-65HEXGSRK0');
+</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+<header class="site-header" id="top">
+  <nav class="navbar" aria-label="Principal">
+    <a href="index.html" class="brand">
+      <span class="brand-icon" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span>
+      <span class="brand-text">P-MARCC <small>Puerto Rico</small></span>
+    </a>
+    <div class="nav-right">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#que-es">¿Qué es?</a></li>
+        <li><a href="index.html#datos">Los datos</a></li>
+        <li class="nav-item-dropdown">
+  <button type="button" class="nav-dropdown-toggle" aria-expanded="false" aria-controls="sectorSubmenu">
+    Sectores
+    <svg class="nav-dropdown-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <ul class="nav-submenu" id="sectorSubmenu">
+    <li><a href="/sectores/energia.html">Energía</a></li>
+    <li><a href="/sectores/infraestructura.html">Infraestructura</a></li>
+    <li><a href="/sectores/transporte.html">Transporte</a></li>
+    <li><a href="/sectores/residuos.html">Residuos</a></li>
+    <li><a href="/sectores/salud.html">Salud</a></li>
+    <li><a href="/sectores/agricultura.html">Agricultura</a></li>
+    <li><a href="/sectores/agua.html">Agua</a></li>
+    <li><a href="/sectores/marinos.html">Marinos y costeros</a></li>
+    <li><a href="/sectores/forestacion.html">Forestación</a></li>
+    <li><a href="/sectores/turismo.html">Turismo</a></li>
+    <li><a href="/sectores/educacion.html">Educación</a></li>
+    <li><a href="/sectores/justicia.html">Justicia climática</a></li>
+  </ul>
+</li>
+        <li><a href="index.html#acciones">Plan de acción</a></li>
+        <li><a href="embalses.html" aria-current="page">Embalses</a></li>
+        <li><a href="visor.html">El Plan (PDF)</a></li>
+        <li><a href="glosario.html">Glosario</a></li>
+      </ul>
+      <button id="themeToggle" aria-label="Cambiar a modo oscuro"><span class="tt-thumb"></span></button>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main id="main-content">
+<section class="sector-hero">
+  <div class="container">
+    <p class="breadcrumb" style="color:#bcdcd8; margin-top:0;">
+      <a href="index.html" style="color:#fff;">Inicio</a> ›
+      <span>Embalses</span>
+    </p>
+    <div class="sector-hero-icon" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--sun-400)"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg></div>
+    <h1>Los embalses de Puerto Rico</h1>
+    <p>Los 19 embalses que monitorea el USGS abastecen buena parte del agua potable e hidroeléctrica del país - y llevan décadas perdiendo capacidad por sedimentación. Aquí puedes ver el nivel actual de cada uno en el mapa, y su ficha con año de construcción, operador y cuánta capacidad ha perdido.</p>
+    <div class="sector-badges">
+      <span class="sector-badge">19 embalses monitoreados (USGS)</span>
+      <span class="sector-badge">6 con umbrales oficiales de la AAA</span>
+      <span class="sector-badge">Datos actualizados a diario</span>
+    </div>
+  </div>
+</section>
+
+<nav class="sector-nav">
+  <div class="container">
+    <a href="#contexto">Contexto</a>
+    <a href="#mapa">Mapa</a>
+    <a href="#lista">Ficha por embalse</a>
+    <a href="#fuentes">Fuentes</a>
+  </div>
+</nav>
+
+<section class="section" id="contexto">
+  <div class="container">
+    <span class="tag">Sobre estos embalses</span>
+    <h2>Agua potable y electricidad - con una capacidad que se reduce cada año</h2>
+    <div class="diag-prose">
+      <p>Puerto Rico no tiene grandes ríos ni lagos naturales de agua dulce: casi toda el agua que sale del grifo, y una parte de la electricidad que se genera, dependen de embalses artificiales construidos entre principios del siglo XX y 2010. La <strong>Autoridad de Acueductos y Alcantarillados (AAA)</strong> opera 6 de ellos para abastecer agua potable; la <strong>Autoridad de Energía Eléctrica (AEE)</strong> opera la mayoría del resto para generación hidroeléctrica; y el <strong>DRNA</strong> opera uno (Cerrillos) principalmente para control de inundaciones y suministro agrícola.</p>
+      <p>El problema es que estos embalses se llenan de sedimento con el tiempo - tierra y escombros que arrastran las lluvias y los huracanes desde las cuencas que los alimentan - y eso reduce, poco a poco, cuánta agua pueden almacenar. Varios ya han perdido más de la mitad de su capacidad original desde que se construyeron. El huracán María (2017), que destruyó 144 millones de árboles en la isla, agravó esta erosión al dejar más terrenos expuestos a las lluvias siguientes.</p>
+      <p>Esta página es un complemento del diagnóstico del <a href="sectores/agua.html" style="color:var(--link-accent); font-weight:600;">sector Agua del P-MARCC</a>, que identifica la sedimentación de los embalses como una de las presiones centrales sobre el suministro de agua del país. Los niveles que ves abajo se actualizan <strong>automáticamente todos los días</strong> a partir de las mediciones públicas del U.S. Geological Survey (USGS).</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="mapa">
+  <div class="container">
+    <span class="tag">Mapa interactivo</span>
+    <h2>Dónde están y cómo está su nivel hoy</h2>
+    <p class="chart-note">Toca o pasa el cursor sobre un embalse para ver su nivel más reciente. El color solo aplica a los 6 embalses de la AAA que tienen umbrales operacionales oficiales y públicos; para el resto no existe un umbral con el que compararlos, así que se muestran en gris.</p>
+
+    <div class="embalses-map-card">
+      <div id="embalsesMap" aria-label="Mapa interactivo de Puerto Rico con la ubicación de los 19 embalses monitoreados por el USGS"></div>
+      <p class="embalses-map-status" id="embalsesMapStatus">Cargando el mapa…</p>
+    </div>
+
+    <div class="embalses-mapa-leyenda">
+      <span class="leyenda-item"><span class="leyenda-punto" style="background:#2f9e44;"></span> Normal (sobre el nivel de Ajustes de la AAA)</span>
+      <span class="leyenda-item"><span class="leyenda-punto" style="background:#e8a33d;"></span> Atención (entre Control y Ajustes)</span>
+      <span class="leyenda-item"><span class="leyenda-punto" style="background:#c92a2a;"></span> Crítico (bajo el nivel de Control)</span>
+      <span class="leyenda-item"><span class="leyenda-punto" style="background:#7c8db0;"></span> Sin umbral oficial de la AAA (solo 6 de 19 embalses lo tienen público)</span>
+    </div>
+
+    <p class="embalse-note">Coordenadas: USGS Water Services. Umbrales de Ajustes y Control: gráfica oficial de monitoreo diario de la AAA (acueductos.pr.gov). Niveles: tabla que se actualiza a diario desde el USGS.</p>
+  </div>
+</section>
+
+<section class="section" id="lista">
+  <div class="container">
+    <span class="tag">Ficha por embalse</span>
+    <h2>Los 19 embalses, uno por uno</h2>
+    <p class="lead">Nombre, municipio, operador, año de construcción y cuánta capacidad de almacenamiento ha perdido cada embalse desde que se construyó, según la investigación disponible. "N/D" indica que no se encontró un dato confiable para esa estación.</p>
+
+    <div class="embalse-grid" id="embalsesGrid"></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="fuentes">
+  <div class="container">
+    <div class="source-box" style="margin-top:0;">
+      <h4>Fuentes de esta página</h4>
+      <ul>
+        <li>U.S. Geological Survey (USGS), Water Services (waterservices.usgs.gov) - niveles diarios y coordenadas de las 19 estaciones.</li>
+        <li>Autoridad de Acueductos y Alcantarillados (AAA), gráfica oficial de monitoreo diario (acueductos.pr.gov) - nombres, operador y umbrales de Ajustes/Control.</li>
+        <li>Primera Hora, "Conoce los principales embalses de Puerto Rico" (2022), contrastado con páginas oficiales de la AAA y el DRNA - año de construcción, capacidad original y % de capacidad perdida.</li>
+        <li>CEACC (2024). <em>P-MARCC</em>, Tomo 1, Capítulo 4.7 "Agua". <a class="ver-plan" href="visor.html?tomo=1&amp;pagina=152">Ver esa página →</a></li>
+      </ul>
+    </div>
+
+    <div class="embalses-cta">
+      <p>¿Quieres ver el historial diario de un embalse específico, con su gráfica y los umbrales de la AAA?</p>
+      <a href="sectores/agua.html#embalses">Ver toda la información de los embalses →</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Sobre esta guía</h4>
+        <p>Este sitio resume, de forma visual y en lenguaje sencillo, el <em>Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico</em> (P-MARCC), versión revisada de abril de 2024, elaborado por el Comité de Expertos y Asesores sobre Cambio Climático (CEACC), Gobierno de Puerto Rico. No sustituye el documento oficial.</p>
+      </div>
+      <div>
+        <h4>Fuente citada como</h4>
+        <p>CEACC (2024). <em>Borrador del Plan de Mitigación, Adaptación y Resiliencia al Cambio Climático en Puerto Rico.</em> Gobierno de Puerto Rico. Tomos 1 y 2.</p>
+        <p><a href="visor.html" style="color:var(--teal-400); font-weight:700;">Leer el Plan página por página en este sitio →</a></p>
+        <p>Documento oficial (DRNA): <a href="https://www.drna.pr.gov/wp-content/uploads/2024/04/PLAN-MITIGACION-TOMO-1-ARCHIVO-DIGITAL-19-ABR-2024.pdf" target="_blank" rel="noopener" style="color:var(--teal-400);">Tomo 1 (PDF)</a> · <a href="https://www.drna.pr.gov/wp-content/uploads/2024/04/PLAN-MITIGACION-TOMO-2-ARCHIVO-DIGITAL-19-ABR-2024.pdf" target="_blank" rel="noopener" style="color:var(--teal-400);">Tomo 2 (PDF)</a></p>
+      </div>
+    </div>
+    <div class="ai-disclosure">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+      <p><strong>Sobre el contenido de este sitio:</strong> los textos, resúmenes y organización visual de esta página fueron elaborados con la ayuda de inteligencia artificial a partir del borrador oficial del P-MARCC. Aunque revisamos la exactitud de los datos, pueden existir errores de interpretación o resumen. Si encuentras algo incorrecto o tienes una sugerencia, <button type="button" class="footer-report-link" onclick="document.getElementById('reportFab').click()">cuéntanoslo aquí</button>; toma menos de un minuto.</p>
+    </div>
+    <p class="footer-note">Hecho para ayudar al ciudadano común a entender el Plan. No es un sitio oficial ni está afiliado al CEACC ni al Gobierno de Puerto Rico. <a href="glosario.html" style="color:var(--teal-400);">Glosario</a> · Última actualización: <time datetime="2026-08-10">10 de agosto de 2026</time>.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
+  integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="sectores/embalses.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"
+  integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script type="module" src="embalses-mapa.js"></script>
+<script src="nav.js" defer></script>
+<script src="theme.js" defer></script>
+<script src="correction.js" defer></script>
+</body>
+</html>

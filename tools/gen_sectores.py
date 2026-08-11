@@ -84,6 +84,7 @@ def nav():
         <li><a href="../index.html#datos">Los datos</a></li>
         <li><a href="../index.html#sectores">Sectores</a></li>
         <li><a href="../index.html#acciones">Plan de acción</a></li>
+        <li><a href="../embalses.html">Embalses</a></li>
         <li><a href="../visor.html">El Plan (PDF)</a></li>
         <li><a href="../glosario.html">Glosario</a></li>
       </ul>
