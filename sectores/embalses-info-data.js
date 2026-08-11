@@ -17,7 +17,13 @@
    ============================================================ */
 
 const EMBALSES_INFO = {
-  "50059000": { nombre: "Carraízo", municipio: "Trujillo Alto", operador: "AAA", anio: 1954, capacidadOriginal: "7,600 millones de galones", porcientoPerdido: 53.7, lat: 18.32791197, lng: -66.01627919 },
+  "50059000": { nombre: "Carraízo", municipio: "Trujillo Alto", operador: "AAA", anio: 1954, capacidadOriginal: "7,600 millones de galones", porcientoPerdido: 53.7, lat: 18.32791197, lng: -66.01627919,
+    alerta: {
+      texto: "Actualmente bajo el Plan de Interrupciones Programadas de la AAA: interrupciones de 48 horas alternas para cerca de 183,000 abonados en San Juan, Trujillo Alto, Carolina, Canóvanas, Loíza, Gurabo y Juncos, en vigor desde el 7 de agosto de 2026 por los bajos niveles del embalse. Podría pasar a interrupciones de 72 horas si el nivel sigue bajando y no llueve.",
+      fuente: "El Nuevo Día",
+      url: "https://www.elnuevodia.com/noticias/gobierno/notas/a-partir-del-viernes-gobernadora-anuncia-plan-de-racionamiento-de-agua-por-bajos-niveles-en-carraizo/"
+    }
+  },
   "50045000": { nombre: "La Plata", municipio: "Comerío / Toa Alta", operador: "AAA", anio: 1974, capacidadOriginal: "10,700 millones de galones", porcientoPerdido: 28.5, lat: 18.34300093, lng: -66.23607079 },
   "50047550": { nombre: "Cidra", municipio: "Cidra", operador: "AAA", anio: null, capacidadOriginal: "1,700 millones de galones", porcientoPerdido: 31.9, lat: 18.19690159, lng: -66.14072219 },
   "50111210": { nombre: "Toa Vaca", municipio: "Villalba", operador: "AAA", anio: 1972, capacidadOriginal: "18,180 millones de galones", porcientoPerdido: 61, lat: 18.103642, lng: -66.489408 },

@@ -161,6 +161,11 @@
   // real de datos en la tabla (varía entre 2006 y 2016 según la estación).
   function startDateFor(range) {
     if (range === 'all') return null;
+    if (range === '30d') {
+      var d = new Date();
+      d.setDate(d.getDate() - 30);
+      return isoDate(d);
+    }
     var d = new Date();
     d.setFullYear(d.getFullYear() - (range === '3y' ? 3 : 1));
     return isoDate(d);
@@ -249,7 +254,7 @@
   select.value = initialSiteNo;
 
   var chart = null;
-  var currentRange = '1y';
+  var currentRange = '30d';
 
   function setStatus(msg, isError) {
     statusBox.textContent = msg || '';
@@ -263,6 +268,19 @@
       text: cs.getPropertyValue('--text-muted').trim() || '#3d5257',
       grid: cs.getPropertyValue('--border').trim() || 'rgba(8,32,50,.08)'
     };
+  }
+
+  function renderAlerta(siteNo) {
+    var box = document.getElementById('embalseAlerta');
+    if (!box) return;
+    var info = window.EMBALSES_INFO && window.EMBALSES_INFO[siteNo];
+    if (info && info.alerta) {
+      box.innerHTML = '⚠ <strong>' + info.alerta.texto + '</strong> <a href="' + info.alerta.url +
+        '" target="_blank" rel="noopener">Fuente: ' + info.alerta.fuente + '</a>';
+      box.style.display = 'block';
+    } else {
+      box.style.display = 'none';
+    }
   }
 
   /* ---- 2. Última lectura + tendencia (independiente del rango elegido:
@@ -612,6 +630,7 @@
 
   /* ---- 6. Cargar un embalse ---- */
   function loadStation(siteNo) {
+    renderAlerta(siteNo);
     fetchLluvia(siteNo);
     setStatus('Cargando el historial…', false);
     canvas.style.visibility = 'hidden';

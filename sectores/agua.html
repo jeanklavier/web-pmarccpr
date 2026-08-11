@@ -175,6 +175,8 @@
         </button>
       </div>
 
+      <div class="embalse-alerta" id="embalseAlerta" style="display:none;" role="alert"></div>
+
       <div class="chart-card">
         <button type="button" class="chart-close-btn" id="chartCloseBtn" aria-label="Cerrar pantalla completa">
           <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -183,7 +185,8 @@
         <h3 id="embalseChart-title">Elevación diaria del embalse</h3>
         <p class="chart-note">Pies de elevación sobre el nivel medio del mar (LMSL)</p>
         <div class="chart-range-controls" role="group" aria-label="Rango de fechas">
-          <button type="button" class="range-btn is-active" data-range="1y">Último año</button>
+          <button type="button" class="range-btn is-active" data-range="30d">Últimos 30 días</button>
+          <button type="button" class="range-btn" data-range="1y">Último año</button>
           <button type="button" class="range-btn" data-range="3y">Últimos 3 años</button>
           <button type="button" class="range-btn" data-range="all">Todo el historial</button>
         </div>

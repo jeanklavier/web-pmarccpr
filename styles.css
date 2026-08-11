@@ -299,6 +299,12 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
   border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-top:14px;
 }
 
+.embalse-alerta{
+  background:rgba(201,42,42,.1); border:1px solid rgba(201,42,42,.35); border-left:4px solid #c92a2a;
+  border-radius:10px; padding:12px 16px; margin-bottom:16px; font-size:.86rem; color:var(--text); line-height:1.5;
+}
+.embalse-alerta a{color:var(--link-accent); font-weight:700;}
+
 .embalse-chart-wrapper{position:relative;}
 
 .chart-expand-btn, .chart-close-btn{
@@ -952,6 +958,11 @@ body.no-scroll{overflow:hidden;}
 .embalse-card-facts dt{font-size:.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px;}
 .embalse-card-facts dd{margin:0; font-size:.88rem; font-weight:700; color:var(--text);}
 .embalse-card-nota{font-size:.74rem; color:var(--callout-text); background:var(--callout-bg); border:1px solid var(--callout-border); border-radius:8px; padding:8px 10px; margin:12px 0 0;}
+.embalse-card-alerta{
+  font-size:.74rem; color:var(--text); background:rgba(201,42,42,.1); border:1px solid rgba(201,42,42,.35);
+  border-radius:8px; padding:8px 10px; margin:12px 0 0; line-height:1.4;
+}
+.embalse-card-alerta a{color:var(--link-accent); font-weight:700;}
 .embalse-card-link{
   margin-top:16px; align-self:flex-start; font-size:.85rem; font-weight:700; color:var(--link-accent);
   text-decoration:none; padding:9px 16px; border-radius:999px; background:rgba(18,165,148,.1);

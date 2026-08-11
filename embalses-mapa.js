@@ -70,10 +70,14 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
       ? '<strong>' + reading.valor.toFixed(2) + ' pies</strong> sobre el nivel del mar<br>' +
         '<span style="font-size:.8em;opacity:.8;">Lectura del ' + fmtFecha(reading.fecha) + '</span>'
       : '<span style="opacity:.8;">Nivel actual no disponible por el momento</span>';
+    var alertaHtml = info.alerta
+      ? '<p style="margin:6px 0 0;color:#c92a2a;font-weight:700;font-size:.8em;">⚠ Bajo Plan de Interrupciones Programadas (AAA)</p>'
+      : '';
     return '<div class="embalse-popup">' +
       '<strong>' + info.nombre + '</strong><br>' +
       '<span style="font-size:.85em;opacity:.85;">' + info.municipio + '</span>' +
       '<p style="margin:8px 0;">' + nivelHtml + '</p>' +
+      alertaHtml +
       '<a href="sectores/agua.html#' + siteNo + '">Ver historial completo →</a>' +
       '</div>';
   }
@@ -148,6 +152,9 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
       var nota = info.porcientoPerdidoNota
         ? '<p class="embalse-card-nota">⚠ ' + info.porcientoPerdidoNota + '</p>'
         : '';
+      var alerta = info.alerta
+        ? '<p class="embalse-card-alerta">⚠ ' + info.alerta.texto + ' <a href="' + info.alerta.url + '" target="_blank" rel="noopener">Fuente: ' + info.alerta.fuente + '</a></p>'
+        : '';
       return '<article class="embalse-card">' +
         '<h4>' + info.nombre + '</h4>' +
         '<p class="embalse-card-municipio">' + info.municipio + '</p>' +
@@ -164,6 +171,7 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
           '<div><dt>% de capacidad perdida</dt><dd>' + perdido + '</dd></div>' +
         '</dl>' +
         nota +
+        alerta +
         '<a class="embalse-card-link" href="sectores/agua.html#' + siteNo + '">Ver gráfica histórica →</a>' +
       '</article>';
     }).join('');
