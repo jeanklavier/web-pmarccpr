@@ -155,7 +155,7 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
           '<span class="embalse-card-nivel-valor" id="nivel-' + siteNo + '">—</span>' +
           '<span class="reservoir-current-trend" id="tendencia-' + siteNo + '"></span>' +
         '</div>' +
-        '<canvas class="embalse-card-sparkline" id="sparkline-' + siteNo + '" width="260" height="48" ' +
+        '<canvas class="embalse-card-sparkline" id="sparkline-' + siteNo + '" width="260" height="56" ' +
           'role="img" aria-label="Tendencia del nivel de ' + info.nombre + ' en el último mes"></canvas>' +
         '<dl class="embalse-card-facts">' +
           '<div><dt>Operador</dt><dd>' + info.operador + '</dd></div>' +
@@ -183,13 +183,26 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
     if (diffM > umbral) color = COLOR_VERDE;
     else if (diffM < -umbral) color = COLOR_ROJO;
 
+    var n = rows.length;
+    var puntos = rows.map(function (r, i) { return i === n - 1 ? 3 : 0; });
+
     new Chart(canvas, {
       type: 'line',
       data: {
         labels: rows.map(function (r) { return r.fecha; }),
         datasets: [{
           data: rows.map(function (r) { return r.valor; }),
-          borderColor: color, borderWidth: 2, pointRadius: 0, tension: .25, fill: false
+          borderColor: color,
+          backgroundColor: color + '26',
+          borderWidth: 2.5,
+          borderCapStyle: 'round',
+          borderJoinStyle: 'round',
+          pointRadius: puntos,
+          pointBackgroundColor: color,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 1.5,
+          tension: .3,
+          fill: true
         }]
       },
       options: {

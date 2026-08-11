@@ -946,7 +946,7 @@ body.no-scroll{overflow:hidden;}
 .embalse-card-municipio{font-size:.82rem; color:var(--text-dim); margin-bottom:14px;}
 .embalse-card-nivel{display:flex; align-items:baseline; gap:10px; margin:2px 0 8px;}
 .embalse-card-nivel-valor{font-size:1.3rem; font-weight:800; color:var(--text);}
-.embalse-card-sparkline{width:100%; height:48px; margin-bottom:14px; display:block;}
+.embalse-card-sparkline{width:100%; height:56px; margin-bottom:14px; display:block;}
 .embalse-card-facts{margin:0 0 6px; display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;}
 .embalse-card-facts div{display:flex; flex-direction:column;}
 .embalse-card-facts dt{font-size:.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px;}
