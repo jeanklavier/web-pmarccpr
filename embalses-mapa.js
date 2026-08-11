@@ -206,7 +206,7 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
     if (!valorEl) return;
     if (!rows.length) { valorEl.textContent = '—'; return; }
     var last = rows[rows.length - 1];
-    valorEl.textContent = (last.valor * 0.3048).toFixed(2) + ' m';
+    valorEl.textContent = (last.valor * 0.3048).toFixed(2) + ' m · ' + last.valor.toFixed(1) + ' pies';
     if (!tendEl) return;
     if (rows.length < 2) { tendEl.textContent = ''; return; }
     var sup = window.PMARCC_SUPABASE;

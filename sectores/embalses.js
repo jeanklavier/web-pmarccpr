@@ -287,7 +287,7 @@
       return;
     }
     var lastM = lastFt * 0.3048;
-    currentValue.textContent = lastM.toFixed(2) + ' m';
+    currentValue.textContent = lastM.toFixed(2) + ' m (' + lastFt.toFixed(2) + ' pies)';
 
     var d = last.dateTime.slice(0, 10).split('-');
     currentDate.textContent = parseInt(d[2], 10) + ' de ' + MESES_LARGO[parseInt(d[1], 10) - 1] + ' de ' + d[0];
@@ -337,6 +337,38 @@
   }
 
   /* ---- 4. Gráfica de línea con Chart.js ---- */
+  /* Dibuja el valor numérico sobre la línea principal cada ~1/8 del total
+     de puntos (se adapta solo sin importar el rango: último año, 3 años o
+     todo el historial), más siempre el último punto real. Solo aplica al
+     dataset 0 (la línea del embalse), no a Ajustes/Control/Proyección. */
+  function drawValueLabels(chartInstance) {
+    var meta = chartInstance.getDatasetMeta(0);
+    var ds = chartInstance.data.datasets[0];
+    var area = chartInstance.chartArea;
+    if (!meta || !ds || !area) return;
+    var total = ds.data.length;
+    if (!total) return;
+    var interval = Math.max(1, Math.round(total / 8));
+    var ctx = chartInstance.ctx;
+    var cc = themeColors();
+    ctx.save();
+    ctx.font = '700 11px "Segoe UI", system-ui, sans-serif';
+    ctx.fillStyle = cc.text;
+    ctx.textAlign = 'center';
+    function drawAt(i) {
+      var point = meta.data[i];
+      var val = ds.data[i];
+      if (!point || val == null || isNaN(val)) return;
+      var y = point.y - 12;
+      if (y < area.top + 12) y = point.y + 16;
+      var x = Math.min(Math.max(point.x, area.left + 18), area.right - 18);
+      ctx.fillText(val.toFixed(1), x, y);
+    }
+    for (var i = 0; i < total; i += interval) drawAt(i);
+    if ((total - 1) % interval !== 0) drawAt(total - 1);
+    ctx.restore();
+  }
+
   function renderChart(values, stationLabel, siteNo) {
     var c = themeColors();
     var labels = values.map(function (v) {
@@ -350,17 +382,17 @@
     var datasets = [{
       label: stationLabel,
       data: data,
-      borderColor: '#1f7ae0',
-      backgroundColor: 'rgba(31,122,224,.12)',
-      fill: true, tension: .15, pointRadius: 0, borderWidth: 2
+      borderColor: '#2f8fff',
+      backgroundColor: 'rgba(47,143,255,.16)',
+      fill: true, tension: .15, pointRadius: 0, borderWidth: 3
     }];
     if (typeof ajustes === 'number') {
       datasets.push({
         label: 'Nivel de ajustes',
         data: labels.map(function () { return ajustes; }),
-        borderColor: '#c9782f',
-        borderDash: [6, 4],
-        borderWidth: 1.5,
+        borderColor: '#f2a93c',
+        borderDash: [8, 5],
+        borderWidth: 2.5,
         pointRadius: 0,
         fill: false
       });
@@ -369,9 +401,9 @@
       datasets.push({
         label: 'Nivel de control',
         data: labels.map(function () { return control; }),
-        borderColor: '#c92a2a',
-        borderDash: [3, 3],
-        borderWidth: 1.5,
+        borderColor: '#ff4d4d',
+        borderDash: [5, 4],
+        borderWidth: 2.5,
         pointRadius: 0,
         fill: false
       });
@@ -407,9 +439,9 @@
       datasets.push({
         label: 'Proyección (tendencia 30 días)',
         data: proyeccionData,
-        borderColor: '#8854d0',
-        borderDash: [8, 4],
-        borderWidth: 1.5,
+        borderColor: '#a668ff',
+        borderDash: [10, 5],
+        borderWidth: 2.5,
         pointRadius: 0,
         fill: false,
         spanGaps: false
@@ -433,6 +465,7 @@
     chart = new Chart(canvas, {
       type: 'line',
       data: { labels: labels, datasets: datasets },
+      plugins: [{ id: 'valueLabelsPlugin', afterDatasetsDraw: drawValueLabels }],
       options: {
         animation: false,
         plugins: {
