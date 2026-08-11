@@ -622,6 +622,76 @@
     });
   });
 
+  var chartWrapper = document.getElementById('embalseChartWrapper');
+  var expandBtn = document.getElementById('chartExpandBtn');
+  var closeBtn = document.getElementById('chartCloseBtn');
+
+  function requestFs(el) {
+    var fn = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+    if (!fn) return Promise.reject(new Error('no soportado'));
+    try { return fn.call(el) || Promise.resolve(); } catch (e) { return Promise.reject(e); }
+  }
+  function exitFs() {
+    var fn = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+    if (fn) { try { fn.call(document); } catch (e) {} }
+  }
+  function isFsActive() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+  }
+
+  function enterFullscreenMode() {
+    if (!chartWrapper) return;
+    chartWrapper.classList.add('is-fullscreen');
+    document.body.classList.add('no-scroll');
+    // Mejora progresiva: si el navegador soporta fullscreen nativo en un div
+    // (no todos - en iPhone/Safari es poco confiable), lo activa además del
+    // overlay CSS. Si falla, no pasa nada: el overlay CSS ya hace el trabajo.
+    requestFs(chartWrapper).catch(function () {});
+    if (chart) {
+      chart.options.maintainAspectRatio = false;
+      setTimeout(function () { chart.resize(); }, 60);
+    }
+  }
+
+  function exitFullscreenMode() {
+    if (!chartWrapper) return;
+    chartWrapper.classList.remove('is-fullscreen');
+    document.body.classList.remove('no-scroll');
+    if (isFsActive()) exitFs();
+    if (chart) {
+      chart.options.maintainAspectRatio = true;
+      setTimeout(function () { chart.resize(); }, 60);
+    }
+  }
+
+  if (expandBtn) expandBtn.addEventListener('click', enterFullscreenMode);
+  if (closeBtn) closeBtn.addEventListener('click', exitFullscreenMode);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && chartWrapper && chartWrapper.classList.contains('is-fullscreen')) {
+      exitFullscreenMode();
+    }
+  });
+
+  // Si la persona sale del fullscreen nativo con el gesto del sistema (no
+  // con nuestro botón), hay que sincronizar el overlay CSS igual.
+  ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(function (evt) {
+    document.addEventListener(evt, function () {
+      if (!isFsActive() && chartWrapper && chartWrapper.classList.contains('is-fullscreen')) {
+        exitFullscreenMode();
+      }
+    });
+  });
+
+  window.addEventListener('resize', function () {
+    if (chartWrapper && chartWrapper.classList.contains('is-fullscreen') && chart) chart.resize();
+  });
+  window.addEventListener('orientationchange', function () {
+    if (chartWrapper && chartWrapper.classList.contains('is-fullscreen') && chart) {
+      setTimeout(function () { chart.resize(); }, 150);
+    }
+  });
+
   if (chartAvailable) Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
   loadStation(initialSiteNo);
   if (initialSiteNo !== DEFAULT_SITE) {

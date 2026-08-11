@@ -165,33 +165,44 @@
     <h2>El nivel de los embalses, con datos del USGS</h2>
     <p class="chart-note">La AAA y la AEE solo publican el nivel actual de los embalses, sin historial. El U.S. Geological Survey (USGS) monitorea 19 embalses de Puerto Rico y sí mantiene un historial público. Elige un embalse y un rango de fechas para ver su elevación diaria.</p>
 
-    <div class="embalse-controls">
-      <label for="embalseSelect">Embalse</label>
-      <select id="embalseSelect" aria-describedby="embalseStatus"></select>
-    </div>
+    <div class="embalse-chart-wrapper" id="embalseChartWrapper">
+      <div class="embalse-controls">
+        <label for="embalseSelect">Embalse</label>
+        <select id="embalseSelect" aria-describedby="embalseStatus"></select>
+        <button type="button" class="chart-expand-btn" id="chartExpandBtn" aria-label="Ver la gráfica en pantalla completa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          Pantalla completa
+        </button>
+      </div>
 
-    <div class="chart-card">
-      <h3 id="embalseChart-title">Elevación diaria del embalse</h3>
-      <p class="chart-note">Pies de elevación sobre el nivel medio del mar (LMSL)</p>
-      <div class="chart-range-controls" role="group" aria-label="Rango de fechas">
-        <button type="button" class="range-btn is-active" data-range="1y">Último año</button>
-        <button type="button" class="range-btn" data-range="3y">Últimos 3 años</button>
-        <button type="button" class="range-btn" data-range="all">Todo el historial</button>
+      <div class="chart-card">
+        <button type="button" class="chart-close-btn" id="chartCloseBtn" aria-label="Cerrar pantalla completa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          Cerrar
+        </button>
+        <h3 id="embalseChart-title">Elevación diaria del embalse</h3>
+        <p class="chart-note">Pies de elevación sobre el nivel medio del mar (LMSL)</p>
+        <div class="chart-range-controls" role="group" aria-label="Rango de fechas">
+          <button type="button" class="range-btn is-active" data-range="1y">Último año</button>
+          <button type="button" class="range-btn" data-range="3y">Últimos 3 años</button>
+          <button type="button" class="range-btn" data-range="all">Todo el historial</button>
+        </div>
+        <div class="reservoir-current" id="reservoirCurrent">
+          <span class="reservoir-current-label">Última lectura (USGS, provisional)</span>
+          <span class="reservoir-current-value" id="reservoirCurrentValue">—</span>
+          <span class="reservoir-current-trend" id="reservoirCurrentTrend"></span>
+          <span class="reservoir-current-date" id="reservoirCurrentDate"></span>
+        </div>
+        <canvas id="embalseChart" role="img" aria-labelledby="embalseChart-title" aria-describedby="embalseChart-data"></canvas>
+        <table class="visually-hidden" id="embalseChart-data">
+          <caption id="embalseChart-caption">Datos de la gráfica: elevación promedio mensual del embalse seleccionado, en pies</caption>
+          <thead><tr><th>Mes</th><th>Elevación promedio (pies)</th></tr></thead>
+          <tbody id="embalseChart-tbody"></tbody>
+        </table>
+        <div class="embalse-status" id="embalseStatus" role="status" aria-live="polite">Cargando el historial…</div>
+        <p class="proyeccion-nota" id="proyeccionNota" style="display:none;"></p>
+        <p class="rotate-hint" id="rotateHint">↻ Gira tu pantalla para ver mejor la gráfica</p>
       </div>
-      <div class="reservoir-current" id="reservoirCurrent">
-        <span class="reservoir-current-label">Última lectura (USGS, provisional)</span>
-        <span class="reservoir-current-value" id="reservoirCurrentValue">—</span>
-        <span class="reservoir-current-trend" id="reservoirCurrentTrend"></span>
-        <span class="reservoir-current-date" id="reservoirCurrentDate"></span>
-      </div>
-      <canvas id="embalseChart" role="img" aria-labelledby="embalseChart-title" aria-describedby="embalseChart-data"></canvas>
-      <table class="visually-hidden" id="embalseChart-data">
-        <caption id="embalseChart-caption">Datos de la gráfica: elevación promedio mensual del embalse seleccionado, en pies</caption>
-        <thead><tr><th>Mes</th><th>Elevación promedio (pies)</th></tr></thead>
-        <tbody id="embalseChart-tbody"></tbody>
-      </table>
-      <div class="embalse-status" id="embalseStatus" role="status" aria-live="polite">Cargando el historial…</div>
-      <p class="proyeccion-nota" id="proyeccionNota" style="display:none;"></p>
     </div>
 
     <p class="embalse-note">Datos: U.S. Geological Survey (USGS), estación <span id="embalseSourceSiteNo">-</span> - <a id="embalseSourceLink" href="https://waterdata.usgs.gov/" target="_blank" rel="noopener"><span id="embalseSourceName">-</span></a>. Los valores más recientes son datos <strong>provisionales</strong> (sujetos a revisión) según el propio USGS.</p>
