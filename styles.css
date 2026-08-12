@@ -303,6 +303,12 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
 .embalse-status.err{color:#c23c2a;}
 .embalse-note{font-size:.8rem; color:var(--text-dim); margin-top:14px;}
 .embalse-note a{color:var(--link-accent); font-weight:600;}
+
+.alertas-list{list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:10px;}
+.alerta-item{background:var(--surface); border:1px solid var(--border); border-left:4px solid #e8590c; border-radius:var(--radius); padding:10px 14px; font-size:.9rem; box-shadow:var(--shadow-sm);}
+.alerta-item strong{display:block; color:var(--heading-accent); margin-bottom:2px;}
+.alerta-item span{color:var(--text-muted);}
+.alerta-item.alerta-ninguna{border-left-color:#2f9e44; color:var(--text-muted); font-style:italic;}
 .chart-range-controls{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
 .range-btn{
   border:1px solid var(--border-strong); background:var(--bg); color:var(--text-muted);

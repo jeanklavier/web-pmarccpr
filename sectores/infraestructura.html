@@ -119,11 +119,70 @@
 
 <nav class="sector-nav">
   <div class="container">
+    <a href="#estado-infraestructura">Estado actual</a>
     <a href="#diagnostico">Diagnóstico</a>
     <a href="#acciones">Cursos de acción</a>
     <a href="#fuentes">Fuentes</a>
   </div>
 </nav>
+
+<section class="section" id="estado-infraestructura">
+  <div class="container">
+    <span class="tag">En vivo · USGS, NWS, FEMA y COR3</span>
+    <h2>La infraestructura, en este momento</h2>
+    <p class="chart-note">Indicadores que se actualizan solos y ayudan a monitorear la implementación de este sector: sismicidad reciente, alertas de clima activas, y cuánto dinero federal de recuperación se ha desembolsado en la isla.</p>
+
+    <div class="stat-cards">
+      <div class="stat-card"><span class="stat-number" id="infraSismos30d">—</span><span class="stat-label">Sismos M2.5+ en 30 días (USGS)</span></div>
+      <div class="stat-card"><span class="stat-number" id="infraAlertasActivas">—</span><span class="stat-label">Alertas activas (NWS)</span></div>
+      <div class="stat-card"><span class="stat-number" id="infraCor3Desembolsado">—</span><span class="stat-label">Desembolsado a PR (COR3)</span></div>
+      <div class="stat-card"><span class="stat-number" id="infraCor3Porciento">—</span><span class="stat-label">% de lo obligado ya desembolsado</span></div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>Sismicidad reciente cerca de Puerto Rico</h3>
+        <p class="chart-note">Sismos de magnitud 2.5 o mayor en los últimos 30 días.</p>
+        <table class="hidro-table">
+          <thead><tr><th>Mag.</th><th>Lugar</th><th>Fecha</th></tr></thead>
+          <tbody id="sismosBody"></tbody>
+        </table>
+        <p class="embalse-status" id="sismosStatus" role="status" aria-live="polite">Cargando…</p>
+        <p class="embalse-note">Fuente: <a href="https://earthquake.usgs.gov/earthquakes/map/" target="_blank" rel="noopener">U.S. Geological Survey (USGS)</a>, en tiempo real.</p>
+      </div>
+      <div class="chart-card">
+        <h3>Alertas activas del Servicio Nacional de Meteorología</h3>
+        <ul class="alertas-list" id="alertasList"></ul>
+        <p class="embalse-note">Fuente: <a href="https://www.weather.gov/sju/" target="_blank" rel="noopener">National Weather Service, oficina de San Juan</a>, en tiempo real.</p>
+      </div>
+    </div>
+
+    <div class="hidro-cruce">
+      <h3>Fondos federales de recuperación desembolsados por sector</h3>
+      <p class="chart-note" id="cor3Timestamp">Actualizado: —</p>
+      <div class="chart-card">
+        <canvas id="chartCor3Recipientes" role="img" aria-label="Fondos desembolsados por tipo de receptor: municipios, agencias, organizaciones sin fines de lucro"></canvas>
+      </div>
+      <table class="hidro-table">
+        <thead><tr><th>Sector</th><th>Receptor</th><th>Desastre</th><th>Monto</th><th>Fecha de pago</th></tr></thead>
+        <tbody id="cor3Body"></tbody>
+      </table>
+      <p class="embalse-status" id="cor3Status" role="status" aria-live="polite">Cargando…</p>
+      <p class="embalse-note">Fuente: <a href="https://recovery.pr.gov/en/financial-analysis/disbursement-dashboard" target="_blank" rel="noopener">Portal de Transparencia de COR3</a>. Se actualiza semanalmente.</p>
+    </div>
+
+    <div class="hidro-cruce">
+      <h3>Proyectos de infraestructura con fondos obligados recientemente (FEMA)</h3>
+      <p class="chart-note">"Obligado" significa que FEMA comprometió el dinero para el proyecto - no necesariamente que ya se desembolsó. Es el paso anterior a lo que muestra COR3 arriba.</p>
+      <table class="hidro-table">
+        <thead><tr><th>Categoría de daño</th><th>Municipio</th><th>Evento</th><th>Monto obligado</th><th>Última obligación</th></tr></thead>
+        <tbody id="femaBody"></tbody>
+      </table>
+      <p class="embalse-status" id="femaStatus" role="status" aria-live="polite">Cargando…</p>
+      <p class="embalse-note">Fuente: <a href="https://www.fema.gov/openfema-data-page/public-assistance-funded-projects-details-v2" target="_blank" rel="noopener">OpenFEMA</a>, dataset "Public Assistance Funded Projects Details". Se actualiza a diario.</p>
+    </div>
+  </div>
+</section>
 
 <section class="section" id="diagnostico">
   <div class="container">
@@ -390,6 +449,11 @@
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"
+  integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="infraestructura-estado.js" defer></script>
+<script src="infraestructura-cor3.js" defer></script>
 <script src="../nav.js" defer></script>
 <script src="../theme.js" defer></script>
 <script src="../correction.js" defer></script>
