@@ -262,6 +262,9 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
 .hidro-table a{color:var(--link-accent); font-weight:700;}
 .hidro-cero{color:var(--text-dim); font-size:.82em;}
 
+.solar-cruce{margin-top:32px;}
+.solar-cruce h3{margin-bottom:6px;}
+
 .luma-cta{
   background:linear-gradient(120deg, rgba(18,165,148,.1), rgba(15,92,120,.06));
   border:1px solid var(--border); border-radius:var(--radius);
