@@ -123,12 +123,72 @@
 
 <nav class="sector-nav">
   <div class="container">
+    <a href="#estado-sistema">Estado actual</a>
     <a href="#diagnostico">Diagnóstico</a>
     <a href="#metas">Metas legales</a>
     <a href="#acciones">Cursos de acción</a>
     <a href="#fuentes">Fuentes</a>
   </div>
 </nav>
+
+<!-- ============ ESTADO DEL SISTEMA (EN VIVO) ============ -->
+<section class="section" id="estado-sistema">
+  <div class="container">
+    <span class="tag">En vivo · Genera PR / AEE</span>
+    <h2>El sistema eléctrico, en este momento</h2>
+    <p class="chart-note" id="estadoTimestamp">Actualizado: —</p>
+    <p class="embalse-status" id="estadoSistemaStatus" role="status" aria-live="polite"></p>
+
+    <div class="stat-cards" id="estadoStatCards">
+      <div class="stat-card"><span class="stat-number" id="estadoGeneracionTotal">—</span><span class="stat-label">Generación total</span></div>
+      <div class="stat-card"><span class="stat-number" id="estadoCapacidadDisponible">—</span><span class="stat-label">Capacidad disponible</span></div>
+      <div class="stat-card"><span class="stat-number" id="estadoReservaRotacion">—</span><span class="stat-label">Reserva en rotación</span></div>
+      <div class="stat-card"><span class="stat-number" id="estadoReservaOperacional">—</span><span class="stat-label">Reserva operacional</span></div>
+      <div class="stat-card"><span class="stat-number" id="estadoPorcientoRenovable">—</span><span class="stat-label">Generación renovable</span></div>
+      <div class="stat-card"><span class="stat-number" id="estadoPorcientoPrivados">—</span><span class="stat-label">De productores privados (PPOA)</span></div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>Mezcla de combustible ahora mismo</h3>
+        <p class="chart-note">Porciento de la generación actual por tipo de combustible</p>
+        <canvas id="chartCombustibleActual" role="img" aria-label="Mezcla de combustible de la generación actual"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Capacidad de generación</h3>
+        <div class="chart-range-controls" role="group" aria-label="Rango de tiempo">
+          <button type="button" class="range-btn capacidad-range-btn is-active" data-cap-range="daily">Diario (7 días)</button>
+          <button type="button" class="range-btn capacidad-range-btn" data-cap-range="weekly">Semanal (5 semanas)</button>
+          <button type="button" class="range-btn capacidad-range-btn" data-cap-range="monthly">Mensual (12 meses)</button>
+        </div>
+        <canvas id="chartCapacidadHistorica" role="img" aria-label="Historial de capacidad de generación"></canvas>
+      </div>
+    </div>
+
+    <div class="hidro-cruce">
+      <h3>Hidroeléctricas: la conexión con los embalses</h3>
+      <p class="chart-note">Estas plantas generan electricidad con el agua de los embalses que monitoreamos en <a href="../embalses.html">la página de embalses</a>. Cuando el nivel baja demasiado, dejan de generar.</p>
+      <table class="hidro-table">
+        <thead><tr><th>Planta</th><th>Generando ahora</th></tr></thead>
+        <tbody id="hidroelectricasBody"></tbody>
+      </table>
+    </div>
+
+    <p class="embalse-note">Datos de generación: <a href="https://genera-pr.com/data-generacion" target="_blank" rel="noopener">Genera PR</a>, que opera la flota de generación de la Autoridad de Energía Eléctrica (AEE). Se actualizan varias veces al día; la hora exacta aparece arriba.</p>
+
+    <div class="luma-cta">
+      <div>
+        <h3 style="margin:0 0 6px;">¿Se fue la luz en tu área?</h3>
+        <p>LUMA no publica sus datos de interrupciones de forma abierta para que otros sitios los muestren en vivo, así que te llevamos directo a sus canales oficiales en vez de intentar replicarlos aquí.</p>
+      </div>
+      <div class="luma-cta-links">
+        <a href="https://lumapr.com/notable-outages/" target="_blank" rel="noopener">Ver interrupciones notables</a>
+        <a href="https://miluma.lumapr.com" target="_blank" rel="noopener">Portal MiLUMA</a>
+      </div>
+    </div>
+    <p class="chart-note" style="margin-top:8px;">También puedes llamar al <a href="tel:+18448885862">1-844-888-5862</a> para reportar o consultar una interrupción.</p>
+  </div>
+</section>
 
 <!-- ============ DIAGNÓSTICO ============ -->
 <section class="section" id="diagnostico">
@@ -409,6 +469,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"
   integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w=="
   crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="https://operationdata.prepa.pr.gov/dataSourceGenera.js" defer></script>
+<script src="energia-estado.js" defer></script>
 <script src="../nav.js" defer></script>
 <script src="../theme.js" defer></script>
 <script src="energia.js" defer></script>

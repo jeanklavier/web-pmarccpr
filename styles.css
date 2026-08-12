@@ -253,6 +253,32 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
 }
 .stat-number{display:block; font-family:Georgia,serif; font-size:2.4rem; color:var(--sun-400); margin-bottom:10px;}
 .stat-label{font-size:.86rem; color:#dceeec; line-height:1.5;}
+#estado-sistema .stat-cards{grid-template-columns:repeat(3,1fr);}
+
+.hidro-cruce{margin-top:32px;}
+.hidro-table{width:100%; border-collapse:collapse; margin-top:12px; font-size:.9rem;}
+.hidro-table th, .hidro-table td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--border);}
+.hidro-table th{color:var(--text-dim); font-size:.78rem; text-transform:uppercase; letter-spacing:.04em;}
+.hidro-table a{color:var(--link-accent); font-weight:700;}
+.hidro-cero{color:var(--text-dim); font-size:.82em;}
+
+.luma-cta{
+  background:linear-gradient(120deg, rgba(18,165,148,.1), rgba(15,92,120,.06));
+  border:1px solid var(--border); border-radius:var(--radius);
+  padding:24px 26px; margin-top:30px; display:flex; align-items:center; justify-content:space-between;
+  gap:20px; flex-wrap:wrap;
+}
+.luma-cta h3{color:var(--heading-accent);}
+.luma-cta p{margin:0; color:var(--text-muted); font-size:.95rem;}
+.luma-cta-links{display:flex; gap:10px; flex-wrap:wrap;}
+.luma-cta-links a{
+  white-space:nowrap; background:#0c8074; color:#fff; font-weight:700; font-size:.9rem;
+  padding:12px 22px; border-radius:999px; text-decoration:none; transition:transform .15s ease;
+}
+.luma-cta-links a:hover{transform:translateY(-2px);}
+@media (max-width:720px){
+  .luma-cta{flex-direction:column; align-items:flex-start;}
+}
 
 .chart-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:24px;}
 .chart-card{
@@ -560,6 +586,7 @@ body.no-scroll{overflow:hidden;}
   .pillars{grid-template-columns:1fr;}
   .info-grid{grid-template-columns:1fr 1fr;}
   .stat-cards{grid-template-columns:1fr 1fr;}
+  #estado-sistema .stat-cards{grid-template-columns:1fr 1fr;}
   .chart-grid{grid-template-columns:1fr;}
   .sector-grid{grid-template-columns:1fr 1fr;}
   .two-col{grid-template-columns:1fr;}
@@ -588,6 +615,7 @@ body.no-scroll{overflow:hidden;}
   .nav-submenu a:hover{background:none; opacity:1;}
   .info-grid{grid-template-columns:1fr;}
   .stat-cards{grid-template-columns:1fr;}
+  #estado-sistema .stat-cards{grid-template-columns:1fr;}
   .sector-grid{grid-template-columns:1fr;}
   .participa-grid{grid-template-columns:1fr;}
   .coa-explainer{flex-direction:column;}
