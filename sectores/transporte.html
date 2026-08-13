@@ -119,11 +119,44 @@
 
 <nav class="sector-nav">
   <div class="container">
+    <a href="#estado-transporte">Estado actual</a>
     <a href="#diagnostico">Diagnóstico</a>
     <a href="#acciones">Cursos de acción</a>
     <a href="#fuentes">Fuentes</a>
   </div>
 </nav>
+
+<section class="section" id="estado-transporte">
+  <div class="container">
+    <span class="tag">En vivo · FAA y NLR (antes NREL)</span>
+    <h2>El transporte, en este momento</h2>
+    <p class="chart-note" id="faaTimestamp">Actualizado: —</p>
+
+    <div class="stat-cards">
+      <div class="stat-card"><span class="stat-number" id="transEvEstaciones">—</span><span class="stat-label">Estaciones de carga EV en PR</span></div>
+      <div class="stat-card"><span class="stat-number" id="transEvPuertos">—</span><span class="stat-label">Puntos de carga totales</span></div>
+      <div class="stat-card"><span class="stat-number" id="transFaaEventos">—</span><span class="stat-label">Avisos activos en aeropuertos</span></div>
+      <div class="stat-card"><span class="stat-number" id="transFaaEstadoGeneral">—</span><span class="stat-label">Estado SJU / BQN / PSE</span></div>
+    </div>
+
+    <div class="hidro-cruce">
+      <h3>Aeropuertos de Puerto Rico</h3>
+      <ul class="alertas-list" id="faaEventosList"></ul>
+      <p class="embalse-note">Fuente: <a href="https://nasstatus.faa.gov/" target="_blank" rel="noopener">National Airspace System Status, Federal Aviation Administration</a>. Se revisa cada 20 minutos.</p>
+    </div>
+
+    <div class="hidro-cruce">
+      <h3>Estaciones de carga para vehículos eléctricos</h3>
+      <p class="chart-note">Todas las estaciones públicas y privadas de carga eléctrica registradas en Puerto Rico.</p>
+      <table class="hidro-table">
+        <thead><tr><th>Estación</th><th>Municipio</th><th>Red</th><th>Puertos (conectores)</th><th>Estado</th><th>Costo</th></tr></thead>
+        <tbody id="evBody"></tbody>
+      </table>
+      <p class="embalse-status" id="evStatus" role="status" aria-live="polite">Cargando…</p>
+      <p class="embalse-note">Fuente: <a href="https://afdc.energy.gov/stations" target="_blank" rel="noopener">Alternative Fuels Data Center (AFDC)</a>, un recurso del Departamento de Energía de EE. UU. operado por el National Laboratory of the Rockies (NLR, antes NREL). Se actualiza a diario.</p>
+    </div>
+  </div>
+</section>
 
 <section class="section" id="diagnostico">
   <div class="container">
@@ -326,6 +359,7 @@
   </div>
 </footer>
 
+<script src="transporte-estado.js" defer></script>
 <script src="../nav.js" defer></script>
 <script src="../theme.js" defer></script>
 <script src="../correction.js" defer></script>
