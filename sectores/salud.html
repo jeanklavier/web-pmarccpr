@@ -119,11 +119,44 @@
 
 <nav class="sector-nav">
   <div class="container">
+    <a href="#estado-salud">Estado actual</a>
     <a href="#diagnostico">Diagnóstico</a>
     <a href="#acciones">Cursos de acción</a>
     <a href="#fuentes">Fuentes</a>
   </div>
 </nav>
+
+<section class="section" id="estado-salud">
+  <div class="container">
+    <span class="tag">En vivo · NWS</span>
+    <h2>El riesgo de calor, en este momento</h2>
+    <p class="chart-note">El índice de calor combina temperatura y humedad para medir cómo se siente el calor realmente - y el riesgo que representa para la salud.</p>
+
+    <div class="stat-cards">
+      <div class="stat-card"><span class="stat-number" id="saludIndiceMax">—</span><span class="stat-label">Índice de calor más alto en PR ahora</span></div>
+      <div class="stat-card"><span class="stat-number" id="saludEstacionMax" style="font-size:1.1rem;">—</span><span class="stat-label">Estación con la lectura más alta</span></div>
+      <div class="stat-card"><span class="stat-number" id="saludCategoriaMax" style="font-size:1.1rem;">—</span><span class="stat-label">Categoría de riesgo</span></div>
+      <div class="stat-card"><span class="stat-number" id="saludAlertasCalor">—</span><span class="stat-label">Avisos de calor activos (NWS)</span></div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h3>Índice de calor por estación</h3>
+        <table class="hidro-table">
+          <thead><tr><th>Estación</th><th>Temp.</th><th>Humedad</th><th>Índice de calor</th><th>Riesgo</th></tr></thead>
+          <tbody id="calorBody"></tbody>
+        </table>
+        <p class="embalse-status" id="calorStatus" role="status" aria-live="polite">Cargando…</p>
+        <p class="embalse-note">Fuente: <a href="https://www.weather.gov/sju/" target="_blank" rel="noopener">National Weather Service, oficina de San Juan</a>, 5 estaciones oficiales en PR. Algunas pueden no reportar en ciertos momentos por mantenimiento del sensor.</p>
+      </div>
+      <div class="chart-card">
+        <h3>Avisos de calor activos</h3>
+        <ul class="alertas-list" id="calorAlertasList"></ul>
+        <p class="embalse-note">Incluye avisos de calor (Heat Advisory) y alertas de calor extremo (Excessive Heat Warning/Watch) para Puerto Rico.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section" id="diagnostico">
   <div class="container">
@@ -279,6 +312,7 @@
   </div>
 </footer>
 
+<script src="salud-calor.js" defer></script>
 <script src="../nav.js" defer></script>
 <script src="../theme.js" defer></script>
 <script src="../correction.js" defer></script>
