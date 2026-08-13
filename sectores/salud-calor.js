@@ -65,9 +65,9 @@
     body.innerHTML = ok.map(function (r) {
       var hiF = r.heatIndex != null ? cToF(r.heatIndex) : cToF(r.temp);
       var cat = categoria(hiF);
-      return '<tr><td>' + r.nombre + '</td><td>' + r.temp.toFixed(0) + '°C</td><td>' +
+      return '<tr><td>' + r.nombre + '</td><td>' + cToF(r.temp).toFixed(0) + '°F</td><td>' +
         (r.rh != null ? r.rh.toFixed(0) + '%' : '—') + '</td><td>' +
-        (r.heatIndex != null ? r.heatIndex.toFixed(0) + '°C (' + hiF.toFixed(0) + '°F)' : '—') + '</td><td>' +
+        (r.heatIndex != null ? hiF.toFixed(0) + '°F' : '—') + '</td><td>' +
         '<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:' + cat.color +
         ';margin-right:6px;vertical-align:middle;"></span>' + cat.label + '</td></tr>';
     }).join('');
@@ -80,7 +80,7 @@
     var peorF = cToF(peor.heatIndex != null ? peor.heatIndex : peor.temp);
     var catPeor = categoria(peorF);
 
-    if (statIndice) statIndice.textContent = (peor.heatIndex != null ? peor.heatIndex.toFixed(0) : peor.temp.toFixed(0)) + '°C';
+    if (statIndice) statIndice.textContent = peorF.toFixed(0) + '°F';
     if (statEstacion) statEstacion.textContent = peor.nombre;
     if (statCategoria) statCategoria.textContent = catPeor.label;
 

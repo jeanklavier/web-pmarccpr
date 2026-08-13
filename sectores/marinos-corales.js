@@ -20,6 +20,7 @@
     if (baa >= 5) return 'Alerta de blanqueo ' + (baa - 1);
     return NIVELES[baa] || ('Nivel ' + baa);
   }
+  function cToF(c) { return c * 9 / 5 + 32; }
 
   fetch(SUPABASE_URL + '/rest/v1/pmarcc_crw_estaciones?select=estacion,fecha,sst,dhw,baa&order=baa.desc,dhw.desc', {
     headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY }
@@ -30,7 +31,7 @@
     if (!rows || !rows.length) throw new Error('sin datos');
 
     body.innerHTML = rows.map(function (r) {
-      return '<tr><td>' + r.estacion + '</td><td>' + Number(r.sst).toFixed(1) + '°C</td><td>' +
+      return '<tr><td>' + r.estacion + '</td><td>' + cToF(Number(r.sst)).toFixed(1) + '°F</td><td>' +
         Number(r.dhw).toFixed(1) + '</td><td>' + nivelLabel(r.baa) + '</td></tr>';
     }).join('');
 
