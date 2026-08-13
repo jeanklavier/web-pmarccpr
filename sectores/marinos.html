@@ -119,11 +119,47 @@
 
 <nav class="sector-nav">
   <div class="container">
+    <a href="#estado-marinos">Estado actual</a>
     <a href="#diagnostico">Diagnóstico</a>
     <a href="#acciones">Cursos de acción</a>
     <a href="#fuentes">Fuentes</a>
   </div>
 </nav>
+
+<section class="section" id="estado-marinos">
+  <div class="container">
+    <span class="tag">En vivo · NOAA</span>
+    <h2>El mar y los arrecifes, en este momento</h2>
+
+    <div class="stat-cards">
+      <div class="stat-card"><span class="stat-number" id="marNivelSanJuan">—</span><span class="stat-label">Nivel del mar en San Juan ahora (m)</span></div>
+      <div class="stat-card"><span class="stat-number" id="marEstacionesMarea">—</span><span class="stat-label">Estaciones de nivel del mar monitoreadas</span></div>
+      <div class="stat-card"><span class="stat-number" id="marCoralPeor">—</span><span class="stat-label">Estación de coral con más estrés térmico</span></div>
+      <div class="stat-card"><span class="stat-number" id="marCoralAlerta">—</span><span class="stat-label">Estaciones de coral en alerta de blanqueo</span></div>
+    </div>
+
+    <div class="hidro-cruce">
+      <h3>Nivel del mar en las costas de Puerto Rico</h3>
+      <table class="hidro-table">
+        <thead><tr><th>Estación</th><th>Nivel actual (m, MLLW)</th><th>Hora (AST)</th></tr></thead>
+        <tbody id="mareaBody"></tbody>
+      </table>
+      <p class="embalse-status" id="mareaStatus" role="status" aria-live="polite">Cargando…</p>
+      <p class="embalse-note">Fuente: <a href="https://tidesandcurrents.noaa.gov/" target="_blank" rel="noopener">Centro de Operaciones Oceánicas y Costeras (CO-OPS), NOAA</a>. Lecturas cada 6 minutos, 13 estaciones en Puerto Rico, Vieques, Culebra y Mona.</p>
+    </div>
+
+    <div class="hidro-cruce">
+      <h3>Estrés térmico y blanqueo de corales</h3>
+      <p class="chart-note">Nivel de alerta: 0 sin estrés · 1 vigilancia · 2 alerta · 3 y 4 alerta de blanqueo.</p>
+      <table class="hidro-table">
+        <thead><tr><th>Estación</th><th>Temp. del mar</th><th>Semanas de calor (DHW)</th><th>Nivel de alerta</th></tr></thead>
+        <tbody id="coralBody"></tbody>
+      </table>
+      <p class="embalse-status" id="coralStatus" role="status" aria-live="polite">Cargando…</p>
+      <p class="embalse-note">Fuente: <a href="https://coralreefwatch.noaa.gov/" target="_blank" rel="noopener">Coral Reef Watch, NOAA</a>, 16 estaciones virtuales en Puerto Rico. Se actualiza a diario.</p>
+    </div>
+  </div>
+</section>
 
 <section class="section" id="diagnostico">
   <div class="container">
@@ -377,6 +413,8 @@
   </div>
 </footer>
 
+<script src="marinos-mar.js" defer></script>
+<script src="marinos-corales.js" defer></script>
 <script src="../nav.js" defer></script>
 <script src="../theme.js" defer></script>
 <script src="../correction.js" defer></script>
