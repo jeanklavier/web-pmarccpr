@@ -468,6 +468,13 @@ body.no-scroll{overflow:hidden;}
 .site-footer h4{color:#fff; margin-bottom:10px; font-size:1rem;}
 .site-footer p{font-size:.86rem; color:#a9c7c3;}
 .footer-note{border-top:1px solid rgba(255,255,255,.12); padding-top:20px; font-size:.78rem; color:#7fa19c; text-align:center;}
+.footer-support{margin:0 0 20px; text-align:center;}
+.support-link{
+  display:inline-flex; align-items:center; gap:.3rem;
+  color:#a9c7c3; font-size:.78rem; font-weight:600;
+  text-decoration-color:rgba(169,199,195,.55); text-underline-offset:.2rem;
+}
+.support-link:hover{color:#fff;}
 
 .support-block{
   margin-top:24px; padding-top:20px; border-top:1px solid rgba(255,255,255,.12);
