@@ -366,7 +366,10 @@
     if (!meta || !ds || !area) return;
     var total = ds.data.length;
     if (!total) return;
-    var interval = Math.max(1, Math.round(total / 8));
+    // Limita las etiquetas según el ancho disponible para que, en móvil,
+    // los números no terminen ocultando la línea del nivel del embalse.
+    var maxLabels = Math.max(3, Math.floor(area.width / 72));
+    var interval = Math.max(1, Math.ceil(total / maxLabels));
     var ctx = chartInstance.ctx;
     var cc = themeColors();
     ctx.save();
@@ -402,7 +405,8 @@
       data: data,
       borderColor: '#2f8fff',
       backgroundColor: 'rgba(47,143,255,.16)',
-      fill: true, tension: .15, pointRadius: 0, borderWidth: 3
+      fill: true, tension: .15, pointRadius: 0, borderWidth: 3.5,
+      order: 1
     }];
     if (typeof ajustes === 'number') {
       datasets.push({
@@ -412,7 +416,8 @@
         borderDash: [8, 5],
         borderWidth: 2.5,
         pointRadius: 0,
-        fill: false
+        fill: false,
+        order: 2
       });
     }
     if (typeof control === 'number') {
@@ -423,7 +428,8 @@
         borderDash: [5, 4],
         borderWidth: 2.5,
         pointRadius: 0,
-        fill: false
+        fill: false,
+        order: 2
       });
     }
 
@@ -462,7 +468,8 @@
         borderWidth: 2.5,
         pointRadius: 0,
         fill: false,
-        spanGaps: false
+        spanGaps: false,
+        order: 0
       });
 
       if (proyeccionNota) {
@@ -486,6 +493,8 @@
       plugins: [{ id: 'valueLabelsPlugin', afterDatasetsDraw: drawValueLabels }],
       options: {
         animation: false,
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             display: datasets.length > 1,
@@ -711,7 +720,7 @@
     document.body.classList.remove('no-scroll');
     if (isFsActive()) exitFs();
     if (chart) {
-      chart.options.maintainAspectRatio = true;
+      chart.options.maintainAspectRatio = false;
       setTimeout(function () { chart.resize(); }, 60);
     }
   }

@@ -14,7 +14,7 @@
 <meta property="og:image" content="https://planclimaticopr.com/og-image.jpg">
 <meta property="og:locale" content="es_PR">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../styles.css?v=20260821-mobile-charts-2">
 <script>
   (function () {
     try {
@@ -196,7 +196,9 @@
           <span class="reservoir-current-trend" id="reservoirCurrentTrend"></span>
           <span class="reservoir-current-date" id="reservoirCurrentDate"></span>
         </div>
-        <canvas id="embalseChart" role="img" aria-labelledby="embalseChart-title" aria-describedby="embalseChart-data"></canvas>
+        <div class="embalse-chart-stage">
+          <canvas id="embalseChart" role="img" aria-labelledby="embalseChart-title" aria-describedby="embalseChart-data"></canvas>
+        </div>
         <table class="visually-hidden" id="embalseChart-data">
           <caption id="embalseChart-caption">Datos de la gráfica: elevación promedio mensual del embalse seleccionado, en pies</caption>
           <thead><tr><th>Mes</th><th>Elevación promedio (pies)</th></tr></thead>
@@ -437,7 +439,7 @@
 <script src="../nav.js" defer></script>
 <script src="../theme.js" defer></script>
 <script type="module" src="embalses-coords-loader.js"></script>
-<script src="embalses.js" defer></script>
+<script src="embalses.js?v=20260821-mobile-charts-2" defer></script>
 <script src="../correction.js" defer></script>
 </body>
 </html>

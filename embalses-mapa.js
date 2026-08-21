@@ -162,8 +162,10 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
           '<span class="embalse-card-nivel-valor" id="nivel-' + siteNo + '">—</span>' +
           '<span class="reservoir-current-trend" id="tendencia-' + siteNo + '"></span>' +
         '</div>' +
-        '<canvas class="embalse-card-sparkline" id="sparkline-' + siteNo + '" width="260" height="56" ' +
-          'role="img" aria-label="Tendencia del nivel de ' + info.nombre + ' en el último mes"></canvas>' +
+        '<div class="embalse-card-sparkline-wrap">' +
+          '<canvas class="embalse-card-sparkline" id="sparkline-' + siteNo + '" ' +
+            'role="img" aria-label="Tendencia del nivel de ' + info.nombre + ' en el último mes"></canvas>' +
+        '</div>' +
         '<dl class="embalse-card-facts">' +
           '<div><dt>Operador</dt><dd>' + info.operador + '</dd></div>' +
           '<div><dt>Construido</dt><dd>' + anio + '</dd></div>' +
@@ -214,7 +216,7 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
         }]
       },
       options: {
-        animation: false, responsive: false,
+        animation: false, responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { enabled: false } },
         scales: { x: { display: false }, y: { display: false } }
       }
