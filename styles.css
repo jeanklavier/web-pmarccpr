@@ -991,13 +991,14 @@ body.no-scroll{overflow:hidden;}
 .embalses-map-label{fill:var(--text-dim); font-size:24px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;}
 .embalse-map-marker{cursor:pointer; outline:none;}
 .embalse-map-marker circle{
-  stroke:#fff; stroke-width:3; vector-effect:non-scaling-stroke;
-  transition:r .16s ease, stroke-width .16s ease, filter .16s ease;
-  filter:drop-shadow(0 2px 3px rgba(0,0,0,.28));
+  stroke-width:9; stroke-opacity:.32; vector-effect:non-scaling-stroke;
+  transform-box:fill-box; transform-origin:center;
+  transition:r .16s ease, transform .16s ease, filter .16s ease;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.42));
 }
 .embalse-map-marker:hover circle,
 .embalse-map-marker:focus circle,
-.embalse-map-marker.is-active circle{stroke-width:5; filter:drop-shadow(0 0 7px rgba(12,128,116,.55));}
+.embalse-map-marker.is-active circle{transform:scale(1.22); stroke-opacity:.5; filter:drop-shadow(0 0 9px rgba(46,196,182,.72));}
 .embalse-map-detail{
   border-left:1px solid var(--border); padding:28px 24px; background:var(--surface);
   display:flex; align-items:center;
