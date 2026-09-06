@@ -15,10 +15,7 @@
 <meta property="og:locale" content="es_PR">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-<link rel="stylesheet" href="styles.css?v=20260821-mobile-charts-2">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"
-  integrity="sha512-Zcn6bjR/8RZbLEpLIeOwNtzREBAJnUKESxces60Mpoj+2okopSAcSUIUOseddDm0cxnGQzxIR7vJgsLZbdLE3w=="
-  crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="styles.css?v=20260906-local-reservoir-map">
 <script>
   (function () {
     try {
@@ -149,7 +146,7 @@
     <p class="chart-note">Toca o pasa el cursor sobre un embalse para ver su nivel más reciente. El color solo aplica a los 6 embalses de la AAA que tienen umbrales operacionales oficiales y públicos; para el resto no existe un umbral con el que compararlos, así que se muestran en gris.</p>
 
     <div class="embalses-map-card">
-      <div id="embalsesMap" aria-label="Mapa interactivo de Puerto Rico con la ubicación de los 19 embalses monitoreados por el USGS"></div>
+      <div id="embalsesMap" aria-label="Mapa vectorial interactivo de Puerto Rico con la ubicación de los 19 embalses monitoreados por el USGS"></div>
       <p class="embalses-map-status" id="embalsesMapStatus">Cargando el mapa…</p>
     </div>
 
@@ -217,14 +214,11 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"
-  integrity="sha512-BwHfrr4c9kmRkLw6iXFdzcdWV/PGkVgiIyIWLLlTSXzWQzxuSg4DiQUCpauz/EWjgk5TYQqX/kvn9pG1NpYfqg=="
-  crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 <script src="sectores/embalses.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"
   integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w=="
   crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
-<script type="module" src="embalses-mapa.js?v=20260821-mobile-charts-2"></script>
+<script type="module" src="embalses-mapa.js?v=20260906-local-reservoir-map"></script>
 <script src="nav.js" defer></script>
 <script src="theme.js" defer></script>
 <script src="correction.js" defer></script>

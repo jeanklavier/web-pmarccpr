@@ -1,5 +1,5 @@
 /* ============================================================
-   Mapa (Leaflet), tarjetas y mini-gráficas de los 19 embalses de PR.
+   Mapa vectorial local, tarjetas y mini-gráficas de los 19 embalses de PR.
    Los datos fijos (nombre, municipio, coordenadas, etc.) vienen de
    sectores/embalses-info-data.js. El nivel actual, el historial de 30
    días y los umbrales de la AAA se reusan de sectores/embalses.js vía
@@ -15,14 +15,18 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
   var COLOR_NEUTRAL = '#7c8db0';
   var HISTORIAL_DIAS = 30;
 
-  var TILE_LIGHT = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-  var TILE_DARK  = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-  var TILE_ATTR  = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>';
-
-  function currentTheme() {
-    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-  }
-  function tileUrlFor(theme) { return theme === 'dark' ? TILE_DARK : TILE_LIGHT; }
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var MAP_WIDTH = 1000;
+  var MAP_HEIGHT = 420;
+  var MAP_BOUNDS = { west: -67.3, east: -65.55, north: 18.56, south: 17.88 };
+  var PUERTO_RICO_OUTLINE = [
+    [-67.269879, 18.362235], [-67.154863, 18.192450], [-67.209633, 17.956941],
+    [-66.985078, 17.973372], [-66.924832, 17.929556], [-66.771478, 18.006234],
+    [-66.448338, 17.984326], [-66.234737, 17.929556], [-65.834921, 18.017187],
+    [-65.730859, 18.186973], [-65.626797, 18.203403], [-65.632274, 18.367712],
+    [-65.840398, 18.433435], [-66.409999, 18.488204], [-66.957694, 18.488204],
+    [-67.094617, 18.515589], [-67.269879, 18.362235]
+  ];
 
   function radiusFor(status) {
     if (status === 'rojo') return 12;
@@ -101,39 +105,84 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
   }
 
   var markers = {};
+  var readings = {};
+
+  function project(lat, lng) {
+    var x = 42 + ((lng - MAP_BOUNDS.west) / (MAP_BOUNDS.east - MAP_BOUNDS.west)) * 916;
+    var y = 40 + ((MAP_BOUNDS.north - lat) / (MAP_BOUNDS.north - MAP_BOUNDS.south)) * 340;
+    return { x: x, y: y };
+  }
+
+  function outlinePath() {
+    return PUERTO_RICO_OUTLINE.map(function (coord, i) {
+      var point = project(coord[1], coord[0]);
+      return (i ? 'L' : 'M') + point.x.toFixed(1) + ',' + point.y.toFixed(1);
+    }).join(' ') + ' Z';
+  }
+
+  function showMapDetail(siteNo) {
+    var detail = document.getElementById('embalsesMapDetail');
+    var info = EMBALSES_INFO[siteNo];
+    if (!detail || !info) return;
+    Object.keys(markers).forEach(function (key) {
+      markers[key].group.classList.toggle('is-active', key === siteNo);
+    });
+    detail.innerHTML = '<div class="embalse-map-detail-inner">' +
+      '<span class="embalse-map-detail-kicker">Embalse seleccionado</span>' +
+      popupHtml(siteNo, info, readings[siteNo] || null) +
+      '</div>';
+  }
 
   function initMap() {
     var mapEl = document.getElementById('embalsesMap');
     var statusEl = document.getElementById('embalsesMapStatus');
     if (!mapEl) return;
-    if (typeof L === 'undefined') {
-      mapEl.style.display = 'none';
-      if (statusEl) statusEl.textContent = 'No se pudo cargar el mapa en este momento.';
-      return;
-    }
-    if (statusEl) statusEl.style.display = 'none';
+    mapEl.innerHTML = '<div class="embalses-map-figure">' +
+      '<svg class="embalses-map-svg" viewBox="0 0 ' + MAP_WIDTH + ' ' + MAP_HEIGHT + '" role="img" aria-labelledby="embalsesMapTitle embalsesMapDesc">' +
+        '<title id="embalsesMapTitle">Ubicación de los 19 embalses monitoreados</title>' +
+        '<desc id="embalsesMapDesc">Mapa esquemático de Puerto Rico. Los puntos se pueden seleccionar para consultar el nivel más reciente de cada embalse.</desc>' +
+        '<path class="embalses-island" d="' + outlinePath() + '"></path>' +
+        '<text class="embalses-map-label" x="500" y="225" text-anchor="middle">Puerto Rico</text>' +
+        '<g id="embalsesMapMarkers"></g>' +
+      '</svg>' +
+      '</div>' +
+      '<aside class="embalse-map-detail" id="embalsesMapDetail" aria-live="polite">' +
+        '<div class="embalse-map-detail-inner"><span class="embalse-map-detail-kicker">Mapa interactivo</span>' +
+        '<p class="chart-note">Selecciona un punto para ver el nombre, municipio y nivel más reciente del embalse.</p></div>' +
+      '</aside>';
 
-    var map = L.map('embalsesMap', { scrollWheelZoom: false }).setView([18.2, -66.4], 9);
-    var tileLayer = L.tileLayer(tileUrlFor(currentTheme()), {
-      attribution: TILE_ATTR,
-      subdomains: 'abcd',
-      maxZoom: 19,
-      detectRetina: true
-    }).addTo(map);
-
-    window.addEventListener('pmarcc-theme-change', function (e) {
-      var theme = (e.detail && e.detail.theme) || currentTheme();
-      tileLayer.setUrl(tileUrlFor(theme));
-    });
+    var markerLayer = document.getElementById('embalsesMapMarkers');
 
     Object.keys(EMBALSES_INFO).forEach(function (siteNo) {
       var info = EMBALSES_INFO[siteNo];
-      var marker = L.circleMarker([info.lat, info.lng], {
-        radius: 9, weight: 2, color: '#fff', fillColor: COLOR_NEUTRAL, fillOpacity: .9
-      }).addTo(map);
-      marker.bindPopup(popupHtml(siteNo, info, null));
-      markers[siteNo] = marker;
+      var point = project(info.lat, info.lng);
+      var group = document.createElementNS(SVG_NS, 'g');
+      var circle = document.createElementNS(SVG_NS, 'circle');
+      var title = document.createElementNS(SVG_NS, 'title');
+      group.setAttribute('class', 'embalse-map-marker');
+      group.setAttribute('role', 'button');
+      group.setAttribute('tabindex', '0');
+      group.setAttribute('aria-label', info.nombre + ', ' + info.municipio + '. Seleccionar para ver detalles.');
+      circle.setAttribute('cx', point.x.toFixed(1));
+      circle.setAttribute('cy', point.y.toFixed(1));
+      circle.setAttribute('r', '9');
+      circle.setAttribute('fill', COLOR_NEUTRAL);
+      title.textContent = info.nombre + ' — ' + info.municipio;
+      group.appendChild(title);
+      group.appendChild(circle);
+      group.addEventListener('mouseenter', function () { showMapDetail(siteNo); });
+      group.addEventListener('focus', function () { showMapDetail(siteNo); });
+      group.addEventListener('click', function () { showMapDetail(siteNo); });
+      group.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          showMapDetail(siteNo);
+        }
+      });
+      markerLayer.appendChild(group);
+      markers[siteNo] = { group: group, circle: circle, title: title };
     });
+    if (statusEl) statusEl.style.display = 'none';
   }
 
   function renderCards() {
@@ -243,16 +292,19 @@ import { EMBALSES_INFO, EMBALSES_CON_UMBRALES } from './sectores/embalses-info-d
   function loadReservoir(siteNo, info) {
     fetchHistory30(siteNo).then(function (rows) {
       var reading = rows.length ? rows[rows.length - 1] : null;
+      readings[siteNo] = reading;
       var marker = markers[siteNo];
       if (marker) {
         var status = reading ? classify(siteNo, reading.valor) : null;
-        marker.setStyle({ fillColor: colorFor(status) });
-        marker.setRadius(radiusFor(status));
-        if (marker._path) {
-          marker._path.classList.toggle('embalse-marker-critico', status === 'rojo');
-        }
-        if (status === 'rojo' || status === 'ambar') marker.bringToFront();
-        marker.setPopupContent(popupHtml(siteNo, info, reading));
+        marker.circle.setAttribute('fill', colorFor(status));
+        marker.circle.setAttribute('r', String(radiusFor(status)));
+        marker.circle.classList.toggle('embalse-marker-critico', status === 'rojo');
+        marker.group.setAttribute('aria-label', info.nombre + ', ' + info.municipio + '. ' +
+          (reading ? 'Nivel más reciente: ' + reading.valor.toFixed(2) + ' pies. ' : 'Nivel actual no disponible. ') +
+          'Seleccionar para ver detalles.');
+        marker.title.textContent = info.nombre + ' — ' + info.municipio +
+          (reading ? ': ' + reading.valor.toFixed(2) + ' pies' : ': nivel no disponible');
+        if (marker.group.classList.contains('is-active')) showMapDetail(siteNo);
       }
       renderSparkline(siteNo, rows);
       renderNivelActual(siteNo, rows);
