@@ -1,12 +1,16 @@
 /* ============================================================
    Reportar un error o dejar una sugerencia - botón flotante +
    modal accesible con selector de tipo. Envía el mensaje a la
-   misma base de datos (Supabase) que recoge los formularios de
-   los sitios de JCTech, vía la función "form-submit". Se inyecta
+   misma base de datos que recoge los formularios de los sitios de
+   JCTech. Primero pasa por una función propia que valida, limita y
+   filtra el envío antes de entregarlo a "form-submit". Se inyecta
    en cada página para no duplicar HTML.
    ============================================================ */
 (function () {
-  var SUPABASE_URL = 'https://eexzkkypfkpscewufgrg.supabase.co/functions/v1/form-submit';
+  var FEEDBACK_URL = '/api/feedback';
+  var MIN_MESSAGE_LENGTH = 12;
+  var MIN_SECTION_LENGTH = 3;
+  var MIN_FILL_TIME_MS = 1500;
 
   var COPY = {
     error: {
@@ -76,23 +80,23 @@
         '<button type="button" class="type-btn" id="typeSugerencia" aria-pressed="false">Sugerencia o idea</button>' +
       '</div>' +
       '<p class="modal-sub" id="reportSub"></p>' +
-      '<form id="reportForm" novalidate>' +
+      '<form id="reportForm">' +
         '<div class="form-field">' +
           '<label for="rf-seccion" id="reportSeccionLabel">Sección o dato a corregir</label>' +
-          '<input type="text" id="rf-seccion" name="producto" required>' +
+          '<input type="text" id="rf-seccion" name="producto" required minlength="3" maxlength="300">' +
           '<p class="form-hint">Se llena solo según la sección donde estabas. Puedes editarlo.</p>' +
         '</div>' +
         '<div class="form-field">' +
           '<label for="rf-mensaje" id="reportMensajeLabel">¿Cuál es el error?</label>' +
-          '<textarea id="rf-mensaje" name="mensaje" required placeholder="Ej: El dato de 4.12% debería ser..."></textarea>' +
+          '<textarea id="rf-mensaje" name="mensaje" required minlength="12" maxlength="4000" placeholder="Ej: El dato de 4.12% debería ser..."></textarea>' +
         '</div>' +
         '<div class="form-field">' +
           '<label for="rf-nombre">Nombre (opcional)</label>' +
-          '<input type="text" id="rf-nombre" name="nombre" autocomplete="name">' +
+          '<input type="text" id="rf-nombre" name="nombre" maxlength="120" autocomplete="name">' +
         '</div>' +
         '<div class="form-field">' +
           '<label for="rf-correo">Correo electrónico (opcional)</label>' +
-          '<input type="email" id="rf-correo" name="correo" autocomplete="email">' +
+          '<input type="email" id="rf-correo" name="correo" maxlength="254" autocomplete="email">' +
           '<p class="form-hint">Solo por si necesitamos aclarar algo. Puedes reportar de forma anónima.</p>' +
         '</div>' +
         '<div class="honeypot" aria-hidden="true">' +
@@ -101,6 +105,9 @@
         '</div>' +
         '<input type="hidden" name="_source" value="pmarcc">' +
         '<input type="hidden" id="rf-tipo" name="tipo_negocio" value="Corrección P-MARCC">' +
+        '<input type="hidden" id="rf-started" name="_form_started_at" value="">' +
+        '<input type="hidden" id="rf-page" name="_page_url" value="">' +
+        '<input type="hidden" name="_feedback_version" value="2">' +
         '<button type="submit" class="modal-submit" id="reportSubmit">Enviar corrección</button>' +
         '<div class="modal-status" id="reportStatus" role="status" aria-live="polite"></div>' +
       '</form>' +
@@ -119,8 +126,12 @@
   var tipoInput = document.getElementById('rf-tipo');
   var typeErrorBtn = document.getElementById('typeError');
   var typeSugerenciaBtn = document.getElementById('typeSugerencia');
+  var startedInput = document.getElementById('rf-started');
+  var pageInput = document.getElementById('rf-page');
   var lastFocused = null;
   var currentType = 'error';
+  var submitting = false;
+  var submittedSuccessfully = false;
 
   function applyType(type) {
     currentType = type;
@@ -138,16 +149,25 @@
   }
 
   function openModal() {
+    if (submitting) return;
     lastFocused = document.activeElement;
+    form.reset();
+    submittedSuccessfully = false;
+    statusBox.className = 'modal-status';
+    statusBox.textContent = '';
+    submitBtn.disabled = false;
     applyType('error');
     var ref = (window.location.pathname.split('/').pop() || 'index.html') + (currentSectionId ? '#' + currentSectionId : '');
     seccionInput.value = (document.title.split('|')[0].trim()) + (currentSectionLabel ? ' - ' + currentSectionLabel : '') + ' (' + ref + ')';
+    startedInput.value = String(Date.now());
+    pageInput.value = window.location.href;
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
     seccionInput.focus();
     document.addEventListener('keydown', onKeydown);
   }
   function closeModal() {
+    if (submitting) return;
     overlay.classList.remove('open');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', onKeydown);
@@ -171,24 +191,54 @@
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    if (submitting || submittedSuccessfully) return;
     if (document.getElementById('rf-gotcha').value) return; // bot
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    var sectionValue = seccionInput.value.trim();
+    var messageValue = mensajeInput.value.trim();
+    var words = messageValue.match(/[A-Za-zÀ-ÖØ-öø-ÿ0-9%]+/g) || [];
+    if (sectionValue.length < MIN_SECTION_LENGTH) {
+      statusBox.textContent = 'Indica la página, sección o dato relacionado.';
+      statusBox.className = 'modal-status show err';
+      seccionInput.focus();
+      return;
+    }
+    if (messageValue.length < MIN_MESSAGE_LENGTH || words.length < 2) {
+      statusBox.textContent = 'Describe el error o la sugerencia con al menos dos palabras.';
+      statusBox.className = 'modal-status show err';
+      mensajeInput.focus();
+      return;
+    }
+    if (!startedInput.value || Date.now() - Number(startedInput.value) < MIN_FILL_TIME_MS) {
+      statusBox.textContent = 'Espera un momento y vuelve a intentarlo.';
+      statusBox.className = 'modal-status show err';
+      return;
+    }
+
     statusBox.className = 'modal-status';
     statusBox.textContent = '';
+    submitting = true;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Enviando…';
 
     var fd = new FormData(form);
-    // El backend requiere correo o teléfono; si la persona reporta de forma
-    // anónima, se envía un correo centinela para no bloquear el reporte.
-    if (!fd.get('correo')) fd.set('correo', 'anonimo@pmarcc-reporte.info');
-    fetch(SUPABASE_URL, { method: 'POST', body: fd })
+    fetch(FEEDBACK_URL, { method: 'POST', body: fd, credentials: 'same-origin' })
       .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
       .then(function (res) {
         if (res.ok && res.data && res.data.success) {
+          submittedSuccessfully = true;
           statusBox.textContent = COPY[currentType].successMsg;
           statusBox.className = 'modal-status show ok';
-          form.reset();
-          setTimeout(closeModal, 2600);
+          setTimeout(function () {
+            submittedSuccessfully = false;
+            closeModal();
+            form.reset();
+          }, 2600);
         } else {
           throw new Error((res.data && res.data.error) || 'No se pudo enviar');
         }
@@ -198,8 +248,11 @@
         statusBox.className = 'modal-status show err';
       })
       .finally(function () {
-        submitBtn.disabled = false;
-        submitBtn.textContent = COPY[currentType].submitLabel;
+        submitting = false;
+        if (!submittedSuccessfully) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = COPY[currentType].submitLabel;
+        }
       });
   });
 })();
